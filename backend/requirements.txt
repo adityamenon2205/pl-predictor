@@ -1,0 +1,49 @@
+# ==============================
+# Backend - FastAPI
+# ==============================
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+
+# ==============================
+# Database - MongoDB
+# ==============================
+pymongo
+
+# ==============================
+# Data Processing
+# ==============================
+pandas
+numpy
+
+# ==============================
+# Machine Learning
+# ==============================
+scikit-learn
+xgboost
+
+# ==============================
+# Model Explainability
+# ==============================
+shap
+
+# ==============================
+# Configuration / Environment
+# ==============================
+python-dotenv
+
+# ==============================
+# HTTP / API
+# ==============================
+httpx
+
+# ==============================
+# Data Visualization / Analysis
+# ==============================
+matplotlib
+seaborn
+jupyter
+
+
+joblib

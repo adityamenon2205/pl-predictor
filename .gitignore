@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+*.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+
+# ML generated files
+ml/models/*.pkl
+
+# Generated datasets
+ml/data/processed/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+frontend/dist/
+frontend/build/
+
+# Frontend environment
+frontend/.env
+frontend/.env.local
