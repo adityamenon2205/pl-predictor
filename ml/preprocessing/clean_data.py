@@ -38,6 +38,14 @@ REQUIRED_COLUMNS = [
     "AY",
     "HR",
     "AR",
+
+    # Bookmaker odds
+    "B365H",
+    "B365D",
+    "B365A",
+    "AvgH",
+    "AvgD",
+    "AvgA",
 ]
 
 
