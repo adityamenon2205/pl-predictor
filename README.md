@@ -2,7 +2,7 @@
 
 An end-to-end machine learning application for predicting English Premier League match outcomes using historical match data, team performance, form, Elo ratings, home/away statistics, rest days, and betting-market information.
 
-> **Current status:** Machine learning pipeline completed. FastAPI backend and core APIs implemented. MongoDB and React dashboard are the next development stages.
+> **Current status:** Machine learning pipeline and FastAPI backend completed. MongoDB Atlas integration implemented. React frontend is the next development stage.
 
 ---
 
@@ -14,16 +14,16 @@ The Premier League Match Predictor is a machine learning application designed to
 - 🤝 **Draw**
 - ✈️ **Away Win**
 
-The system uses historical Premier League match data to generate team-performance features and predict match outcomes using machine learning.
+The system combines historical Premier League match data with engineered team-performance features and a machine learning model to generate probability-based predictions.
 
-The current production baseline is a **Random Forest classifier** trained using a chronological train/test split. This approach simulates real-world prediction by ensuring that future matches are not used to train the model before evaluating it.
+The current production baseline is a **Random Forest classifier** trained using a chronological train/test split. This approach simulates real-world prediction by ensuring that future matches are not used to train the model before evaluation.
 
 The application is being developed as a full-stack system consisting of:
 
 - 🐍 Python machine learning pipeline
 - ⚡ FastAPI backend
+- 🍃 MongoDB Atlas database
 - ⚛️ React frontend
-- 🍃 MongoDB database
 
 ---
 
@@ -42,7 +42,7 @@ The feature engineering pipeline incorporates:
 - Corners
 - Home-team and away-team performance splits
 - Elo ratings
-- Rest days between matches
+- Rest days
 - Relative team-strength features
 - Betting-market implied probabilities
 - Market margins
@@ -61,12 +61,12 @@ Several approaches were evaluated during development:
 | Model | Accuracy | Macro F1 | Draw F1 |
 |---|---:|---:|---:|
 | **Random Forest V4** | **50.00%** | 0.3792 | 0.0189 |
-| Balanced XGBoost V4 | 43.68% | **0.3819** | **0.1410 |
+| Balanced XGBoost V4 | 43.68% | **0.3819** | **0.1410** |
 | Poisson V5 | 48.68% | 0.3621 | 0.0000 |
 
-The **Random Forest V4 model** is currently the production baseline because it achieved the highest overall accuracy on the held-out 2025/26 season.
+The **Random Forest V4 model** is currently used as the production baseline because it achieved the highest overall accuracy on the held-out 2025/26 season.
 
-Model experimentation and optimization will continue after the first complete application is operational.
+Model experimentation and optimization will continue after the complete application is operational.
 
 ---
 
@@ -124,6 +124,7 @@ The raw datasets contain match results and additional match statistics, includin
 - Shots
 - Shots on target
 - Corners
+- Cards
 - Bookmaker odds
 - Match results
 
@@ -131,24 +132,43 @@ The preprocessing pipeline cleans and combines the historical season data before
 
 ---
 
-## 🏗️ Backend
+# 🏗️ Application Architecture
 
-The application currently uses **FastAPI** to expose the machine learning functionality through REST APIs.
+The application follows a modular architecture separating the machine learning pipeline, backend services, database layer, and frontend.
 
-### Current API Endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/` | API status |
-| GET | `/health` | Health check |
-| GET | `/teams/` | Retrieve available Premier League teams |
-| GET | `/statistics/` | Retrieve historical league statistics |
-| POST | `/predict/` | Predict the outcome of a fixture |
-
-### Example Prediction Request
-
-```json
-{
-  "home_team": "Arsenal",
-  "away_team": "Chelsea"
-}
+```text
+                    Historical EPL Data
+                           │
+                           ▼
+                  Data Preprocessing
+                           │
+                           ▼
+                   Feature Engineering
+                           │
+                           ▼
+                    Model Training
+                           │
+                           ▼
+                  Random Forest V4
+                           │
+                           ▼
+                       FastAPI
+                           │
+             ┌─────────────┼─────────────┐
+             │             │             │
+             ▼             ▼             ▼
+        Prediction       Teams       Statistics
+             │             │             │
+             │             └──────┬──────┘
+             │                    │
+             ▼                    ▼
+        MongoDB Atlas ◄──── Application Data
+             │
+             ▼
+       Prediction History
+             │
+             ▼
+        React Frontend
+             │
+             ▼
+          Dashboard
