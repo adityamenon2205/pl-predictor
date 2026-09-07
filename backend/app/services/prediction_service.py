@@ -2,13 +2,13 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
+from app.database.db_collections import predictions_collection
 from app.services.feature_service import FeatureService
 
 
 class PredictionService:
 
     def __init__(self, feature_service: FeatureService):
-
         base_dir = Path(__file__).resolve().parents[3]
 
         model_path = (
@@ -29,7 +29,6 @@ class PredictionService:
         home_team: str,
         away_team: str
     ):
-
         # Generate proper V4 features
         feature_dict = (
             self.feature_service.generate_features(
@@ -79,7 +78,8 @@ class PredictionService:
             2: "Home Win"
         }
 
-        return {
+        # Create prediction result
+        result = {
             "home_team": home_team,
             "away_team": away_team,
             "prediction": class_names[
@@ -100,3 +100,9 @@ class PredictionService:
                 ),
             }
         }
+
+        # Save prediction to MongoDB
+        predictions_collection.insert_one(result)
+
+        # Return prediction to API
+        return result

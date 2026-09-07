@@ -1,28 +1,46 @@
-from pathlib import Path
-
-import pandas as pd
+from app.database.db_collections import matches_collection
 
 
 class StatisticsService:
-    def __init__(self):
-        base_dir = Path(__file__).resolve().parents[3]
-        data_path = base_dir / "ml" / "data" / "processed" / "epl_matches.csv"
-
-        self.df = pd.read_csv(data_path)
 
     def get_overall_statistics(self):
-        total_matches = len(self.df)
+        total_matches = matches_collection.count_documents({})
 
-        home_wins = (self.df["FTR"] == "H").sum()
-        draws = (self.df["FTR"] == "D").sum()
-        away_wins = (self.df["FTR"] == "A").sum()
+        home_wins = matches_collection.count_documents({
+            "FTR": "H"
+        })
+
+        draws = matches_collection.count_documents({
+            "FTR": "D"
+        })
+
+        away_wins = matches_collection.count_documents({
+            "FTR": "A"
+        })
+
+        if total_matches == 0:
+            return {
+                "total_matches": 0,
+                "home_wins": 0,
+                "draws": 0,
+                "away_wins": 0,
+                "home_win_percentage": 0,
+                "draw_percentage": 0,
+                "away_win_percentage": 0
+            }
 
         return {
-            "total_matches": int(total_matches),
-            "home_wins": int(home_wins),
-            "draws": int(draws),
-            "away_wins": int(away_wins),
-            "home_win_percentage": round(home_wins / total_matches * 100, 2),
-            "draw_percentage": round(draws / total_matches * 100, 2),
-            "away_win_percentage": round(away_wins / total_matches * 100, 2)
+            "total_matches": total_matches,
+            "home_wins": home_wins,
+            "draws": draws,
+            "away_wins": away_wins,
+            "home_win_percentage": round(
+                home_wins / total_matches * 100, 2
+            ),
+            "draw_percentage": round(
+                draws / total_matches * 100, 2
+            ),
+            "away_win_percentage": round(
+                away_wins / total_matches * 100, 2
+            )
         }

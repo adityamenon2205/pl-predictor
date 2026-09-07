@@ -44,3 +44,6 @@ frontend/build/
 # Frontend environment
 frontend/.env
 frontend/.env.local
+
+# Images / screenshots
+img/
