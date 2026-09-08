@@ -1,16 +1,25 @@
-from app.services.prediction_history_service import PredictionHistoryService
-from fastapi import APIRouter
+from app.schemas.prediction import PredictionRequest, PredictionResponse
+from app.services.container import prediction_service
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter(
-    prefix="/predictions",
-    tags=["Prediction History"]
+    prefix="/predict",
+    tags=["Prediction"]
 )
 
-prediction_history_service = PredictionHistoryService()
 
+@router.post("/", response_model=PredictionResponse)
+def predict_match(request: PredictionRequest):
+    try:
+        result = prediction_service.predict(
+            request.home_team,
+            request.away_team
+        )
 
-@router.get("/")
-def get_predictions():
-    return {
-        "predictions": prediction_history_service.get_predictions()
-    }
+        return result
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
