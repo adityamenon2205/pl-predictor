@@ -3,6 +3,7 @@ from app.api.predictions import router as predictions_router
 from app.api.statistics import router as statistics_router
 from app.api.teams import router as teams_router
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Premier League Match Predictor",
@@ -10,6 +11,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(prediction_router)
 app.include_router(predictions_router)
