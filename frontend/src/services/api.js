@@ -19,3 +19,15 @@ export async function getTeams() {
 
   return response.json();
 }
+
+export async function getTeamStatistics(teamName) {
+  const response = await fetch(
+    `${API_BASE_URL}/teams/${encodeURIComponent(teamName)}/statistics`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch team statistics");
+  }
+
+  return response.json();
+}
