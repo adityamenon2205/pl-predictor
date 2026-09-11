@@ -10,7 +10,7 @@ The system predicts Premier League match outcomes as:
 
 It combines historical Premier League match data with engineered team-performance features, Elo ratings, home/away statistics, form, rest days, and betting-market information to generate probability-based predictions.
 
-> **Current status:** Machine learning pipeline and FastAPI backend completed. MongoDB Atlas integration implemented. The React frontend is under active development.
+> **Current status:** Machine learning pipeline, FastAPI backend, MongoDB Atlas integration, Overview dashboard, Teams Explorer, and team-specific Analytics are implemented. Predictor, advanced league analytics, and prediction-history UI remain in active development.
 
 ---
 
@@ -139,6 +139,8 @@ The preprocessing pipeline cleans and combines the historical season data before
 - **16 completed seasons**
 - **2010/11 through 2025/26**
 
+The 2025/26 season is included in the processed historical dataset but is reserved as the held-out test season for the current Random Forest V4 evaluation. The incomplete 2026/27 season is excluded from training and evaluation.
+
 ---
 
 ## 🏗️ Application Architecture
@@ -200,6 +202,7 @@ The backend is implemented using **FastAPI**, providing REST API endpoints for p
 | GET | `/` | API status |
 | GET | `/health` | Health check |
 | GET | `/teams/` | Retrieve available teams |
+| GET | `/teams/{team_name}/statistics` | Retrieve historical statistics for a specific team |
 | GET | `/statistics/` | Retrieve league statistics |
 | POST | `/predict/` | Generate a match prediction |
 | GET | `/predictions/` | Retrieve prediction history |
@@ -271,7 +274,7 @@ The prediction history endpoint retrieves these records for display in the front
 
 ## ⚛️ Frontend
 
-The frontend is being developed using:
+The frontend is implemented using:
 
 - React
 - Vite
@@ -333,15 +336,26 @@ The Overview page retrieves real data from `GET /statistics/` and `GET /teams/`,
 
 ### ⚽ Teams
 
-Planned functionality:
+The Teams Explorer retrieves available clubs from the backend and presents them as team-specific cards.
 
-- Team cards
-- Team statistics
-- Team performance metrics
-- Home/away performance
-- Form
+Currently implemented:
+
+- Team cards for the historical dataset's 41 teams
+- Searchable Teams Explorer
+- Club-inspired primary, secondary, and accent color themes
+- Team crests
+- Navigation from a team card to its Analytics view
+- Real team statistics retrieved from `GET /teams/{team_name}/statistics`
+
+Current team analytics include:
+
+- Matches played
+- Wins, draws, and losses
+- Win/draw/loss percentages
 - Goals scored and conceded
-- Team comparisons
+- Goal difference
+- Home record
+- Away record
 
 Team-specific visual styling will also be used:
 
@@ -356,7 +370,7 @@ The application's main interface will retain the project's purple visual identit
 
 ### 🔮 Predictor
 
-The main machine learning interface. Users will be able to:
+The main machine learning interface. The backend prediction API is implemented; the full frontend predictor interface is still being developed. Once complete, users will be able to:
 
 - Select a home team
 - Select an away team
@@ -380,24 +394,34 @@ The predictor communicates directly with `POST /predict/`.
 
 ### 📈 Analytics
 
-Provides deeper exploration of historical Premier League data.
+The Analytics page provides team-specific historical performance analysis when opened from the Teams Explorer.
 
-Planned visualizations include:
+Currently implemented:
+
+- Team identity and crest
+- Team-specific club-inspired color theme
+- Matches, wins, draws, and losses KPI cards
+- Win/draw/loss percentages
+- Match-result distribution donut chart
+- Goals scored vs conceded chart
+- Goal-difference summary
+- Home vs away performance chart
+- Real statistics loaded from MongoDB through the FastAPI backend
+
+Planned analytics include:
 
 - Season-by-season outcome trends
 - Goals per season
-- Home vs away performance
 - Team performance comparisons
 - Win-rate comparisons
 - PPG comparisons
-- Goal statistics
-- Other historical performance metrics
+- Additional historical performance metrics
 
 Where numerical information can be understood more effectively through visualization, charts and graphs will be preferred over raw numerical values.
 
 ### 🕐 Prediction History
 
-Displays predictions previously generated through the application.
+The backend stores predictions previously generated through the application. The dedicated frontend history interface is still being developed.
 
 Predictions are retrieved from `GET /predictions/` and stored in MongoDB Atlas. The interface will allow users to browse previous predictions in a structured dashboard format rather than raw JSON.
 
@@ -450,7 +474,6 @@ The goal is to use animation to improve usability and visual feedback rather tha
 pl-predictor/
 │
 ├── backend/
-│   ├── .env
 │   ├── requirements.txt
 │   │
 │   └── app/
@@ -460,12 +483,14 @@ pl-predictor/
 │       │   ├── prediction.py
 │       │   ├── predictions.py
 │       │   ├── statistics.py
-│       │   └── teams.py
+│       │   ├── teams.py
+│       │   └── __init__.py
 │       │
 │       ├── database/
 │       │   ├── db_collections.py
 │       │   ├── mongodb.py
-│       │   └── seed.py
+│       │   ├── seed.py
+│       │   └── __init__.py
 │       │
 │       ├── models/
 │       │   └── prediction_model.py
@@ -479,7 +504,8 @@ pl-predictor/
 │           ├── feature_service.py
 │           ├── prediction_history_service.py
 │           ├── prediction_service.py
-│           └── statistics_service.py
+│           ├── statistics_service.py
+│           └── __init__.py
 │
 ├── frontend/
 │   ├── public/
@@ -806,12 +832,13 @@ React History Page
 
 ### In Progress
 
-- [ ] Complete Teams Explorer
-- [ ] Team-specific statistics
-- [ ] Team color themes
-- [ ] Team detail pages
+- [x] Teams Explorer foundation
+- [x] Team-specific statistics API
+- [x] Team color themes
+- [x] Team analytics routing
+- [x] Team analytics dashboard
 - [ ] Complete Predictor interface
-- [ ] Advanced Analytics page
+- [ ] Advanced league Analytics
 - [ ] Season-level analytics APIs
 - [ ] Prediction History UI
 - [ ] Advanced data visualizations
@@ -823,8 +850,8 @@ React History Page
 - [ ] React Bits components
 - [ ] Page transitions
 - [ ] Micro-interactions
-- [ ] Loading states
-- [ ] Error states
+- [x] Loading states
+- [x] Error states
 - [ ] Empty states
 - [ ] Performance optimization
 - [ ] Final UI/UX refinement
