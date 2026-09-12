@@ -1,4 +1,4 @@
-**#** **⚽ Premier League Match Predictor**
+# ⚽ Premier League Match Predictor
 
 A full-stack football analytics platform that combines a machine learning prediction pipeline with a React dashboard, backed by MongoDB Atlas and a FastAPI backend.
 
