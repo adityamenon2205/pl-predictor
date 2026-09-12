@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
   PieChart,
   Pie,
@@ -84,26 +85,34 @@ function Overview() {
       <div className="stats-grid">
         <div className="stat-card">
           <span>Total Matches</span>
-          <strong>{statistics.total_matches.toLocaleString()}</strong>
+          <strong>
+            {statistics.total_matches.toLocaleString()}
+          </strong>
           <small>Historical matches analyzed</small>
         </div>
 
         <div className="stat-card">
           <span>Home Wins</span>
           <strong>{statistics.home_win_percentage}%</strong>
-          <small>{statistics.home_wins.toLocaleString()} matches</small>
+          <small>
+            {statistics.home_wins.toLocaleString()} matches
+          </small>
         </div>
 
         <div className="stat-card">
           <span>Draws</span>
           <strong>{statistics.draw_percentage}%</strong>
-          <small>{statistics.draws.toLocaleString()} matches</small>
+          <small>
+            {statistics.draws.toLocaleString()} matches
+          </small>
         </div>
 
         <div className="stat-card">
           <span>Away Wins</span>
           <strong>{statistics.away_win_percentage}%</strong>
-          <small>{statistics.away_wins.toLocaleString()} matches</small>
+          <small>
+            {statistics.away_wins.toLocaleString()} matches
+          </small>
         </div>
       </div>
 
@@ -116,30 +125,125 @@ function Overview() {
             </div>
           </div>
 
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={300}>
+          <div className="chart-container outcome-chart-container">
+            <ResponsiveContainer width="100%" height={340}>
               <PieChart>
+                <defs>
+                  {/* Home Wins - Coral */}
+                  <linearGradient
+                    id="homeGradient"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                  >
+                    <stop
+                      offset="0%"
+                      stopColor="#F26B5B"
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor="#E95545"
+                    />
+                  </linearGradient>
+
+                  {/* Draws - Golden Yellow */}
+                  <linearGradient
+                    id="drawGradient"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                  >
+                    <stop
+                      offset="0%"
+                      stopColor="#FFD166"
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor="#F5B942"
+                    />
+                  </linearGradient>
+
+                  {/* Away Wins - Teal */}
+                  <linearGradient
+                    id="awayGradient"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                  >
+                    <stop
+                      offset="0%"
+                      stopColor="#4FC3B1"
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor="#35A895"
+                    />
+                  </linearGradient>
+
+                  {/* Subtle glow around the chart */}
+                  <filter
+                    id="donutGlow"
+                    x="-50%"
+                    y="-50%"
+                    width="200%"
+                    height="200%"
+                  >
+                    <feGaussianBlur
+                      stdDeviation="7"
+                      result="blur"
+                    />
+
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
                 <Pie
                   data={outcomeData}
                   dataKey="value"
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  innerRadius={80}
-                  outerRadius={115}
+                  innerRadius={95}
+                  outerRadius={140}
                   paddingAngle={3}
+                  stroke="#F7F3F8"
+                  strokeWidth={2}
+                  // filter="url(#donutGlow)"
+                  isAnimationActive={true}
+                  animationDuration={900}
+                  animationEasing="ease-out"
                 >
-                  {outcomeData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={
-                        ["#541E5D", "#9B6AA3", "#D8CFDA"][index]
-                      }
-                    />
-                  ))}
+                  <Cell fill="url(#homeGradient)" />
+                  <Cell fill="url(#drawGradient)" />
+                  <Cell fill="url(#awayGradient)" />
                 </Pie>
 
-                <Tooltip />
+                <Tooltip
+                  formatter={(value, name) => [
+                    `${value.toLocaleString()} matches`,
+                    name,
+                  ]}
+                  contentStyle={{
+                    backgroundColor: "#241025",
+                    border: "1px solid rgba(255, 255, 255, 0.12)",
+                    borderRadius: "10px",
+                    color: "#ffffff",
+                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+                  }}
+                  labelStyle={{
+                    color: "#ffffff",
+                    fontWeight: 600,
+                  }}
+                  itemStyle={{
+                    color: "#ffffff",
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -148,19 +252,25 @@ function Overview() {
             <div>
               <span className="legend-dot home"></span>
               <span>Home Wins</span>
-              <strong>{statistics.home_win_percentage}%</strong>
+              <strong>
+                {statistics.home_win_percentage}%
+              </strong>
             </div>
 
             <div>
               <span className="legend-dot draw"></span>
               <span>Draws</span>
-              <strong>{statistics.draw_percentage}%</strong>
+              <strong>
+                {statistics.draw_percentage}%
+              </strong>
             </div>
 
             <div>
               <span className="legend-dot away"></span>
               <span>Away Wins</span>
-              <strong>{statistics.away_win_percentage}%</strong>
+              <strong>
+                {statistics.away_win_percentage}%
+              </strong>
             </div>
           </div>
         </section>

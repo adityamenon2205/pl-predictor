@@ -31,3 +31,26 @@ export async function getTeamStatistics(teamName) {
 
   return response.json();
 }
+
+export async function predictMatch(homeTeam, awayTeam) {
+  const response = await fetch(`${API_BASE_URL}/predict/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      home_team: homeTeam,
+      away_team: awayTeam,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.detail || "Failed to predict match"
+    );
+  }
+
+  return response.json();
+}
