@@ -54,3 +54,25 @@ export async function predictMatch(homeTeam, awayTeam) {
 
   return response.json();
 }
+
+export async function getPredictionHistory() {
+  const response = await fetch(`${API_BASE_URL}/predictions/`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch prediction history");
+  }
+
+  return response.json();
+}
+
+export async function getLeagueAnalytics() {
+  const response = await fetch(
+    `${API_BASE_URL}/statistics/league`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch league analytics");
+  }
+
+  return response.json();
+}

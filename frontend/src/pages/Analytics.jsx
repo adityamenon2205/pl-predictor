@@ -1,20 +1,165 @@
-import { useEffect, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
 } from "recharts";
 
-import { getTeamStatistics } from "../services/api";
+import {
+  getLeagueAnalytics,
+  getTeamStatistics,
+} from "../services/api";
+
 import teamMetadata from "../data/teams";
+
+
+/*
+ * =========================================
+ * MEASURED RECHARTS CONTAINER
+ * =========================================
+ *
+ * ResponsiveContainer was causing the league charts to
+ * mount with their legend but without a usable SVG drawing
+ * area in the current layout. This wrapper measures the
+ * actual DOM width and passes a numeric width directly to
+ * Recharts.
+ */
+
+function MeasuredChart({ children, height }) {
+  const containerRef = useRef(null);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const element = containerRef.current;
+
+    if (!element) {
+      return undefined;
+    }
+
+    const updateWidth = () => {
+      const nextWidth = Math.floor(
+        element.getBoundingClientRect().width
+      );
+
+      if (nextWidth > 0) {
+        setWidth(nextWidth);
+      }
+    };
+
+    updateWidth();
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="analytics-chart"
+      style={{
+        width: "100%",
+        height: `${height}px`,
+      }}
+    >
+      {width > 0
+        ? cloneElement(children, {
+            width,
+            height,
+          })
+        : null}
+    </div>
+  );
+}
+
+
+/*
+ * =========================================
+ * SEASON TREND DATA NORMALIZATION
+ * =========================================
+ *
+ * Accepts the normal array response, but also safely handles
+ * an object/dictionary response from the backend.
+ */
+
+function normalizeNumber(value) {
+  const number = Number(value);
+
+  return Number.isFinite(number)
+    ? number
+    : null;
+}
+
+function normalizeSeasonTrends(raw) {
+  let rows = [];
+
+  if (Array.isArray(raw)) {
+    rows = raw;
+  } else if (
+    raw &&
+    Array.isArray(raw.data)
+  ) {
+    rows = raw.data;
+  } else if (
+    raw &&
+    typeof raw === "object"
+  ) {
+    rows = Object.entries(raw).map(
+      ([season, values]) => ({
+        season,
+        ...(values || {}),
+      })
+    );
+  }
+
+  return rows
+    .map((row) => ({
+      season: row.season ?? row.Season ?? "",
+      home_win_percentage: normalizeNumber(
+        row.home_win_percentage ??
+        row.home_win_pct ??
+        row.home_win_rate
+      ),
+      draw_percentage: normalizeNumber(
+        row.draw_percentage ??
+        row.draw_pct ??
+        row.draw_rate
+      ),
+      away_win_percentage: normalizeNumber(
+        row.away_win_percentage ??
+        row.away_win_pct ??
+        row.away_win_rate
+      ),
+      goals_per_match: normalizeNumber(
+        row.goals_per_match ??
+        row.goalsPerMatch
+      ),
+      home_goals_per_match: normalizeNumber(
+        row.home_goals_per_match ??
+        row.home_goals_per_match_avg
+      ),
+      away_goals_per_match: normalizeNumber(
+        row.away_goals_per_match ??
+        row.away_goals_per_match_avg
+      ),
+    }))
+    .filter((row) => row.season !== "");
+}
 
 
 function Analytics() {
@@ -22,508 +167,1129 @@ function Analytics() {
 
   const selectedTeam = searchParams.get("team");
 
-  const [stats, setStats] = useState(null);
+  /*
+   * =========================================
+   * TEAM ANALYTICS STATE
+   * =========================================
+   */
+
+  const [teamStatistics, setTeamStatistics] = useState(null);
+
+  /*
+   * =========================================
+   * LEAGUE ANALYTICS STATE
+   * =========================================
+   */
+
+  const [leagueAnalytics, setLeagueAnalytics] = useState(null);
+
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState(null);
 
-  const theme = teamMetadata[selectedTeam] || {
-    primary: "#541E5D",
-    secondary: "#FFFFFF",
-    accent: "#541E5D",
-  };
 
+  /*
+   * =========================================
+   * FETCH DATA
+   * =========================================
+   */
 
   useEffect(() => {
-    if (!selectedTeam) {
-      setStats(null);
-      setLoading(false);
-      return;
-    }
-
-    async function loadStatistics() {
+    async function loadAnalytics() {
       try {
         setLoading(true);
         setError(null);
 
-        const data = await getTeamStatistics(selectedTeam);
+        /*
+         * Team selected
+         * → Load team analytics
+         */
 
-        setStats(data);
+        if (selectedTeam) {
+          const data = await getTeamStatistics(
+            selectedTeam
+          );
+
+          setTeamStatistics(data);
+          setLeagueAnalytics(null);
+
+          return;
+        }
+
+        /*
+         * No team selected
+         * → Load league analytics
+         */
+
+        const data = await getLeagueAnalytics();
+
+        setLeagueAnalytics(data);
+        setTeamStatistics(null);
+
       } catch (err) {
-        setError("Unable to load team statistics.");
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     }
 
-    loadStatistics();
+    loadAnalytics();
   }, [selectedTeam]);
 
 
-  if (!selectedTeam) {
-    return (
-      <div className="analytics-page">
-        <div className="page-header">
-          <div>
-            <p className="eyebrow">LEAGUE ANALYTICS</p>
-
-            <h1>Analytics</h1>
-
-            <p className="page-description">
-              Select a team from the Teams page to explore
-              historical performance.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  /*
+   * =========================================
+   * LOADING
+   * =========================================
+   */
 
   if (loading) {
     return (
       <div className="analytics-page">
         <div className="analytics-loading">
-          Loading {selectedTeam} statistics...
+          <p>Loading analytics...</p>
         </div>
       </div>
     );
   }
 
+
+  /*
+   * =========================================
+   * ERROR
+   * =========================================
+   */
 
   if (error) {
     return (
       <div className="analytics-page">
         <div className="analytics-error">
-          {error}
+          <h2>Unable to load analytics</h2>
+          <p>{error}</p>
         </div>
       </div>
     );
   }
 
 
-  const resultData = [
-    {
-      name: "Wins",
-      value: stats.wins,
-    },
-    {
-      name: "Draws",
-      value: stats.draws,
-    },
-    {
-      name: "Losses",
-      value: stats.losses,
-    },
-  ];
+  /*
+   * =========================================
+   * TEAM ANALYTICS
+   * =========================================
+   */
 
+  if (selectedTeam && teamStatistics) {
+    const theme = teamMetadata[selectedTeam] || {
+      primary: "#541E5D",
+      secondary: "#FFFFFF",
+      accent: "#541E5D",
+      crest: null,
+    };
 
-  const goalData = [
-    {
-      name: "Goals",
-      Scored: stats.goals_scored,
-      Conceded: stats.goals_conceded,
-    },
-  ];
+    const resultData = [
+      {
+        name: "Wins",
+        value: teamStatistics.wins,
+      },
+      {
+        name: "Draws",
+        value: teamStatistics.draws,
+      },
+      {
+        name: "Losses",
+        value: teamStatistics.losses,
+      },
+    ];
 
+    const resultColors = [
+      theme.primary,
+      "#9B6AA3",
+      "#D8CFDA",
+    ];
 
-  const venueData = [
-    {
-      name: "Home",
-      Wins: stats.home.wins,
-      Draws: stats.home.draws,
-      Losses: stats.home.losses,
-    },
-    {
-      name: "Away",
-      Wins: stats.away.wins,
-      Draws: stats.away.draws,
-      Losses: stats.away.losses,
-    },
-  ];
+    const goalData = [
+      {
+        category: "Goals",
+        scored: teamStatistics.goals_scored,
+        conceded: teamStatistics.goals_conceded,
+      },
+    ];
 
+    const venueData = [
+      {
+        category: "Home",
+        wins: teamStatistics.home.wins,
+        draws: teamStatistics.home.draws,
+        losses: teamStatistics.home.losses,
+      },
+      {
+        category: "Away",
+        wins: teamStatistics.away.wins,
+        draws: teamStatistics.away.draws,
+        losses: teamStatistics.away.losses,
+      },
+    ];
 
-  return (
-    <div
-      className="analytics-page"
-      style={{
-        "--team-primary": theme.primary,
-        "--team-secondary": theme.secondary,
-        "--team-accent": theme.accent,
-      }}
-    >
+    return (
+      <div className="analytics-page">
 
-      {/* -------------------------------- */}
-      {/* HEADER */}
-      {/* -------------------------------- */}
+        {/* ================================
+            TEAM HEADER
+        ================================= */}
 
-      <div className="analytics-header">
+        <div
+          className="analytics-header"
+          style={{
+            "--team-primary": theme.primary,
+            "--team-secondary": theme.secondary,
+            "--team-accent": theme.accent,
+          }}
+        >
+          <div className="analytics-team-identity">
 
-        <div className="analytics-team-identity">
-
-          <div className="analytics-team-crest">
-            {theme.crest && (
-              <img
-                src={theme.crest}
-                alt={`${selectedTeam} crest`}
-              />
-            )}
-          </div>
-
-          <div>
-            <p className="eyebrow">TEAM ANALYTICS</p>
-
-            <h1>{selectedTeam}</h1>
-
-            <p className="page-description">
-              Historical performance analysis for {selectedTeam}.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* -------------------------------- */}
-      {/* KPI CARDS */}
-      {/* -------------------------------- */}
-
-      <div className="analytics-kpi-grid">
-
-        <div className="analytics-kpi-card">
-          <span>Matches</span>
-          <strong>{stats.matches_played}</strong>
-          <small>Historical matches</small>
-        </div>
-
-        <div className="analytics-kpi-card">
-          <span>Wins</span>
-          <strong>{stats.wins}</strong>
-          <small>{stats.win_percentage}% win rate</small>
-        </div>
-
-        <div className="analytics-kpi-card">
-          <span>Draws</span>
-          <strong>{stats.draws}</strong>
-          <small>{stats.draw_percentage}% draw rate</small>
-        </div>
-
-        <div className="analytics-kpi-card">
-          <span>Losses</span>
-          <strong>{stats.losses}</strong>
-          <small>{stats.loss_percentage}% loss rate</small>
-        </div>
-
-      </div>
-
-
-      {/* -------------------------------- */}
-      {/* CHART ROW */}
-      {/* -------------------------------- */}
-
-      <div className="analytics-chart-grid">
-
-        {/* RESULT DISTRIBUTION */}
-
-        <div className="analytics-panel">
-
-          <div className="analytics-panel-header">
-            <div>
-              <h2>Match Results</h2>
-              <p>Overall historical record</p>
-            </div>
-          </div>
-
-          <div className="result-chart">
-
-            <ResponsiveContainer width="100%" height={280}>
-              <PieChart>
-
-                <Pie
-                  data={resultData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={72}
-                  outerRadius={105}
-                  paddingAngle={3}
-                >
-
-                  <Cell fill={theme.primary} />
-                  <Cell fill={theme.secondary} />
-                  <Cell fill="#777777" />
-
-                </Pie>
-
-                <Tooltip
-                  contentStyle={{
-                    background: "#211122",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    borderRadius: "10px",
-                    color: "#ffffff",
-                  }}
+            <div className="analytics-team-crest">
+              {theme.crest ? (
+                <img
+                  src={theme.crest}
+                  alt={`${selectedTeam} crest`}
                 />
+              ) : (
+                <div className="team-crest-fallback">
+                  {selectedTeam.charAt(0)}
+                </div>
+              )}
+            </div>
 
-              </PieChart>
-            </ResponsiveContainer>
+            <div>
+              <p className="eyebrow">
+                TEAM ANALYTICS
+              </p>
+
+              <h1>{selectedTeam}</h1>
+
+              <p className="page-description">
+                Historical Premier League performance
+                across the available dataset.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
+        {/* ================================
+            KPI CARDS
+        ================================= */}
+
+        <div className="analytics-kpi-grid">
+
+          <div className="analytics-kpi-card">
+            <span>Matches</span>
+            <strong>
+              {teamStatistics.matches_played.toLocaleString()}
+            </strong>
+            <small>
+              Historical matches
+            </small>
+          </div>
+
+          <div className="analytics-kpi-card">
+            <span>Wins</span>
+            <strong>
+              {teamStatistics.wins}
+            </strong>
+            <small>
+              {teamStatistics.win_percentage}% win rate
+            </small>
+          </div>
+
+          <div className="analytics-kpi-card">
+            <span>Draws</span>
+            <strong>
+              {teamStatistics.draws}
+            </strong>
+            <small>
+              {teamStatistics.draw_percentage}% draw rate
+            </small>
+          </div>
+
+          <div className="analytics-kpi-card">
+            <span>Losses</span>
+            <strong>
+              {teamStatistics.losses}
+            </strong>
+            <small>
+              {teamStatistics.loss_percentage}% loss rate
+            </small>
+          </div>
+
+        </div>
+
+
+        {/* ================================
+            RESULT + GOALS
+        ================================= */}
+
+        <div className="analytics-chart-grid">
+
+          <section className="analytics-panel">
+
+            <div className="card-header">
+              <div>
+                <p className="eyebrow">
+                  MATCH RESULTS
+                </p>
+
+                <h2>Result Distribution</h2>
+              </div>
+            </div>
+
+            <div className="result-chart">
+
+              <ResponsiveContainer
+                width="100%"
+                height={280}
+              >
+                <PieChart>
+
+                  <Pie
+                    data={resultData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={105}
+                    paddingAngle={3}
+                  >
+                    {resultData.map(
+                      (entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={
+                            resultColors[index]
+                          }
+                        />
+                      )
+                    )}
+                  </Pie>
+
+                  <Tooltip />
+
+                </PieChart>
+              </ResponsiveContainer>
+
+            </div>
 
             <div className="result-legend">
 
               <div>
                 <span
-                  style={{
-                    background: theme.primary,
-                  }}
+                  className="legend-dot home"
                 />
-                <label>Wins</label>
-                <strong>{stats.wins}</strong>
+
+                <span>Wins</span>
+
+                <strong>
+                  {teamStatistics.win_percentage}%
+                </strong>
               </div>
 
               <div>
                 <span
-                  style={{
-                    background: theme.secondary,
-                  }}
+                  className="legend-dot draw"
                 />
-                <label>Draws</label>
-                <strong>{stats.draws}</strong>
+
+                <span>Draws</span>
+
+                <strong>
+                  {teamStatistics.draw_percentage}%
+                </strong>
               </div>
 
               <div>
                 <span
-                  style={{
-                    background: "#777777",
-                  }}
+                  className="legend-dot away"
                 />
-                <label>Losses</label>
-                <strong>{stats.losses}</strong>
+
+                <span>Losses</span>
+
+                <strong>
+                  {teamStatistics.loss_percentage}%
+                </strong>
               </div>
 
             </div>
 
-          </div>
+          </section>
+
+
+          {/* GOALS */}
+
+          <section className="analytics-panel">
+
+            <div className="card-header">
+              <div>
+                <p className="eyebrow">
+                  GOAL RECORD
+                </p>
+
+                <h2>Goals Scored vs Conceded</h2>
+              </div>
+            </div>
+
+            <div className="analytics-chart">
+
+              <ResponsiveContainer
+                width="100%"
+                height={280}
+              >
+                <BarChart
+                  data={goalData}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: 0,
+                    bottom: 10,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.08)"
+                  />
+
+                  <XAxis
+                    dataKey="category"
+                    stroke="#A996B0"
+                  />
+
+                  <YAxis
+                    stroke="#A996B0"
+                  />
+
+                  <Tooltip />
+
+                  <Legend />
+
+                  <Bar
+                    dataKey="scored"
+                    name="Scored"
+                    fill={theme.primary}
+                    radius={[
+                      6,
+                      6,
+                      0,
+                      0,
+                    ]}
+                  />
+
+                  <Bar
+                    dataKey="conceded"
+                    name="Conceded"
+                    fill="#D8CFDA"
+                    radius={[
+                      6,
+                      6,
+                      0,
+                      0,
+                    ]}
+                  />
+
+                </BarChart>
+              </ResponsiveContainer>
+
+            </div>
+
+            <div className="goal-summary">
+
+              <div>
+                <span>Goals scored</span>
+                <strong>
+                  {teamStatistics.goals_scored.toLocaleString()}
+                </strong>
+              </div>
+
+              <div>
+                <span>Goals conceded</span>
+                <strong>
+                  {teamStatistics.goals_conceded.toLocaleString()}
+                </strong>
+              </div>
+
+              <div>
+                <span>Goal difference</span>
+                <strong>
+                  {teamStatistics.goal_difference > 0
+                    ? "+"
+                    : ""}
+                  {teamStatistics.goal_difference.toLocaleString()}
+                </strong>
+              </div>
+
+            </div>
+
+          </section>
 
         </div>
 
 
-        {/* GOALS */}
+        {/* ================================
+            HOME VS AWAY
+        ================================= */}
 
-        <div className="analytics-panel">
+        <section className="analytics-panel venue-panel">
 
-          <div className="analytics-panel-header">
+          <div className="card-header">
             <div>
-              <h2>Goals</h2>
-              <p>Scored versus conceded</p>
+              <p className="eyebrow">
+                VENUE PERFORMANCE
+              </p>
+
+              <h2>Home vs Away</h2>
             </div>
           </div>
 
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart
-              data={goalData}
-              margin={{
-                top: 30,
-                right: 20,
-                left: 0,
-                bottom: 10,
-              }}
+          <div className="analytics-chart">
+
+            <ResponsiveContainer
+              width="100%"
+              height={300}
             >
-
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(255,255,255,0.08)"
-              />
-
-              <XAxis
-                dataKey="name"
-                stroke="rgba(255,255,255,0.55)"
-              />
-
-              <YAxis
-                stroke="rgba(255,255,255,0.55)"
-              />
-
-              <Tooltip
-                contentStyle={{
-                  background: "#211122",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: "10px",
-                  color: "#ffffff",
+              <BarChart
+                data={venueData}
+                margin={{
+                  top: 10,
+                  right: 20,
+                  left: 0,
+                  bottom: 10,
                 }}
-              />
+              >
 
-              <Bar
-                dataKey="Scored"
-                fill={theme.primary}
-                radius={[6, 6, 0, 0]}
-              />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.08)"
+                />
 
-              <Bar
-                dataKey="Conceded"
-                fill={theme.secondary}
-                radius={[6, 6, 0, 0]}
-              />
+                <XAxis
+                  dataKey="category"
+                  stroke="#A996B0"
+                />
 
-            </BarChart>
-          </ResponsiveContainer>
+                <YAxis
+                  stroke="#A996B0"
+                />
 
-          <div className="goal-summary">
+                <Tooltip />
 
-            <div>
-              <span>Scored</span>
-              <strong>{stats.goals_scored}</strong>
-            </div>
+                <Legend />
 
-            <div>
-              <span>Conceded</span>
-              <strong>{stats.goals_conceded}</strong>
-            </div>
+                <Bar
+                  dataKey="wins"
+                  name="Wins"
+                  fill="#FF6B5F"
+                  radius={[
+                    6,
+                    6,
+                    0,
+                    0,
+                  ]}
+                />
 
-            <div>
-              <span>Difference</span>
-              <strong>
-                {stats.goal_difference > 0 ? "+" : ""}
-                {stats.goal_difference}
-              </strong>
-            </div>
+                <Bar
+                  dataKey="draws"
+                  name="Draws"
+                  fill="#FFC857"
+                  radius={[
+                    6,
+                    6,
+                    0,
+                    0,
+                  ]}
+                />
+
+                <Bar
+                  dataKey="losses"
+                  name="Losses"
+                  fill="#48B5A5"
+                  radius={[
+                    6,
+                    6,
+                    0,
+                    0,
+                  ]}
+                />
+
+              </BarChart>
+            </ResponsiveContainer>
 
           </div>
 
-        </div>
+        </section>
+
+
+        {/* ================================
+            HIGHLIGHT
+        ================================= */}
+
+        <section className="analytics-highlight">
+
+          <div>
+            <p className="eyebrow">
+              HISTORICAL HIGHLIGHT
+            </p>
+
+            <h2>
+              {teamStatistics.goal_difference > 0
+                ? `+${teamStatistics.goal_difference}`
+                : teamStatistics.goal_difference}
+              {" "}
+              goal difference
+            </h2>
+
+            <p>
+              Across{" "}
+              {teamStatistics.matches_played.toLocaleString()}
+              {" "}
+              historical matches, {selectedTeam} scored{" "}
+              {teamStatistics.goals_scored.toLocaleString()}
+              {" "}
+              goals and conceded{" "}
+              {teamStatistics.goals_conceded.toLocaleString()}.
+            </p>
+          </div>
+
+        </section>
 
       </div>
+    );
+  }
 
 
-      {/* -------------------------------- */}
-      {/* HOME VS AWAY */}
-      {/* -------------------------------- */}
+  /*
+   * =========================================
+   * LEAGUE ANALYTICS
+   * =========================================
+   */
 
-      <div className="analytics-panel venue-panel">
+  if (leagueAnalytics) {
+    const {
+      overall,
+      season_trends,
+      team_rankings,
+    } = leagueAnalytics;
 
-        <div className="analytics-panel-header">
+    const seasonTrendData =
+      normalizeSeasonTrends(season_trends);
+
+    return (
+      <div className="analytics-page league-analytics-page">
+
+        {/* ================================
+            LEAGUE HEADER
+        ================================= */}
+
+        <div className="page-header">
 
           <div>
-            <h2>Home vs Away Performance</h2>
-            <p>Historical record by venue</p>
+            <p className="eyebrow">
+              LEAGUE ANALYTICS
+            </p>
+
+            <h1>Premier League</h1>
+
+            <p className="page-description">
+              Historical league trends across{" "}
+              {overall.total_matches.toLocaleString()}
+              {" "}
+              matches from the available dataset.
+            </p>
           </div>
 
         </div>
 
 
-        <ResponsiveContainer width="100%" height={300}>
+        {/* ================================
+            KPI CARDS
+        ================================= */}
 
-          <BarChart
-            data={venueData}
-            margin={{
-              top: 20,
-              right: 20,
-              left: 0,
-              bottom: 10,
-            }}
-          >
+        <div className="analytics-kpi-grid">
 
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="rgba(255,255,255,0.08)"
-            />
+          <div className="analytics-kpi-card">
+            <span>Matches</span>
 
-            <XAxis
-              dataKey="name"
-              stroke="rgba(255,255,255,0.55)"
-            />
+            <strong>
+              {overall.total_matches.toLocaleString()}
+            </strong>
 
-            <YAxis
-              stroke="rgba(255,255,255,0.55)"
-            />
-
-            <Tooltip
-              contentStyle={{
-                background: "#211122",
-                border: "1px solid rgba(255,255,255,0.15)",
-                borderRadius: "10px",
-                color: "#ffffff",
-              }}
-            />
-
-            <Bar
-              dataKey="Wins"
-              fill={theme.primary}
-              radius={[5, 5, 0, 0]}
-            />
-
-            <Bar
-              dataKey="Draws"
-              fill={theme.secondary}
-              radius={[5, 5, 0, 0]}
-            />
-
-            <Bar
-              dataKey="Losses"
-              fill="#777777"
-              radius={[5, 5, 0, 0]}
-            />
-
-          </BarChart>
-
-        </ResponsiveContainer>
-
-
-        <div className="venue-summary">
-
-          <div>
-            <h3>Home</h3>
-            <p>
-              {stats.home.wins}W · {stats.home.draws}D ·{" "}
-              {stats.home.losses}L
-            </p>
-            <span>
-              {stats.home.matches} matches
-            </span>
+            <small>
+              Historical matches analyzed
+            </small>
           </div>
 
-          <div>
-            <h3>Away</h3>
-            <p>
-              {stats.away.wins}W · {stats.away.draws}D ·{" "}
-              {stats.away.losses}L
-            </p>
-            <span>
-              {stats.away.matches} matches
-            </span>
+          <div className="analytics-kpi-card">
+            <span>Total Goals</span>
+
+            <strong>
+              {overall.total_goals.toLocaleString()}
+            </strong>
+
+            <small>
+              Across all matches
+            </small>
+          </div>
+
+          <div className="analytics-kpi-card">
+            <span>Goals / Match</span>
+
+            <strong>
+              {overall.goals_per_match}
+            </strong>
+
+            <small>
+              League-wide average
+            </small>
+          </div>
+
+          <div className="analytics-kpi-card">
+            <span>Home Win Rate</span>
+
+            <strong>
+              {overall.home_win_percentage}%
+            </strong>
+
+            <small>
+              {overall.home_wins.toLocaleString()}
+              {" "}
+              home wins
+            </small>
           </div>
 
         </div>
+
+
+        {/* ================================
+            OUTCOME TRENDS
+        ================================= */}
+
+        <section className="analytics-panel">
+
+          <div className="card-header">
+
+            <div>
+              <p className="eyebrow">
+                SEASON TRENDS
+              </p>
+
+              <h2>
+                Match Outcome Trends
+              </h2>
+            </div>
+
+          </div>
+
+          <div className="analytics-chart">
+
+            <MeasuredChart height={360}>
+
+              <LineChart
+                data={seasonTrendData}
+                margin={{
+                  top: 10,
+                  right: 20,
+                  left: 0,
+                  bottom: 10,
+                }}
+              >
+
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.08)"
+                />
+
+                <XAxis
+                  dataKey="season"
+                  stroke="#A996B0"
+                />
+
+                <YAxis
+                  domain={[0, 60]}
+                  stroke="#A996B0"
+                  tickFormatter={(value) =>
+                    `${value}%`
+                  }
+                />
+
+                <Tooltip
+                  formatter={(value) =>
+                    `${value}%`
+                  }
+                />
+
+                <Legend />
+
+                <Line
+                  type="monotone"
+                  dataKey="home_win_percentage"
+                  name="Home Win"
+                  stroke="#FF6B5F"
+                  strokeWidth={3}
+                  dot={false}
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="draw_percentage"
+                  name="Draw"
+                  stroke="#FFC857"
+                  strokeWidth={3}
+                  dot={false}
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="away_win_percentage"
+                  name="Away Win"
+                  stroke="#48B5A5"
+                  strokeWidth={3}
+                  dot={false}
+                />
+
+              </LineChart>
+
+            </MeasuredChart>
+
+          </div>
+
+        </section>
+
+
+        {/* ================================
+            GOAL TRENDS
+        ================================= */}
+
+        <div className="analytics-chart-grid">
+
+          <section className="analytics-panel">
+
+            <div className="card-header">
+
+              <div>
+                <p className="eyebrow">
+                  SCORING TRENDS
+                </p>
+
+                <h2>
+                  Goals Per Match
+                </h2>
+              </div>
+
+            </div>
+
+            <div className="analytics-chart">
+
+              <MeasuredChart height={300}>
+
+                <LineChart
+                  data={seasonTrendData}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: 0,
+                    bottom: 10,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.08)"
+                  />
+
+                  <XAxis
+                    dataKey="season"
+                    stroke="#A996B0"
+                  />
+
+                  <YAxis
+                    stroke="#A996B0"
+                  />
+
+                  <Tooltip />
+
+                  <Line
+                    type="monotone"
+                    dataKey="goals_per_match"
+                    name="Goals / Match"
+                    stroke="#A96BB5"
+                    strokeWidth={3}
+                    dot={false}
+                  />
+
+                </LineChart>
+
+              </MeasuredChart>
+
+            </div>
+
+          </section>
+
+
+          <section className="analytics-panel">
+
+            <div className="card-header">
+
+              <div>
+                <p className="eyebrow">
+                  HOME VS AWAY
+                </p>
+
+                <h2>
+                  Goals by Venue
+                </h2>
+              </div>
+
+            </div>
+
+            <div className="analytics-chart">
+
+              <MeasuredChart height={300}>
+
+                <BarChart
+                  data={seasonTrendData}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: 0,
+                    bottom: 10,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.08)"
+                  />
+
+                  <XAxis
+                    dataKey="season"
+                    stroke="#A996B0"
+                  />
+
+                  <YAxis
+                    stroke="#A996B0"
+                  />
+
+                  <Tooltip />
+
+                  <Legend />
+
+                  <Bar
+                    dataKey="home_goals_per_match"
+                    name="Home Goals"
+                    fill="#FF6B5F"
+                    radius={[
+                      4,
+                      4,
+                      0,
+                      0,
+                    ]}
+                  />
+
+                  <Bar
+                    dataKey="away_goals_per_match"
+                    name="Away Goals"
+                    fill="#48B5A5"
+                    radius={[
+                      4,
+                      4,
+                      0,
+                      0,
+                    ]}
+                  />
+
+                </BarChart>
+
+              </MeasuredChart>
+
+            </div>
+
+          </section>
+
+        </div>
+
+
+        {/* ================================
+            HISTORICAL TEAM PERFORMANCE
+        ================================= */}
+
+        <section className="analytics-panel">
+
+          <div className="card-header">
+
+            <div>
+              <p className="eyebrow">
+                HISTORICAL PERFORMANCE
+              </p>
+
+              <h2>
+                Team Performance
+              </h2>
+
+              <p className="panel-description">
+                Aggregate performance across the
+                full historical dataset.
+              </p>
+            </div>
+
+          </div>
+
+          <div className="league-leaderboard">
+
+            {team_rankings.map((team) => {
+              const metadata = teamMetadata[team.team];
+
+              return (
+                <div
+                  key={team.team}
+                  className="leaderboard-row"
+                  style={{
+                    "--team-primary":
+                      metadata?.primary || "#541E5D",
+                  }}
+                >
+
+                  {/* Rank */}
+                  <div className="leaderboard-rank">
+                    <span>{team.rank}</span>
+                  </div>
+
+                  {/* Team */}
+                  <div className="leaderboard-team">
+
+                    <div className="leaderboard-crest">
+                      {metadata?.crest ? (
+                        <img
+                          src={metadata.crest}
+                          alt={`${team.team} crest`}
+                        />
+                      ) : (
+                        <span>
+                          {team.team.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="leaderboard-team-info">
+                      <h3>{team.team}</h3>
+
+                      <span>
+                        {team.matches} matches
+                      </span>
+                    </div>
+
+                  </div>
+
+                  {/* Record */}
+                  <div className="leaderboard-record">
+
+                    <div className="record-label">
+                      RECORD
+                    </div>
+
+                    <div className="record-values">
+                      <span className="record-win">
+                        {team.wins}W
+                      </span>
+
+                      <span>
+                        {team.draws}D
+                      </span>
+
+                      <span className="record-loss">
+                        {team.losses}L
+                      </span>
+                    </div>
+
+                  </div>
+
+                  {/* Win percentage */}
+                  <div className="leaderboard-winrate">
+
+                    <div className="winrate-header">
+                      <span>WIN RATE</span>
+
+                      <strong>
+                        {team.win_percentage}%
+                      </strong>
+                    </div>
+
+                    <div className="winrate-track">
+                      <div
+                        className="winrate-fill"
+                        style={{
+                          width: `${team.win_percentage}%`,
+                        }}
+                      />
+                    </div>
+
+                  </div>
+
+                  {/* Goal difference */}
+                  <div className="leaderboard-gd">
+
+                    <span>GOAL DIFF.</span>
+
+                    <strong
+                      className={
+                        team.goal_difference >= 0
+                          ? "positive-value"
+                          : "negative-value"
+                      }
+                    >
+                      {team.goal_difference > 0 ? "+" : ""}
+                      {team.goal_difference}
+                    </strong>
+
+                  </div>
+
+                  {/* Points */}
+                  <div className="leaderboard-points">
+
+                    <span>POINTS</span>
+
+                    <strong>
+                      {team.points}
+                    </strong>
+
+                  </div>
+
+                </div>
+              );
+            })}
+
+          </div>
+
+        </section>
 
       </div>
+    );
+  }
 
 
-      {/* -------------------------------- */}
-      {/* GOAL DIFFERENCE */}
-      {/* -------------------------------- */}
+  /*
+   * =========================================
+   * FALLBACK
+   * =========================================
+   */
 
-      <div className="analytics-highlight">
-
-        <div>
-
-          <span>GOAL DIFFERENCE</span>
-
-          <strong>
-            {stats.goal_difference > 0 ? "+" : ""}
-            {stats.goal_difference}
-          </strong>
-
-        </div>
-
+  return (
+    <div className="analytics-page">
+      <div className="analytics-error">
+        <h2>No analytics available</h2>
         <p>
-          {selectedTeam} has scored{" "}
-          <strong>{stats.goals_scored}</strong>{" "}
-          goals while conceding{" "}
-          <strong>{stats.goals_conceded}</strong>{" "}
-          across {stats.matches_played} historical matches.
+          There is currently no analytics data
+          available.
         </p>
-
       </div>
-
     </div>
   );
 }

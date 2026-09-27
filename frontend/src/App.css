@@ -47,6 +47,7 @@
 
 .main-content {
   flex: 1;
+  min-width: 0;
   padding: 40px;
 }
 
@@ -797,40 +798,63 @@
   flex-direction: column;
 }
 
+/* ========================================
+   RESULT CHART LEGEND
+======================================== */
+
 .result-legend {
   display: flex;
-
   justify-content: center;
+  align-items: center;
 
-  gap: 22px;
+  gap: 28px;
 
   margin-top: -5px;
 }
 
-.result-legend div {
+.result-legend > div {
   display: flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 8px;
+
+  white-space: nowrap;
 }
 
-.result-legend span {
+/* ONLY the coloured dots */
+.result-legend .legend-dot {
   width: 9px;
   height: 9px;
+
+  flex: 0 0 9px;
 
   border-radius: 50%;
 }
 
-.result-legend label {
-  color: rgba(255, 255, 255, 0.55);
+/* Legend text */
+.result-legend > div > span:not(.legend-dot) {
+  width: auto;
+  height: auto;
 
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 13px;
+  font-weight: 500;
+
+  line-height: 1.2;
 }
 
+/* Percentage */
 .result-legend strong {
+  width: auto;
+  height: auto;
+
   color: #ffffff;
 
   font-size: 13px;
+  font-weight: 700;
+
+  line-height: 1.2;
 }
 
 /* ========================================
@@ -2393,3 +2417,3462 @@
     margin: 0 7px;
   }
 }
+
+/* =========================================
+   PREDICTION HISTORY
+   ========================================= */
+
+.history-page {
+  min-height: 100%;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+
+.history-header .page-description {
+  max-width: 680px;
+}
+
+.history-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  padding: 14px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  flex-shrink: 0;
+}
+
+.history-count span {
+  color: #9d8e9f;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.history-count strong {
+  margin-top: 3px;
+
+  color: #ffffff;
+
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+
+/* =========================================
+   HISTORY LIST
+   ========================================= */
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+/* =========================================
+   HISTORY CARD
+   ========================================= */
+
+.history-card {
+  display: grid;
+
+  grid-template-columns:
+    minmax(300px, 1.4fr)
+    minmax(150px, 0.7fr)
+    minmax(260px, 1.1fr)
+    150px;
+
+  align-items: center;
+
+  gap: 22px;
+
+  padding: 22px 24px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.012)
+    );
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.history-card:hover {
+  transform: translateY(-2px);
+
+  border-color: rgba(155, 106, 163, 0.2);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.018)
+    );
+}
+
+
+/* =========================================
+   HISTORY MATCH
+   ========================================= */
+
+.history-match {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.history-team {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 0;
+}
+
+.history-team-away {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.history-team-crest {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(
+        in srgb,
+        var(--team-primary) 20%,
+        transparent
+      ),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--team-primary) 40%,
+      rgba(255, 255, 255, 0.08)
+    );
+}
+
+.history-team-crest img {
+  width: 34px;
+  height: 34px;
+
+  object-fit: contain;
+}
+
+.history-team-crest span {
+  color: #ffffff;
+
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.history-team-label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #8f8192;
+
+  font-size: 0.62rem;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.history-team strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 0.92rem;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.history-vs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: #88798b;
+
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+
+/* =========================================
+   OUTCOME
+   ========================================= */
+
+.history-outcome {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.history-outcome-label {
+  margin-bottom: 5px;
+
+  color: #8f8192;
+
+  font-size: 0.62rem;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.history-outcome strong {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.history-home {
+  color: #f26b5b;
+}
+
+.history-draw {
+  color: #ffc857;
+}
+
+.history-away {
+  color: #43b3a3;
+}
+
+
+/* =========================================
+   PROBABILITIES
+   ========================================= */
+
+.history-probabilities {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 10px;
+}
+
+.history-probability {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  padding: 10px 12px;
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.history-probability span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #a99aaa;
+
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.history-probability strong {
+  color: #ffffff;
+
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.history-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  display: inline-block;
+}
+
+.history-dot.home {
+  background: #f26b5b;
+}
+
+.history-dot.draw {
+  background: #ffc857;
+}
+
+.history-dot.away {
+  background: #43b3a3;
+}
+
+
+/* =========================================
+   DATE
+   ========================================= */
+
+.history-date {
+  color: #817382;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  line-height: 1.5;
+
+  text-align: right;
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  max-width: 620px;
+
+  margin: 60px auto 0;
+
+  padding: 55px 30px;
+
+  text-align: center;
+
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.history-empty-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 60px;
+  height: 60px;
+
+  margin-bottom: 18px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(84, 30, 93, 0.7),
+      rgba(84, 30, 93, 0.2)
+    );
+
+  border: 1px solid rgba(155, 106, 163, 0.2);
+
+  color: #c2a8c7;
+
+  font-size: 1.6rem;
+}
+
+.history-empty h2 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 1.15rem;
+}
+
+.history-empty p {
+  max-width: 440px;
+
+  margin: 0;
+
+  color: #938496;
+
+  font-size: 0.88rem;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   ERROR
+   ========================================= */
+
+.history-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+
+  padding: 18px 20px;
+
+  border: 1px solid rgba(242, 107, 91, 0.18);
+  border-radius: 12px;
+
+  background: rgba(242, 107, 91, 0.06);
+}
+
+.history-error > span {
+  color: #f26b5b;
+
+  font-size: 1.1rem;
+}
+
+.history-error strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #ffffff;
+
+  font-size: 0.9rem;
+}
+
+.history-error p {
+  margin: 0;
+
+  color: #a897a9;
+
+  font-size: 0.8rem;
+}
+
+
+/* =========================================
+   LOADING
+   ========================================= */
+
+.history-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 400px;
+
+  color: #a899aa;
+}
+
+.history-loading .loading-spinner {
+  margin-bottom: 14px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 1200px) {
+  .history-card {
+    grid-template-columns:
+      minmax(280px, 1.2fr)
+      minmax(130px, 0.6fr)
+      minmax(230px, 1fr);
+  }
+
+  .history-date {
+    grid-column: 3;
+    text-align: right;
+  }
+}
+
+@media (max-width: 900px) {
+  .history-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .history-count {
+    align-items: flex-start;
+  }
+
+  .history-card {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .history-match {
+    grid-column: 1 / -1;
+  }
+
+  .history-outcome {
+    grid-column: 1;
+  }
+
+  .history-probabilities {
+    grid-column: 1 / -1;
+  }
+
+  .history-date {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+  }
+}
+
+@media (max-width: 600px) {
+  .history-card {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .history-match {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .history-team strong {
+    font-size: 0.82rem;
+  }
+
+  .history-team-crest {
+    width: 42px;
+    height: 42px;
+  }
+
+  .history-team-crest img {
+    width: 29px;
+    height: 29px;
+  }
+
+  .history-outcome,
+  .history-probabilities,
+  .history-date {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .history-date {
+    text-align: left;
+  }
+
+  .history-probabilities {
+    gap: 7px;
+  }
+
+  .history-probability {
+    padding: 9px;
+  }
+}
+
+/* ========================================
+   LEAGUE ANALYTICS
+   ======================================== */
+
+.league-analytics-page {
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.league-analytics-page .analytics-kpi-grid,
+.league-analytics-page .analytics-chart-grid {
+  width: 100%;
+  min-width: 0;
+}
+
+.league-analytics-page .analytics-kpi-card,
+.league-analytics-page .analytics-panel {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ========================================
+   LEAGUE CHARTS
+   ======================================== */
+
+.league-analytics-page .analytics-chart {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.league-analytics-page .recharts-responsive-container {
+  min-width: 1px !important;
+  max-width: 100% !important;
+}
+
+.league-analytics-page .recharts-wrapper {
+  max-width: 100% !important;
+}
+
+.league-analytics-page .recharts-surface {
+  overflow: visible;
+}
+
+/* ========================================
+   TEAM PERFORMANCE TABLE
+   ======================================== */
+
+.league-analytics-page .analytics-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.league-analytics-page .analytics-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+/* ========================================
+   RESPONSIVE LEAGUE ANALYTICS
+   ======================================== */
+
+@media (max-width: 1100px) {
+  .league-analytics-page .analytics-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .league-analytics-page .analytics-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .league-analytics-page .analytics-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .league-analytics-page .analytics-panel {
+    padding: 18px;
+  }
+
+  .league-analytics-page .page-header h1 {
+    font-size: 30px;
+  }
+
+  .league-analytics-page .page-description {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 800px) {
+  .league-analytics-page
+  .recharts-xAxis
+  .recharts-cartesian-axis-tick {
+    font-size: 10px;
+  }
+}
+
+/* ========================================
+   LEAGUE TEAM PERFORMANCE TABLE FIX
+   ======================================== */
+
+.league-analytics-page .analytics-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.league-analytics-page .analytics-table th,
+.league-analytics-page .analytics-table td {
+  padding: 14px 12px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.league-analytics-page .analytics-table th:first-child,
+.league-analytics-page .analytics-table td:first-child {
+  width: 70px;
+}
+
+.league-analytics-page .analytics-table th:nth-child(2),
+.league-analytics-page .analytics-table td:nth-child(2) {
+  width: 220px;
+}
+
+/* Team cell */
+.league-analytics-page .analytics-table td:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* CRITICAL: keep table crests small */
+.league-analytics-page .analytics-table td img {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  object-fit: contain;
+  display: block;
+}
+
+/* Keep team name normal */
+.league-analytics-page .analytics-table td:nth-child(2) {
+  white-space: nowrap;
+}
+
+/* Make the rank column clean */
+.league-analytics-page .analytics-table td:first-child {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Don't let other table images inherit dashboard image rules */
+.league-analytics-page .analytics-table img {
+  position: static !important;
+  transform: none !important;
+}
+
+/* ========================================
+   LEAGUE LEADERBOARD
+   ======================================== */
+
+.league-leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+
+/* ========================================
+   LEADERBOARD ROW
+   ======================================== */
+
+.leaderboard-row {
+  position: relative;
+
+  display: grid;
+  grid-template-columns:
+    54px
+    minmax(190px, 1.5fr)
+    minmax(130px, 1fr)
+    minmax(180px, 1.25fr)
+    110px
+    110px;
+
+  align-items: center;
+
+  min-height: 88px;
+  padding: 14px 18px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.018)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.065);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  overflow: hidden;
+}
+
+
+/* Team colour accent */
+
+.leaderboard-row::before {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+
+  width: 3px;
+
+  border-radius: 0 4px 4px 0;
+
+  background: var(--team-primary);
+  opacity: 0.9;
+}
+
+
+.leaderboard-row:hover {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  border-color: rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ========================================
+   RANK
+   ======================================== */
+
+.leaderboard-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.leaderboard-rank span {
+  display: flex;
+
+  width: 34px;
+  height: 34px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+
+/* Top three */
+
+.leaderboard-row:nth-child(1) .leaderboard-rank span,
+.leaderboard-row:nth-child(2) .leaderboard-rank span,
+.leaderboard-row:nth-child(3) .leaderboard-rank span {
+  background: rgba(255, 200, 87, 0.12);
+  color: #FFC857;
+}
+
+
+/* ========================================
+   TEAM
+   ======================================== */
+
+.leaderboard-team {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  min-width: 0;
+}
+
+
+.leaderboard-crest {
+  display: flex;
+
+  width: 48px;
+  height: 48px;
+
+  flex: 0 0 48px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+.leaderboard-crest img {
+  width: 38px !important;
+  height: 38px !important;
+
+  max-width: 38px !important;
+  max-height: 38px !important;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+
+.leaderboard-crest span {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+
+.leaderboard-team-info {
+  min-width: 0;
+}
+
+
+.leaderboard-team-info h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.leaderboard-team-info span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.42);
+
+  font-size: 11px;
+  font-weight: 500;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+
+/* ========================================
+   RECORD
+   ======================================== */
+
+.leaderboard-record {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+
+.record-label,
+.leaderboard-gd > span,
+.leaderboard-points > span {
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+}
+
+
+.record-values {
+  display: flex;
+  gap: 10px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: rgba(255, 255, 255, 0.72);
+}
+
+
+.record-win {
+  color: #48B5A5;
+}
+
+
+.record-loss {
+  color: #FF6B5F;
+}
+
+
+/* ========================================
+   WIN RATE
+   ======================================== */
+
+.leaderboard-winrate {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  padding-right: 20px;
+}
+
+
+.winrate-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+
+.winrate-header span {
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+}
+
+
+.winrate-header strong {
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+.winrate-track {
+  width: 100%;
+  height: 5px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+.winrate-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--team-primary),
+      rgba(255, 255, 255, 0.8)
+    );
+
+  min-width: 4px;
+}
+
+
+/* ========================================
+   GOAL DIFFERENCE
+   ======================================== */
+
+.leaderboard-gd {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+
+.leaderboard-gd strong {
+  font-size: 15px;
+  font-weight: 750;
+}
+
+
+/* ========================================
+   POINTS
+   ======================================== */
+
+.leaderboard-points {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  padding-left: 18px;
+
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+.leaderboard-points strong {
+  color: #ffffff;
+
+  font-size: 21px;
+  font-weight: 800;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1100px) {
+
+  .leaderboard-row {
+    grid-template-columns:
+      48px
+      minmax(170px, 1.4fr)
+      minmax(120px, 1fr)
+      minmax(150px, 1fr)
+      90px
+      90px;
+
+    padding: 13px 14px;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .leaderboard-row {
+    grid-template-columns:
+      45px
+      minmax(170px, 1fr)
+      minmax(120px, 1fr)
+      90px;
+
+    row-gap: 12px;
+  }
+
+  .leaderboard-winrate {
+    grid-column: 2 / 4;
+  }
+
+  .leaderboard-gd {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .leaderboard-points {
+    display: none;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .leaderboard-row {
+    grid-template-columns:
+      40px
+      1fr
+      80px;
+
+    min-height: 82px;
+  }
+
+  .leaderboard-record {
+    display: none;
+  }
+
+  .leaderboard-winrate {
+    grid-column: 2;
+  }
+
+  .leaderboard-gd {
+    grid-column: 3;
+  }
+
+  .leaderboard-crest {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .leaderboard-crest img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+}
+
+
+/* ========================================
+   LEAGUE ANALYTICS
+   RECHARTS TYPOGRAPHY
+   ======================================== */
+
+/* Axis tick labels */
+.league-analytics-page
+.recharts-cartesian-axis-tick-value {
+  fill: #A996B0 !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em;
+}
+
+/* X-axis labels */
+.league-analytics-page
+.recharts-xAxis
+.recharts-cartesian-axis-tick-value {
+  fill: #B7A8BD !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+/* Y-axis labels */
+.league-analytics-page
+.recharts-yAxis
+.recharts-cartesian-axis-tick-value {
+  fill: #A996B0 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+/* Axis lines */
+.league-analytics-page
+.recharts-cartesian-axis-line {
+  stroke: rgba(255, 255, 255, 0.22) !important;
+  stroke-width: 1 !important;
+}
+
+/* Tick marks */
+.league-analytics-page
+.recharts-cartesian-axis-tick-line {
+  stroke: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Chart grid */
+.league-analytics-page
+.recharts-cartesian-grid-horizontal line,
+.league-analytics-page
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.055) !important;
+  stroke-dasharray: 3 5 !important;
+}
+
+/* ========================================
+   CHART LEGEND
+   ======================================== */
+
+.league-analytics-page
+.recharts-legend-item-text {
+  color: #B7A8BD !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+
+/* ========================================
+   CHART TOOLTIP
+   ======================================== */
+
+.league-analytics-page
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.league-analytics-page
+.recharts-default-tooltip {
+  background: rgba(28, 18, 31, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.30) !important;
+  padding: 10px 12px !important;
+}
+
+.league-analytics-page
+.recharts-tooltip-label {
+  color: #FFFFFF !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+}
+
+.league-analytics-page
+.recharts-tooltip-item {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+
+/* ========================================
+   CHART RESPONSIVENESS
+   ======================================== */
+
+@media (max-width: 800px) {
+
+  .league-analytics-page
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+
+  .league-analytics-page
+  .recharts-xAxis
+  .recharts-cartesian-axis-tick-value {
+    font-size: 9px !important;
+  }
+
+}
+/* ========================================
+   PREDICTOR - TEAM SELECTOR POLISH
+   ======================================== */
+
+/* Selected team input */
+.team-search-wrapper.has-selected-team input {
+  padding-left: 52px;
+}
+
+/* Crest shown inside the selected input */
+.team-search-crest {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  z-index: 2;
+  pointer-events: none;
+}
+
+.team-search-crest img {
+  width: 22px !important;
+  height: 22px !important;
+
+  max-width: 22px !important;
+  max-height: 22px !important;
+
+  object-fit: contain !important;
+
+  display: block;
+}
+
+
+/* ========================================
+   SEARCH DROPDOWN
+   ======================================== */
+
+.team-search-dropdown {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  max-height: 300px;
+
+  padding: 8px;
+
+  box-sizing: border-box;
+
+  z-index: 100;
+}
+
+
+/* ========================================
+   DROPDOWN TEAM OPTION
+   ======================================== */
+
+.team-search-option {
+  width: 100% !important;
+  min-height: 56px;
+
+  box-sizing: border-box;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  padding: 8px 12px !important;
+
+  gap: 12px;
+
+  overflow: hidden;
+
+  border: 0;
+}
+
+
+/* Left side of dropdown option */
+.team-search-option-left {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  flex: 1;
+}
+
+
+/* ========================================
+   DROPDOWN CRESTS
+   ======================================== */
+
+.team-search-option-crest {
+  width: 38px !important;
+  height: 38px !important;
+
+  min-width: 38px !important;
+  max-width: 38px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(
+        in srgb,
+        var(--option-team-primary) 18%,
+        transparent
+      ),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  overflow: hidden;
+}
+
+.team-search-option-crest img {
+  width: 30px !important;
+  height: 30px !important;
+
+  min-width: 30px !important;
+  min-height: 30px !important;
+
+  max-width: 30px !important;
+  max-height: 30px !important;
+
+  object-fit: contain !important;
+
+  display: block !important;
+}
+
+.team-search-option-crest span {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* Team name inside dropdown */
+.team-search-option-left > span {
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* Selected check */
+.team-search-option .team-selected-check {
+  width: auto !important;
+  height: auto !important;
+
+  min-width: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  flex-shrink: 0;
+}
+
+
+/* ========================================
+   DROPDOWN SCROLLBAR
+   ======================================== */
+
+.team-search-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.team-search-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.team-search-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+}
+
+.team-search-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ========================================
+   PREDICTOR RESULT - HERO REDESIGN
+   ======================================== */
+
+.predictor-page .prediction-result-card {
+  margin-top: 22px;
+  overflow: hidden;
+}
+
+
+/* ========================================
+   MATCHUP
+   ======================================== */
+
+.predictor-page .prediction-result {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+}
+
+
+/* The two teams + VS */
+
+.predictor-page .prediction-match {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 90px 1fr;
+
+  align-items: center;
+
+  min-height: 230px;
+
+  padding: 30px 40px;
+
+  box-sizing: border-box;
+
+  border-radius: 20px;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(84, 30, 93, 0.30),
+      rgba(255, 255, 255, 0.018) 55%,
+      rgba(255, 255, 255, 0.012)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+/* ========================================
+   TEAM SIDE
+   ======================================== */
+
+.predictor-page .prediction-team {
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  min-width: 0;
+
+  text-align: center;
+}
+
+
+.predictor-page .prediction-team:first-child {
+  padding-right: 30px;
+}
+
+
+.predictor-page .prediction-team:last-child {
+  padding-left: 30px;
+}
+
+
+/* Crest container */
+
+.predictor-page .prediction-team-crest {
+  position: relative;
+
+  width: 110px;
+  height: 110px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(
+        in srgb,
+        var(--prediction-team-primary) 18%,
+        transparent
+      ),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--prediction-team-primary) 40%,
+      rgba(255, 255, 255, 0.08)
+    );
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.20);
+
+  overflow: hidden;
+}
+
+
+.predictor-page .prediction-team-crest::before {
+  content: "";
+
+  position: absolute;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      color-mix(
+        in srgb,
+        var(--prediction-team-primary) 22%,
+        transparent
+      ),
+      transparent 70%
+    );
+
+  filter: blur(5px);
+}
+
+
+.predictor-page .prediction-team-crest img {
+  position: relative;
+
+  width: 78px !important;
+  height: 78px !important;
+
+  min-width: 78px !important;
+  min-height: 78px !important;
+
+  max-width: 78px !important;
+  max-height: 78px !important;
+
+  object-fit: contain !important;
+
+  display: block !important;
+
+  z-index: 1;
+}
+
+
+.predictor-page .prediction-team-crest span {
+  position: relative;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  z-index: 1;
+}
+
+
+/* Team name */
+
+.predictor-page .prediction-team-name {
+  color: #ffffff;
+
+  font-size: 22px;
+  font-weight: 800;
+
+  line-height: 1.15;
+
+  white-space: nowrap;
+}
+
+
+/* HOME / AWAY */
+
+.predictor-page .prediction-team small {
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.16em;
+}
+
+
+/* ========================================
+   VS
+   ======================================== */
+
+.predictor-page .prediction-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.predictor-page .prediction-vs span {
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #5f2868,
+      #32153b
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  color: rgba(255, 255, 255, 0.85);
+
+  font-size: 14px;
+  font-weight: 800;
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.22);
+}
+
+
+/* ========================================
+   PREDICTED OUTCOME
+   ======================================== */
+
+.predictor-page .prediction-outcome {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 190px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 25px;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(
+        in srgb,
+        var(--winning-primary) 16%,
+        rgba(255, 255, 255, 0.025)
+      ),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--winning-primary) 35%,
+      rgba(255, 255, 255, 0.08)
+    );
+}
+
+
+.predictor-page .prediction-outcome::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--winning-primary),
+      transparent
+    );
+}
+
+
+.predictor-page .prediction-outcome::after {
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  top: -130px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      color-mix(
+        in srgb,
+        var(--winning-primary) 16%,
+        transparent
+      ),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   WINNING CREST
+   ======================================== */
+
+.predictor-page .prediction-winning-crest {
+  position: relative;
+
+  width: 70px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 3px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  z-index: 1;
+}
+
+
+.predictor-page .prediction-winning-crest img {
+  width: 52px !important;
+  height: 52px !important;
+
+  min-width: 52px !important;
+  min-height: 52px !important;
+
+  max-width: 52px !important;
+  max-height: 52px !important;
+
+  object-fit: contain !important;
+
+  display: block !important;
+}
+
+
+.predictor-page .prediction-winning-crest span {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+
+/* ========================================
+   RESULT TEXT
+   ======================================== */
+
+.predictor-page .prediction-label {
+  position: relative;
+
+  color: rgba(255, 255, 255, 0.42);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  z-index: 1;
+}
+
+
+.predictor-page .prediction-outcome > strong {
+  position: relative;
+
+  color: var(--winning-primary);
+
+  font-size: 30px;
+  font-weight: 850;
+
+  line-height: 1;
+
+  z-index: 1;
+}
+
+
+.predictor-page .prediction-winning-team {
+  position: relative;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  z-index: 1;
+}
+
+
+/* ========================================
+   DRAW RESULT
+   ======================================== */
+
+.predictor-page .prediction-draw-result {
+  --winning-primary: #FFC857;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 200, 87, 0.08),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  border-color:
+    rgba(255, 200, 87, 0.22);
+}
+
+
+.predictor-page .prediction-draw-result::before {
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #FFC857,
+      transparent
+    );
+}
+
+
+.predictor-page .prediction-draw-result
+> strong {
+  color: #FFC857;
+}
+
+
+/* Draw crests */
+
+.predictor-page .draw-crests {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 3px;
+
+  z-index: 1;
+}
+
+
+.predictor-page .draw-crest {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+
+.predictor-page .draw-crest img {
+  width: 43px !important;
+  height: 43px !important;
+
+  min-width: 43px !important;
+  min-height: 43px !important;
+
+  max-width: 43px !important;
+  max-height: 43px !important;
+
+  object-fit: contain !important;
+}
+
+
+.predictor-page .draw-vs {
+  color: #FFC857;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+
+/* ========================================
+   PROBABILITY SECTION
+   ======================================== */
+
+.predictor-page .probability-section {
+  width: 100%;
+
+  margin-top: 4px;
+}
+
+
+.predictor-page .probability-header {
+  margin-bottom: 14px;
+}
+
+
+.predictor-page .probability-header h3 {
+  margin: 3px 0 0;
+
+  color: #ffffff;
+
+  font-size: 17px;
+  font-weight: 750;
+}
+
+
+/* Three probability cards */
+
+.predictor-page .probability-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+
+.predictor-page .probability-card {
+  min-width: 0;
+
+  padding: 17px 18px;
+
+  box-sizing: border-box;
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.065);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.predictor-page .probability-card:hover {
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  border-color:
+    rgba(255, 255, 255, 0.11);
+}
+
+
+/* Probability label */
+
+.predictor-page .probability-card-header {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 9px;
+}
+
+
+.predictor-page .probability-card-header > span:last-child {
+  color: rgba(255, 255, 255, 0.60);
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+.predictor-page .probability-dot {
+  width: 7px !important;
+  height: 7px !important;
+
+  min-width: 7px !important;
+
+  border-radius: 50%;
+}
+
+
+/* Percentage */
+
+.predictor-page .probability-card > strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 22px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  margin-bottom: 13px;
+}
+
+
+/* Bar */
+
+.predictor-page .probability-bar {
+  width: 100%;
+  height: 5px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+
+.predictor-page .probability-fill {
+  height: 100%;
+
+  min-width: 3px;
+
+  border-radius: inherit;
+
+  transition:
+    width 0.5s ease;
+}
+
+
+.predictor-page .probability-fill.home {
+  background: #F26B5B;
+}
+
+
+.predictor-page .probability-fill.draw {
+  background: #FFC857;
+}
+
+
+.predictor-page .probability-fill.away {
+  background: #43B3A3;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 850px) {
+
+  .predictor-page .prediction-match {
+    grid-template-columns:
+      1fr 60px 1fr;
+
+    padding: 25px 20px;
+  }
+
+  .predictor-page .prediction-team:first-child {
+    padding-right: 10px;
+  }
+
+  .predictor-page .prediction-team:last-child {
+    padding-left: 10px;
+  }
+
+  .predictor-page .prediction-team-crest {
+    width: 90px;
+    height: 90px;
+  }
+
+  .predictor-page .prediction-team-crest img {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .predictor-page .prediction-team-name {
+    font-size: 18px;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .predictor-page .prediction-match {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+
+    min-height: auto;
+
+    padding: 25px 18px;
+  }
+
+  .predictor-page .prediction-team:first-child,
+  .predictor-page .prediction-team:last-child {
+    padding: 0;
+  }
+
+  .predictor-page .prediction-team-crest {
+    width: 82px;
+    height: 82px;
+  }
+
+  .predictor-page .prediction-team-crest img {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .predictor-page .prediction-vs {
+    order: 2;
+  }
+
+  .predictor-page .prediction-team:last-child {
+    order: 3;
+  }
+
+  .predictor-page .prediction-vs span {
+    width: 42px;
+    height: 42px;
+
+    font-size: 12px;
+  }
+
+  .predictor-page .prediction-team-name {
+    font-size: 17px;
+  }
+
+  .predictor-page .prediction-outcome {
+    min-height: 175px;
+  }
+
+  .predictor-page .prediction-outcome > strong {
+    font-size: 26px;
+  }
+
+  .predictor-page .probability-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .predictor-page .prediction-match {
+    padding: 20px 12px;
+  }
+
+  .predictor-page .prediction-team-crest {
+    width: 72px;
+    height: 72px;
+  }
+
+  .predictor-page .prediction-team-crest img {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+}
+
+/* ========================================
+   HISTORY - MATCH CARD POLISH
+   ======================================== */
+
+.history-card {
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(360px, 1.35fr)
+    minmax(150px, 0.55fr)
+    minmax(330px, 1.05fr)
+    minmax(150px, 0.55fr);
+
+  align-items: center;
+
+  gap: 22px;
+
+  min-height: 124px;
+
+  padding: 20px 24px 20px 28px;
+
+  box-sizing: border-box;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.018)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.075);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* ========================================
+   OUTCOME ACCENT
+   ======================================== */
+
+.history-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 4px;
+
+  background: var(--history-outcome-color);
+
+  border-radius: 20px 0 0 20px;
+
+  box-shadow:
+    0 0 18px
+    color-mix(
+      in srgb,
+      var(--history-outcome-color) 35%,
+      transparent
+    );
+}
+
+
+.history-card:hover {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.022)
+    );
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--history-outcome-color) 28%,
+      rgba(255, 255, 255, 0.075)
+    );
+
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ========================================
+   MATCH AREA
+   ======================================== */
+
+.history-card .history-match {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(130px, 1fr)
+    42px
+    minmax(130px, 1fr);
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+/* ========================================
+   TEAM
+   ======================================== */
+
+.history-card .history-team {
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.history-card .history-team-away {
+  justify-content: flex-start;
+}
+
+
+.history-card .history-team > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.history-card .history-team strong {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 750;
+
+  line-height: 1.15;
+}
+
+
+/* ========================================
+   TEAM LABEL
+   ======================================== */
+
+.history-card .history-team-label {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  line-height: 1;
+}
+
+
+/* ========================================
+   CREST
+   ======================================== */
+
+.history-card .history-team-crest {
+  position: relative;
+
+  width: 60px;
+  height: 60px;
+
+  min-width: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(
+        in srgb,
+        var(--team-primary) 16%,
+        transparent
+      ),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--team-primary) 45%,
+      rgba(255, 255, 255, 0.08)
+    );
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+
+.history-card .history-team-crest::after {
+  content: "";
+
+  position: absolute;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      color-mix(
+        in srgb,
+        var(--team-primary) 20%,
+        transparent
+      ),
+      transparent 70%
+    );
+
+  filter: blur(4px);
+
+  pointer-events: none;
+}
+
+
+.history-card .history-team-crest img {
+  position: relative;
+
+  z-index: 1;
+
+  width: 42px !important;
+  height: 42px !important;
+
+  min-width: 42px !important;
+  min-height: 42px !important;
+
+  max-width: 42px !important;
+  max-height: 42px !important;
+
+  object-fit: contain !important;
+
+  display: block !important;
+}
+
+
+.history-card .history-team-crest span {
+  position: relative;
+
+  z-index: 1;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+
+/* ========================================
+   VS
+   ======================================== */
+
+.history-card .history-vs {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  justify-self: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.06);
+
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  box-sizing: border-box;
+}
+
+
+/* ========================================
+   PREDICTED RESULT
+   ======================================== */
+
+.history-card .history-outcome {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding-left: 6px;
+}
+
+
+.history-card .history-outcome-label {
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.15em;
+}
+
+
+.history-card .history-outcome strong {
+  font-size: 19px;
+  font-weight: 850;
+
+  line-height: 1;
+
+  letter-spacing: -0.01em;
+}
+
+
+.history-card .history-outcome .history-home {
+  color: #F26B5B;
+}
+
+
+.history-card .history-outcome .history-away {
+  color: #43B3A3;
+}
+
+
+.history-card .history-outcome .history-draw {
+  color: #FFC857;
+}
+
+
+/* ========================================
+   PROBABILITY STRIP
+   ======================================== */
+
+.history-card .history-probabilities {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 7px;
+}
+
+
+.history-card .history-probability {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 10px 12px;
+
+  border-radius: 11px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.035);
+
+  box-sizing: border-box;
+}
+
+
+.history-card .history-probability span {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 10px;
+  font-weight: 650;
+}
+
+
+.history-card .history-probability strong {
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+
+/* ========================================
+   PROBABILITY DOTS
+   ======================================== */
+
+.history-card .history-dot {
+  display: inline-block;
+
+  width: 7px;
+  height: 7px;
+
+  min-width: 7px;
+
+  border-radius: 50%;
+}
+
+
+.history-card .history-dot.home {
+  background: #F26B5B;
+
+  box-shadow:
+    0 0 7px rgba(242, 107, 91, 0.35);
+}
+
+
+.history-card .history-dot.draw {
+  background: #FFC857;
+
+  box-shadow:
+    0 0 7px rgba(255, 200, 87, 0.35);
+}
+
+
+.history-card .history-dot.away {
+  background: #43B3A3;
+
+  box-shadow:
+    0 0 7px rgba(67, 179, 163, 0.35);
+}
+
+
+/* ========================================
+   DATE
+   ======================================== */
+
+.history-card .history-date {
+  justify-self: end;
+
+  color: rgba(255, 255, 255, 0.42);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  text-align: right;
+
+  white-space: nowrap;
+}
+
+
+/* ========================================
+   HISTORY LIST SPACING
+   ======================================== */
+
+.history-page .history-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1250px) {
+
+  .history-card {
+    grid-template-columns:
+      minmax(300px, 1.2fr)
+      minmax(130px, 0.5fr)
+      minmax(280px, 1fr)
+      130px;
+
+    gap: 15px;
+
+    padding-right: 18px;
+  }
+
+  .history-card .history-team-crest {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+  }
+
+  .history-card .history-team-crest img {
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+    min-height: 38px !important;
+
+    max-width: 38px !important;
+    max-height: 38px !important;
+  }
+
+}
+
+
+@media (max-width: 1050px) {
+
+  .history-card {
+    grid-template-columns:
+      1fr 150px;
+
+    gap: 18px;
+
+    padding: 20px 22px 20px 26px;
+  }
+
+  .history-card .history-match {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .history-card .history-outcome {
+    grid-column: 2;
+    grid-row: 1;
+
+    align-items: flex-end;
+
+    text-align: right;
+  }
+
+  .history-card .history-probabilities {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .history-card .history-date {
+    grid-column: 1 / -1;
+    grid-row: 3;
+
+    justify-self: start;
+
+    text-align: left;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .history-card {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+
+    padding: 20px 18px 20px 22px;
+  }
+
+  .history-card .history-match {
+    grid-column: 1;
+    grid-row: 1;
+
+    grid-template-columns:
+      minmax(110px, 1fr)
+      36px
+      minmax(110px, 1fr);
+  }
+
+  .history-card .history-outcome {
+    grid-column: 1;
+    grid-row: 2;
+
+    align-items: flex-start;
+
+    text-align: left;
+
+    padding-left: 0;
+  }
+
+  .history-card .history-probabilities {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .history-card .history-date {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .history-card .history-team-crest {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+  }
+
+  .history-card .history-team-crest img {
+    width: 36px !important;
+    height: 36px !important;
+
+    min-width: 36px !important;
+    min-height: 36px !important;
+
+    max-width: 36px !important;
+    max-height: 36px !important;
+  }
+
+  .history-card .history-team strong {
+    font-size: 14px;
+  }
+
+  .history-card .history-outcome strong {
+    font-size: 18px;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .history-card .history-match {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .history-card .history-team {
+    justify-content: flex-start;
+  }
+
+  .history-card .history-team-away {
+    justify-content: flex-start;
+  }
+
+  .history-card .history-vs {
+    display: none;
+  }
+
+  .history-card .history-probabilities {
+    grid-template-columns: 1fr;
+  }
+
+  .history-card .history-probability {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+}
+
+/* =========================================================
+   FINAL RESPONSIVE SYSTEM
+   ========================================================= */
+
+/* Prevent intrinsic widths from breaking the application layout. */
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.app-layout {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.main-content > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ---------------------------------------------------------
+   Desktop / tablet
+   --------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .main-content {
+    padding: 32px;
+  }
+
+  .overview-page,
+  .teams-page,
+  .analytics-page,
+  .league-analytics-page,
+  .predictor-page,
+  .history-page {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .sidebar {
+    width: 210px;
+    min-width: 210px;
+    box-sizing: border-box;
+  }
+
+  .main-content {
+    padding: 28px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .analytics-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .analytics-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------
+   Mobile
+   --------------------------------------------------------- */
+
+@media (max-width: 800px) {
+  .app-layout {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /*
+    The old mobile rule only changed sidebar width to 190px.
+    Because the sidebar also had 40px of horizontal padding,
+    it still consumed most of a 375px viewport.
+
+    On mobile the sidebar becomes a compact top navigation.
+  */
+  .sidebar {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-logo h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .sidebar-logo span {
+    font-size: 11px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar-nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 9px 13px;
+    font-size: 13px;
+  }
+
+  .main-content {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 24px 18px;
+  }
+
+  .page-header {
+    width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 32px;
+    line-height: 1.08;
+  }
+
+  .page-description {
+    max-width: 100%;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .analytics-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Predictor */
+  .predictor-matchup {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .vs-divider {
+    height: 42px;
+  }
+
+  .vs-divider span {
+    width: 42px;
+    height: 42px;
+  }
+
+  .probability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* History */
+  .history-card {
+    max-width: 100%;
+  }
+
+  /* League charts */
+  .league-analytics-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .league-analytics-page .analytics-panel {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .league-analytics-page .analytics-chart {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: 360px !important;
+    min-height: 360px !important;
+    overflow: visible !important;
+  }
+
+  .league-analytics-page
+  .analytics-chart
+  .recharts-responsive-container {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 1px !important;
+    min-height: 1px !important;
+    max-width: 100% !important;
+  }
+
+  .league-analytics-page
+  .analytics-chart
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .league-analytics-page .recharts-surface {
+    overflow: visible !important;
+  }
+
+  .league-analytics-page
+  .recharts-xAxis
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+}
+
+/* ---------------------------------------------------------
+   Small phones
+   --------------------------------------------------------- */
+
+@media (max-width: 650px) {
+  .main-content {
+    padding: 22px 16px;
+  }
+
+  .page-header h1 {
+    font-size: 29px;
+  }
+
+  .analytics-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-panel {
+    padding: 18px;
+  }
+
+  .analytics-team-identity {
+    align-items: flex-start;
+  }
+
+  .analytics-team-crest {
+    width: 64px;
+    height: 64px;
+  }
+
+  .venue-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-highlight {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .league-analytics-page .analytics-chart {
+    height: 320px !important;
+    min-height: 320px !important;
+  }
+
+  .league-analytics-page .analytics-panel {
+    padding: 16px;
+  }
+
+  .teams-page .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 500px) {
+  .main-content {
+    padding: 18px 12px;
+  }
+
+  .sidebar {
+    padding: 12px;
+  }
+
+  .sidebar-nav {
+    gap: 4px;
+  }
+
+  .sidebar-nav a {
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 27px;
+  }
+
+  .page-description {
+    font-size: 13px;
+  }
+
+  .dashboard-card {
+    padding: 18px;
+  }
+
+  .analytics-kpi-card {
+    min-height: 120px;
+    padding: 18px;
+  }
+
+  .analytics-panel {
+    padding: 15px;
+  }
+
+  .league-analytics-page .analytics-chart {
+    height: 300px !important;
+    min-height: 300px !important;
+  }
+
+  .prediction-result-card {
+    padding: 16px;
+  }
+
+  .history-card {
+    padding: 18px 14px 18px 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .main-content {
+    padding: 16px 10px;
+  }
+
+  .sidebar {
+    padding: 10px;
+  }
+
+  .sidebar-nav a {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 25px;
+  }
+
+  .dashboard-card {
+    padding: 14px;
+  }
+
+  .analytics-panel {
+    padding: 14px;
+  }
+}
+
+/* =========================================================
+   LEAGUE ANALYTICS CHART DIMENSIONS
+   Desktop has explicit chart heights because Recharts'
+   ResponsiveContainer needs a measurable parent.
+   ========================================================= */
+
+.league-analytics-page .analytics-chart {
+  width: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+/*
+  The first chart is 360px in the JSX.
+  The two lower charts are 300px in the JSX.
+  We intentionally do not force their height here;
+  ResponsiveContainer receives those fixed JSX heights.
+*/
+.league-analytics-page
+.analytics-chart
+.recharts-responsive-container {
+  max-width: 100% !important;
+  min-width: 1px !important;
+}
+
+/* Never allow a page-level flex/grid rule to collapse the chart. */
+.league-analytics-page .analytics-chart-grid {
+  min-width: 0;
+  width: 100%;
+}
+
+.league-analytics-page .analytics-panel {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Keep the historical table scrollable rather than widening the page. */
+.league-analytics-page .analytics-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+

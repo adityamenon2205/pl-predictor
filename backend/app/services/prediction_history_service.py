@@ -5,7 +5,7 @@ class PredictionHistoryService:
 
     def get_predictions(self):
         predictions = predictions_collection.find({}).sort(
-            "_id", -1
+            "timestamp", -1
         )
 
         results = []

@@ -4,28 +4,29 @@ A full-stack football analytics platform that combines a machine learning predic
 
 The system predicts Premier League match outcomes as:
 
-* 🏠 **Home Win**
-* 🤝 **Draw**
-* ✈️ **Away Win**
+- 🏠 **Home Win**
+- 🤝 **Draw**
+- ✈️ **Away Win**
 
 It combines historical Premier League match data with engineered team-performance features, Elo ratings, home/away statistics, form, rest days, and betting-market information to generate probability-based predictions.
 
-> **Current status:** Machine learning pipeline, FastAPI backend, MongoDB Atlas integration, Overview dashboard, Teams Explorer, and team-specific Analytics are implemented. Predictor, advanced league analytics, and prediction-history UI remain in active development.
+> **Current status:** The machine learning pipeline, FastAPI backend, MongoDB Atlas integration, Overview dashboard, Teams Explorer, team-specific Analytics, Predictor interface, and Prediction History interface are implemented. League Analytics is implemented with season trends, scoring trends, venue comparisons, and historical team rankings. Current work is focused on chart rendering/responsive refinement and final UI polish.
 
 ---
 
 ## 📌 Overview
 
-The Premier League Match Predictor is designed to estimate the outcome of a Premier League fixture using historical data and machine learning.
+The Premier League Match Predictor estimates the outcome of a Premier League fixture using historical data and machine learning.
 
 The current production baseline is **Random Forest V4**, trained using a chronological train/test split. This approach simulates real-world prediction by ensuring future matches are not used to train the model before evaluation.
 
 The application consists of:
 
-* 🐍 Python machine learning pipeline
-* ⚡ FastAPI backend
-* 🍃 MongoDB Atlas database
-* ⚛️ React frontend
+- 🐍 Python machine learning pipeline
+- ⚡ FastAPI backend
+- 🍃 MongoDB Atlas database
+- ⚛️ React + Vite frontend
+- 📊 Recharts-based analytics dashboard
 
 ---
 
@@ -33,13 +34,13 @@ The application consists of:
 
 The **Random Forest V4** model achieved the following results on the held-out **2025/26 season**:
 
-| Metric       |     Result |
-| ------------ | ---------: |
-| Accuracy     | **50.00%** |
-| Log Loss     |     1.0315 |
-| Macro F1     |     0.3792 |
-| Draw F1      |     0.0189 |
-| Test Matches |        380 |
+| Metric | Result |
+|---|---:|
+| Accuracy | **50.00%** |
+| Log Loss | 1.0315 |
+| Macro F1 | 0.3792 |
+| Draw F1 | 0.0189 |
+| Test Matches | 380 |
 
 The model currently performs considerably better at identifying home wins than draws. Draw prediction remains an important area for future model improvement.
 
@@ -47,15 +48,15 @@ The model currently performs considerably better at identifying home wins than d
 
 Several approaches were evaluated during development:
 
-| Model                |   Accuracy |   Macro F1 |    Draw F1 |
-| -------------------- | ---------: | ---------: | ---------: |
-| **Random Forest V4** | **50.00%** |     0.3792 |     0.0189 |
-| Balanced XGBoost V4  |     43.68% | **0.3819** | **0.1410** |
-| Poisson V5           |     48.68% |     0.3621 |     0.0000 |
+| Model | Accuracy | Macro F1 | Draw F1 |
+|---|---:|---:|---:|
+| **Random Forest V4** | **50.00%** | 0.3792 | 0.0189 |
+| Balanced XGBoost V4 | 43.68% | **0.3819** | **0.1410** |
+| Poisson V5 | 48.68% | 0.3621 | 0.0000 |
 
 **Random Forest V4** is currently used as the production baseline because it achieved the highest overall accuracy on the held-out 2025/26 season.
 
-Model experimentation and optimization will continue after the complete application is operational.
+Model experimentation is currently paused while the application experience, analytics, and frontend are completed.
 
 ---
 
@@ -67,17 +68,21 @@ The model is evaluated using a **chronological train/test split** rather than a 
 
 Premier League seasons:
 
-`2010/11 → 2024/25`
+```text
+2010/11 → 2024/25
+```
 
 ### Test Data
 
-**2025/26**
+```text
+2025/26
+```
 
 The test set contains **380 matches**.
 
 ### Excluded Data
 
-The **2026/27 season is excluded from model training and evaluation** because it is incomplete.
+The **2026/27 season is excluded from model training and evaluation** because the available season data is incomplete.
 
 This chronological approach better represents a real-world prediction scenario and reduces the risk of future information leaking into the training process.
 
@@ -89,24 +94,24 @@ This chronological approach better represents a real-world prediction scenario a
 
 The feature engineering pipeline incorporates:
 
-* Recent form over the previous 3, 5, and 10 matches
-* Points per game (PPG)
-* Win rates
-* Goals scored and conceded
-* Goal difference
-* Shots
-* Shots on target
-* Corners
-* Fouls
-* Yellow cards
-* Red cards
-* Home-team and away-team performance splits
-* Elo ratings
-* Rest days
-* Relative team-strength features
-* Betting-market implied probabilities
-* Market margins
-* Team balance/difference features
+- Recent form over the previous 3, 5, and 10 matches
+- Points per game (PPG)
+- Win rates
+- Goals scored and conceded
+- Goal difference
+- Shots
+- Shots on target
+- Corners
+- Fouls
+- Yellow cards
+- Red cards
+- Home-team and away-team performance splits
+- Elo ratings
+- Rest days
+- Relative team-strength features
+- Betting-market implied probabilities
+- Market margins
+- Team balance/difference features
 
 All rolling and historical features are generated using information available **before the current match**, helping prevent future information leakage.
 
@@ -120,26 +125,28 @@ Historical Premier League match data is sourced from **Football-Data.co.uk**.
 
 The raw datasets contain match results and additional match statistics, including:
 
-* Full-time goals
-* Half-time goals
-* Shots
-* Shots on target
-* Corners
-* Fouls
-* Yellow cards
-* Red cards
-* Bookmaker odds
-* Match results
+- Full-time goals
+- Half-time goals
+- Shots
+- Shots on target
+- Corners
+- Fouls
+- Yellow cards
+- Red cards
+- Bookmaker odds
+- Match results
 
 The preprocessing pipeline cleans and combines the historical season data before generating the features used by the machine learning models.
 
 ### Current Processed Dataset
 
-* **6,080 completed Premier League matches**
-* **16 completed seasons**
-* **2010/11 through 2025/26**
+- **6,080 completed Premier League matches**
+- **16 completed seasons**
+- **2010/11 through 2025/26**
 
-The 2025/26 season is included in the processed historical dataset but is reserved as the held-out test season for the current Random Forest V4 evaluation. The incomplete 2026/27 season is excluded from training and evaluation.
+The 2025/26 season is included in the processed historical dataset but is reserved as the held-out test season for the current Random Forest V4 evaluation.
+
+The incomplete 2026/27 season is excluded from training and evaluation.
 
 ---
 
@@ -148,45 +155,45 @@ The 2025/26 season is included in the processed historical dataset but is reserv
 The application follows a modular architecture separating the machine learning pipeline, backend services, database layer, and frontend.
 
 ```text
-                    Historical EPL Data
-                           │
-                           ▼
-                    Data Preprocessing
-                           │
-                           ▼
-                    Feature Engineering
-                           │
-                           ▼
-                      Model Training
-                           │
-                           ▼
-                    Random Forest V4
-                           │
-                           ▼
-                         FastAPI
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-              ▼            ▼            ▼
-         Prediction      Teams      Statistics
-              │            │            │
-              └────────────┼────────────┘
-                           │
-                           ▼
-                      MongoDB Atlas
-                           │
-                    ┌──────┴──────┐
-                    │             │
-                    ▼             ▼
-                Match Data   Prediction History
-                    │             │
-                    └──────┬──────┘
-                           │
-                           ▼
-                      React Frontend
-                           │
-                           ▼
-                    Analytics Dashboard
+                         Historical EPL Data
+                                  │
+                                  ▼
+                         Data Preprocessing
+                                  │
+                                  ▼
+                         Feature Engineering
+                                  │
+                                  ▼
+                           Model Training
+                                  │
+                                  ▼
+                         Random Forest V4
+                                  │
+                                  ▼
+                              FastAPI
+                                  │
+                    ┌─────────────┼─────────────┐
+                    │             │             │
+                    ▼             ▼             ▼
+               Prediction       Teams       Statistics
+                    │             │             │
+                    └─────────────┼─────────────┘
+                                  │
+                                  ▼
+                            MongoDB Atlas
+                                  │
+                    ┌─────────────┴─────────────┐
+                    │                           │
+                    ▼                           ▼
+               Match Data               Prediction History
+                    │                           │
+                    └─────────────┬─────────────┘
+                                  │
+                                  ▼
+                           React Frontend
+                                  │
+                                  ▼
+                      Football Analytics Dashboard
 ```
 
 ---
@@ -197,15 +204,15 @@ The backend is implemented using **FastAPI**, providing REST API endpoints for p
 
 ### Backend API
 
-| Method | Endpoint                        | Purpose                                            |
-| ------ | ------------------------------- | -------------------------------------------------- |
-| GET    | `/`                             | API status                                         |
-| GET    | `/health`                       | Health check                                       |
-| GET    | `/teams/`                       | Retrieve available teams                           |
-| GET    | `/teams/{team_name}/statistics` | Retrieve historical statistics for a specific team |
-| GET    | `/statistics/`                  | Retrieve league statistics                         |
-| POST   | `/predict/`                     | Generate a match prediction                        |
-| GET    | `/predictions/`                 | Retrieve prediction history                        |
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/` | API status |
+| GET | `/health` | Health check |
+| GET | `/teams/` | Retrieve available teams |
+| GET | `/teams/{team_name}/statistics` | Retrieve historical statistics for a specific team |
+| GET | `/statistics/` | Retrieve league analytics/statistics |
+| POST | `/predict/` | Generate a match prediction |
+| GET | `/predictions/` | Retrieve prediction history |
 
 ### Example Prediction Request
 
@@ -239,7 +246,11 @@ The prediction service loads the trained Random Forest V4 model, generates the r
 
 MongoDB Atlas is used as the application's database layer.
 
-**Database:** `pl_predictor`
+**Database:**
+
+```text
+pl_predictor
+```
 
 ### Collections
 
@@ -247,13 +258,13 @@ MongoDB Atlas is used as the application's database layer.
 
 Stores the historical Premier League match dataset.
 
-* Current records: **6,080 matches**
+- Current records: **6,080 matches**
 
 #### `teams`
 
 Stores the unique teams present in the historical dataset.
 
-* Current records: **41 teams**
+- Current records: **41 teams**
 
 #### `predictions`
 
@@ -261,12 +272,13 @@ Stores predictions generated through the `/predict/` API.
 
 Each prediction contains:
 
-* Home team
-* Away team
-* Predicted outcome
-* Home probability
-* Draw probability
-* Away probability
+- Home team
+- Away team
+- Predicted outcome
+- Home probability
+- Draw probability
+- Away probability
+- Prediction timestamp
 
 The prediction history endpoint retrieves these records for display in the frontend.
 
@@ -276,14 +288,14 @@ The prediction history endpoint retrieves these records for display in the front
 
 The frontend is implemented using:
 
-* React
-* Vite
-* JavaScript
-* React Router
-* Recharts
-* CSS
+- React
+- Vite
+- JavaScript
+- React Router
+- Recharts
+- CSS
 
-The frontend communicates with the FastAPI backend through REST API requests.
+The frontend communicates with the FastAPI backend through REST API requests. API calls are centralized in `src/services/api.js`.
 
 ### Current Frontend Architecture
 
@@ -296,6 +308,8 @@ frontend/
     │   ├── charts/
     │   ├── common/
     │   └── layout/
+    ├── data/
+    │   └── teams.js
     ├── pages/
     │   ├── Overview.jsx
     │   ├── Teams.jsx
@@ -312,157 +326,239 @@ frontend/
 
 ---
 
-## 📊 Dashboard
+# 📊 Dashboard
 
 The frontend is being developed as a full football analytics dashboard rather than a simple prediction form.
 
-### 🏠 Overview
+## 🏠 Overview
 
 Provides a high-level statistical snapshot of the Premier League dataset.
 
 Currently implemented:
 
-* Total matches
-* Home win percentage
-* Draw percentage
-* Away win percentage
-* Number of teams
-* Match outcome distribution
-* League dataset snapshot
+- Total matches
+- Home win percentage
+- Draw percentage
+- Away win percentage
+- Number of teams
+- Match outcome distribution
+- League dataset snapshot
 
-The Overview page retrieves real data from `GET /statistics/` and `GET /teams/`, and visualizes match outcomes using an interactive Recharts visualization.
+The Overview page retrieves real data from the backend and visualizes match outcomes using Recharts.
 
 > **No artificial or manually generated statistics are used in the dashboard.**
 
-### ⚽ Teams
+---
+
+## ⚽ Teams Explorer
 
 The Teams Explorer retrieves available clubs from the backend and presents them as team-specific cards.
 
 Currently implemented:
 
-* Team cards for the historical dataset's 41 teams
-* Searchable Teams Explorer
-* Club-inspired primary, secondary, and accent color themes
-* Team crests
-* Navigation from a team card to its Analytics view
-* Real team statistics retrieved from `GET /teams/{team_name}/statistics`
+- Team cards for the historical dataset's **41 teams**
+- Searchable Teams Explorer
+- Club-inspired primary, secondary, and accent color themes
+- Team crests
+- Navigation from a team card to its Analytics view
+- Real team statistics retrieved from `/teams/{team_name}/statistics`
+
+### Team Analytics
 
 Current team analytics include:
 
-* Matches played
-* Wins, draws, and losses
-* Win/draw/loss percentages
-* Goals scored and conceded
-* Goal difference
-* Home record
-* Away record
+- Matches played
+- Wins, draws, and losses
+- Win/draw/loss percentages
+- Goals scored and conceded
+- Goal difference
+- Home record
+- Away record
+- Result distribution chart
+- Goals scored vs conceded chart
+- Home vs away performance chart
+- Historical highlight
 
-Team-specific visual styling will also be used:
+Team-specific visual styling is used throughout the Teams Explorer, Analytics dashboard, and prediction results.
 
-| Team            | Colors       |
-| --------------- | ------------ |
-| Arsenal         | Red / White  |
-| Chelsea         | Blue / White |
-| Liverpool       | Red          |
-| Manchester City | Sky Blue     |
+| Team | Example colors |
+|---|---|
+| Arsenal | Red / White |
+| Chelsea | Blue / White |
+| Liverpool | Red |
+| Manchester City | Sky Blue |
 
-The application's main interface will retain the project's purple visual identity while individual team components use their respective club-inspired color schemes.
+The application's main interface retains the project's purple visual identity while individual team components use their respective club-inspired color schemes.
 
-### 🔮 Predictor
+---
 
-The main machine learning interface. The backend prediction API is implemented; the full frontend predictor interface is still being developed. Once complete, users will be able to:
+## 🔮 Predictor
 
-* Select a home team
-* Select an away team
-* Submit the match
-* Receive the predicted outcome
-* View the probability distribution
+The Predictor is the main machine learning interface and is currently implemented.
+
+Users can:
+
+- Search for a home team
+- Search for an away team
+- Select teams using crest-enhanced selectors
+- Submit a fixture for prediction
+- Receive the predicted outcome
+- View home/draw/away probability percentages
+- View the prediction result using team-specific visual styling
 
 Example:
 
 ```text
 Arsenal  vs  Chelsea
 
-         HOME WIN
-           41.07%
+        HOME WIN
 
-Home Win      Draw      Away Win
-41.07%       35.18%      23.75%
+          41.07%
+
+Home Win       Draw       Away Win
+41.07%         35.18%       23.75%
 ```
 
-The predictor communicates directly with `POST /predict/`.
+The predictor communicates directly with:
 
-### 📈 Analytics
+```text
+POST /predict/
+```
 
-The Analytics page provides team-specific historical performance analysis when opened from the Teams Explorer.
+Predictions are also persisted to MongoDB Atlas for the History page.
+
+---
+
+## 📈 Analytics
+
+The Analytics section now contains both **team-specific analytics** and **league-wide historical analytics**.
+
+### Team Analytics
+
+When a team is selected from the Teams Explorer, the Analytics page provides:
+
+- Team identity and crest
+- Team-specific club-inspired color theme
+- Matches, wins, draws, and losses KPI cards
+- Win/draw/loss percentages
+- Match-result distribution donut chart
+- Goals scored vs conceded chart
+- Goal-difference summary
+- Home vs away performance chart
+- Real statistics retrieved through the FastAPI backend
+
+### League Analytics
+
+The default Analytics route provides league-wide historical analysis.
 
 Currently implemented:
 
-* Team identity and crest
-* Team-specific club-inspired color theme
-* Matches, wins, draws, and losses KPI cards
-* Win/draw/loss percentages
-* Match-result distribution donut chart
-* Goals scored vs conceded chart
-* Goal-difference summary
-* Home vs away performance chart
-* Real statistics loaded from MongoDB through the FastAPI backend
+- Total matches KPI
+- Total goals KPI
+- Goals per match KPI
+- Home win rate KPI
+- Season-by-season match outcome trends
+- Home win percentage trends
+- Draw percentage trends
+- Away win percentage trends
+- Goals-per-match trends
+- Home vs away goals-per-match comparison
+- Historical team performance table
+- Team rankings
+- Matches, wins, draws, losses, goal difference, points, and win percentage
 
-Planned analytics include:
+The league analytics use real historical data rather than manually created readings.
 
-* Season-by-season outcome trends
-* Goals per season
-* Team performance comparisons
-* Win-rate comparisons
-* PPG comparisons
-* Additional historical performance metrics
+### Current Analytics Refinement
 
-Where numerical information can be understood more effectively through visualization, charts and graphs will be preferred over raw numerical values.
+The league analytics functionality and UI are implemented, but **chart rendering and responsive/mobile behavior are currently being refined**, particularly for Recharts on narrow viewport sizes.
 
-### 🕐 Prediction History
+The current refinement work focuses on:
 
-The backend stores predictions previously generated through the application. The dedicated frontend history interface is still being developed.
+- Reliable chart sizing
+- Mobile chart rendering
+- Responsive dashboard layout
+- Avoiding horizontal overflow
+- Maintaining readable chart labels on small screens
 
-Predictions are retrieved from `GET /predictions/` and stored in MongoDB Atlas. The interface will allow users to browse previous predictions in a structured dashboard format rather than raw JSON.
+Where numerical information can be understood more effectively through visualization, charts and graphs are preferred over raw numerical values.
+
+---
+
+## 🕐 Prediction History
+
+The Prediction History page is implemented.
+
+It retrieves prediction records through:
+
+```text
+GET /predictions/
+```
+
+and displays them in a structured dashboard interface.
+
+Currently implemented:
+
+- Prediction count
+- Historical prediction cards
+- Home and away teams
+- Team crests
+- Predicted outcome
+- Home/draw/away probabilities
+- Prediction timestamps
+- Outcome-specific visual styling
+- Loading state
+- Error state
+- Empty state handling
+
+Prediction history is backed by MongoDB Atlas rather than static frontend data.
 
 ---
 
 ## 🎨 UI / UX Design
 
-The application uses a dark visual design centered around the primary brand color **`#541E5D`**.
+The application uses a dark visual design centered around the primary brand color:
+
+```text
+#541E5D
+```
 
 The interface uses:
 
-* Deep purple backgrounds
-* Purple gradients
-* White and off-white typography
-* Dark translucent surfaces
-* Rounded cards
-* Subtle borders
-* Data visualizations
-* Responsive layouts
+- Deep purple backgrounds
+- Purple gradients
+- White and off-white typography
+- Dark translucent surfaces
+- Rounded cards
+- Subtle borders
+- Data visualizations
+- Responsive layouts
+- Club-inspired team colors
+- Football crests
+
+The Predictor uses searchable team selectors to reduce friction when choosing from the 41 available teams.
+
+Prediction results and team analytics adapt their visual identity to the relevant club, including team crests and club-inspired colors.
 
 The design goal is to create a modern football analytics platform while maintaining clear visual hierarchy and readability.
-
-Team-specific sections will use club-inspired color palettes while the overall application branding remains based around the primary purple theme.
 
 ---
 
 ## ✨ Animation & Interaction
 
-Animations are intentionally treated as a final polish layer rather than a core development dependency.
+Animations are intentionally treated as a **final polish layer** rather than a core development dependency.
 
-After the major functionality and UI are complete, the project may incorporate:
+After the major functionality and UI are stable, the project may incorporate:
 
-* React Motion animations
-* React Bits components
-* Page transitions
-* Animated statistics
-* Hover interactions
-* Scroll-based reveals
-* Prediction result animations
-* Micro-interactions
-* Interactive chart transitions
+- Motion animations
+- React Bits components
+- Page transitions
+- Animated statistics
+- Hover interactions
+- Scroll-based reveals
+- Prediction result animations
+- Micro-interactions
+- Interactive chart transitions
 
 The goal is to use animation to improve usability and visual feedback rather than adding effects purely for decoration.
 
@@ -475,7 +571,6 @@ pl-predictor/
 │
 ├── backend/
 │   ├── requirements.txt
-│   │
 │   └── app/
 │       ├── main.py
 │       │
@@ -516,48 +611,43 @@ pl-predictor/
 │   │   │   ├── charts/
 │   │   │   ├── common/
 │   │   │   └── layout/
-│   │   │
+│   │   ├── data/
+│   │   │   └── teams.js
 │   │   ├── pages/
 │   │   │   ├── Overview.jsx
 │   │   │   ├── Teams.jsx
 │   │   │   ├── Predictor.jsx
 │   │   │   ├── Analytics.jsx
 │   │   │   └── History.jsx
-│   │   │
 │   │   ├── services/
 │   │   │   └── api.js
-│   │   │
 │   │   ├── App.css
 │   │   ├── App.jsx
 │   │   ├── index.css
 │   │   └── main.jsx
-│   │
 │   ├── package.json
 │   ├── package-lock.json
 │   └── vite.config.js
 │
 ├── ml/
 │   ├── config.py
-│   │
 │   ├── data/
 │   │   ├── raw/
 │   │   └── processed/
-│   │
 │   ├── models/
 │   │   ├── random_forest_model.pkl
+│   │   ├── random_forest_v2.pkl
+│   │   ├── random_forest_v3.pkl
 │   │   ├── random_forest_v4.pkl
 │   │   ├── xgboost_model.pkl
 │   │   └── ...
-│   │
 │   ├── notebooks/
 │   │   └── exploration.ipynb
-│   │
 │   ├── preprocessing/
 │   │   ├── clean_data.py
 │   │   ├── feature_engineering.py
 │   │   ├── feature_engineering_v2.py
 │   │   └── feature_engineering_v3.py
-│   │
 │   └── training/
 │       ├── train_random_forest.py
 │       ├── train_random_forest_v2.py
@@ -578,46 +668,48 @@ pl-predictor/
 └── README.md
 ```
 
+> Trained model binaries, generated processed datasets, environment files, and other generated/private files are excluded from version control according to `.gitignore`.
+
 ---
 
 ## 🛠️ Technology Stack
 
 ### Machine Learning
 
-* Python
-* Pandas
-* NumPy
-* Scikit-learn
-* XGBoost
-* Joblib
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- XGBoost
+- Joblib
 
 ### Backend
 
-* FastAPI
-* Uvicorn
-* Pydantic
-* PyMongo
-* Python-dotenv
+- FastAPI
+- Uvicorn
+- Pydantic
+- PyMongo
+- Python-dotenv
 
 ### Database
 
-* MongoDB Atlas
+- MongoDB Atlas
 
 ### Frontend
 
-* React
-* Vite
-* JavaScript
-* React Router
-* Recharts
-* CSS
+- React
+- Vite
+- JavaScript
+- React Router
+- Recharts
+- CSS
 
 ### Development
 
-* Git
-* GitHub
-* Jupyter Notebook
-* VS Code
+- Git
+- GitHub
+- Jupyter Notebook
+- VS Code
 
 ---
 
@@ -645,11 +737,15 @@ uvicorn app.main:app --reload
 
 The API will be available at:
 
-`http://127.0.0.1:8000`
+```text
+http://127.0.0.1:8000
+```
 
 FastAPI Swagger documentation:
 
-`http://127.0.0.1:8000/docs`
+```text
+http://127.0.0.1:8000/docs
+```
 
 ### 2. Start the Frontend
 
@@ -673,7 +769,9 @@ npm run dev
 
 The frontend will be available at:
 
-`http://localhost:5173`
+```text
+http://localhost:5173
+```
 
 ---
 
@@ -699,11 +797,13 @@ python -m app.database.seed
 
 The seed process populates the `matches` and `teams` collections with the processed Premier League dataset.
 
+Prediction records are subsequently written to the `predictions` collection when predictions are generated through the application.
+
 ---
 
 ## 🔐 Environment Variables
 
-The following environment variables are required by the backend:
+The backend requires:
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
@@ -722,7 +822,7 @@ MONGODB_DATABASE=pl_predictor
 User selects teams
        │
        ▼
-React Frontend
+React Predictor
        │
        ▼
 POST /predict/
@@ -772,89 +872,120 @@ GET /predictions/
 React History Page
 ```
 
+### Analytics Flow
+
+```text
+MongoDB match data
+        │
+        ▼
+Statistics Service
+        │
+        ▼
+GET /statistics/
+        │
+        ▼
+React Analytics Dashboard
+        │
+        ├── League Analytics
+        │
+        └── Team Analytics
+```
+
 ---
 
-## 📌 Current Development Status
+# 📌 Current Development Status
 
-### Machine Learning
+## Machine Learning
 
-* [x] Historical data collection
-* [x] Data cleaning
-* [x] Feature engineering
-* [x] Rolling form features
-* [x] Elo ratings
-* [x] Home/away statistics
-* [x] Betting-market features
-* [x] Feature balance/difference metrics
-* [x] Random Forest experiments
-* [x] XGBoost experiments
-* [x] Poisson experiment
-* [x] Chronological evaluation
-* [x] Random Forest V4 production baseline
+- [x] Historical data collection
+- [x] Data cleaning
+- [x] Feature engineering
+- [x] Rolling form features
+- [x] Elo ratings
+- [x] Home/away statistics
+- [x] Betting-market features
+- [x] Feature balance/difference metrics
+- [x] Random Forest experiments
+- [x] XGBoost experiments
+- [x] Poisson experiment
+- [x] Chronological evaluation
+- [x] Random Forest V4 production baseline
+- [x] 2025/26 held-out evaluation
+- [x] 2026/27 exclusion from training/evaluation
 
-### Backend
+## Backend
 
-* [x] FastAPI application
-* [x] Prediction API
-* [x] Teams API
-* [x] Statistics API
-* [x] Prediction history API
-* [x] Prediction service
-* [x] Feature service
-* [x] Shared service architecture
-* [x] CORS configuration
+- [x] FastAPI application
+- [x] Prediction API
+- [x] Teams API
+- [x] Statistics API
+- [x] Prediction history API
+- [x] Prediction service
+- [x] Feature service
+- [x] Prediction history service
+- [x] Shared service architecture
+- [x] CORS configuration
+- [x] MongoDB Atlas integration
 
-### Database
+## Database
 
-* [x] MongoDB Atlas cluster
-* [x] MongoDB connection
-* [x] Matches collection
-* [x] Teams collection
-* [x] Predictions collection
-* [x] Database seeding
-* [x] Prediction persistence
-* [x] Prediction history retrieval
+- [x] MongoDB Atlas cluster
+- [x] MongoDB connection
+- [x] Matches collection
+- [x] Teams collection
+- [x] Predictions collection
+- [x] Database seeding
+- [x] Prediction persistence
+- [x] Prediction history retrieval
 
-### Frontend
+## Frontend
 
-* [x] React + Vite setup
-* [x] ESLint
-* [x] React Router
-* [x] Application layout
-* [x] Sidebar navigation
-* [x] Page structure
-* [x] API service layer
-* [x] FastAPI integration
-* [x] Overview dashboard
-* [x] Real statistics from backend
-* [x] Recharts integration
-* [x] Initial responsive styling
+- [x] React + Vite setup
+- [x] ESLint
+- [x] React Router
+- [x] Application layout
+- [x] Sidebar navigation
+- [x] Page structure
+- [x] API service layer
+- [x] FastAPI integration
+- [x] Overview dashboard
+- [x] Real statistics from backend
+- [x] Recharts integration
+- [x] Teams Explorer
+- [x] Team search
+- [x] Team crest integration
+- [x] Team-specific color themes
+- [x] Team analytics routing
+- [x] Team analytics dashboard
+- [x] Predictor interface
+- [x] Prediction result visualization
+- [x] Prediction History UI
+- [x] Loading states
+- [x] Error states
+- [x] Empty states
 
-### In Progress
+## League Analytics
 
-* [x] Teams Explorer foundation
-* [x] Team-specific statistics API
-* [x] Team color themes
-* [x] Team analytics routing
-* [x] Team analytics dashboard
-* [ ] Complete Predictor interface
-* [ ] Advanced league Analytics
-* [ ] Season-level analytics APIs
-* [ ] Prediction History UI
-* [ ] Advanced data visualizations
-* [ ] Responsive/mobile refinement
+- [x] League analytics page
+- [x] League KPI cards
+- [x] Season outcome trend visualization
+- [x] Goals-per-match visualization
+- [x] Home vs away goals visualization
+- [x] Historical team performance table
+- [x] Team ranking data
+- [ ] Recharts rendering refinement on narrow viewports
+- [ ] Final mobile layout refinement
 
-### Final Polish
+## Final Polish
 
-* [ ] Motion animations
-* [ ] React Bits components
-* [ ] Page transitions
-* [ ] Micro-interactions
-* [x] Loading states
-* [x] Error states
-* [ ] Empty states
-* [ ] Performance optimization
-* [ ] Final UI/UX refinement
+- [ ] Motion animations
+- [ ] React Bits components
+- [ ] Page transitions
+- [ ] Micro-interactions
+- [ ] Advanced hover interactions
+- [ ] Advanced chart interactions
+- [ ] Performance optimization
+- [ ] Final UI/UX refinement
 
 ---
 
@@ -862,23 +993,22 @@ React History Page
 
 Potential future improvements include:
 
-* More advanced ensemble models
-* Improved draw prediction
-* Probability calibration
-* Additional football-specific features
-* Fixture-date-aware rest calculations
-* Live/current-season data integration
-* Team-specific statistical APIs
-* Advanced team comparison
-* Model confidence analysis
-* Prediction performance tracking
-* Historical prediction accuracy
-* More advanced visual analytics
-* Interactive team profiles
-* Responsive mobile dashboard
-* Animated UI interactions
+- Improved draw prediction
+- Probability calibration
+- Additional football-specific features
+- Fixture-date-aware rest calculations
+- Live/current-season data integration
+- Expanded team-specific statistical APIs
+- Advanced team comparison
+- Model confidence analysis
+- Prediction performance tracking
+- Historical prediction accuracy
+- More advanced visual analytics
+- Interactive team profiles
+- Responsive mobile dashboard refinement
+- Animated UI interactions
 
-Model optimization will be revisited after the full application is operational.
+Model optimization will be revisited after the current application experience and analytics features are complete.
 
 ---
 

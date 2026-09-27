@@ -14,6 +14,10 @@ function TeamSearch({
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
+  const selectedTheme = value
+    ? teamMetadata[value]
+    : null;
+
   const filteredTeams = teams.filter((team) =>
     team.toLowerCase().includes(search.toLowerCase())
   );
@@ -37,7 +41,27 @@ function TeamSearch({
     <div className="team-selector">
       <label>{label}</label>
 
-      <div className="team-search-wrapper">
+      <div
+        className={`team-search-wrapper ${
+          value ? "has-selected-team" : ""
+        }`}
+      >
+        {selectedTheme?.crest && (
+          <div
+            className="team-search-crest"
+            style={{
+              "--selector-team-primary":
+                selectedTheme.primary || "#541E5D",
+            }}
+          >
+            <img
+              src={selectedTheme.crest}
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        )}
+
         <input
           type="text"
           value={value || search}
@@ -56,6 +80,7 @@ function TeamSearch({
             {filteredTeams.length > 0 ? (
               filteredTeams.map((team) => {
                 const isDisabled = team === disabledTeam;
+                const theme = teamMetadata[team];
 
                 return (
                   <button
@@ -73,7 +98,27 @@ function TeamSearch({
                       }
                     }}
                   >
-                    <span>{team}</span>
+                    <div className="team-search-option-left">
+                      <div
+                        className="team-search-option-crest"
+                        style={{
+                          "--option-team-primary":
+                            theme?.primary || "#541E5D",
+                        }}
+                      >
+                        {theme?.crest ? (
+                          <img
+                            src={theme.crest}
+                            alt=""
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <span>{team.charAt(0)}</span>
+                        )}
+                      </div>
+
+                      <span>{team}</span>
+                    </div>
 
                     {team === value && (
                       <span className="team-selected-check">
@@ -211,7 +256,9 @@ function Predictor() {
 
   return (
     <div className="predictor-page">
-      {/* Header */}
+      {/* =========================================
+          HEADER
+          ========================================= */}
 
       <div className="page-header predictor-header">
         <div>
@@ -226,7 +273,9 @@ function Predictor() {
         </div>
       </div>
 
-      {/* Predictor Form */}
+      {/* =========================================
+          FIXTURE SELECTOR
+          ========================================= */}
 
       <section className="dashboard-card predictor-form-card">
         <div className="card-header">
@@ -316,17 +365,67 @@ function Predictor() {
           </div>
 
           <div className="prediction-result">
-            {/* Match */}
+            {/* =====================================
+                MATCH DISPLAY
+                ===================================== */}
 
             <div className="prediction-match">
-              <div className="prediction-team-name">
-                <span>{prediction.home_team}</span>
+              <div
+                className="prediction-team"
+                style={{
+                  "--prediction-team-primary":
+                    homeTeamTheme?.primary || "#541E5D",
+                }}
+              >
+                <div className="prediction-team-crest">
+                  {homeTeamTheme?.crest ? (
+                    <img
+                      src={homeTeamTheme.crest}
+                      alt={`${prediction.home_team} crest`}
+                    />
+                  ) : (
+                    <span>
+                      {prediction.home_team.charAt(0)}
+                    </span>
+                  )}
+                </div>
+
+                <span className="prediction-team-name">
+                  {prediction.home_team}
+                </span>
+
+                <small>HOME</small>
               </div>
 
-              <strong>vs</strong>
+              <div className="prediction-vs">
+                <span>VS</span>
+              </div>
 
-              <div className="prediction-team-name">
-                <span>{prediction.away_team}</span>
+              <div
+                className="prediction-team"
+                style={{
+                  "--prediction-team-primary":
+                    awayTeamTheme?.primary || "#541E5D",
+                }}
+              >
+                <div className="prediction-team-crest">
+                  {awayTeamTheme?.crest ? (
+                    <img
+                      src={awayTeamTheme.crest}
+                      alt={`${prediction.away_team} crest`}
+                    />
+                  ) : (
+                    <span>
+                      {prediction.away_team.charAt(0)}
+                    </span>
+                  )}
+                </div>
+
+                <span className="prediction-team-name">
+                  {prediction.away_team}
+                </span>
+
+                <small>AWAY</small>
               </div>
             </div>
 
@@ -403,9 +502,7 @@ function Predictor() {
                     )}
                   </div>
 
-                  <div className="draw-vs">
-                    +
-                  </div>
+                  <div className="draw-vs">+</div>
 
                   <div className="draw-crest draw-crest-away">
                     {awayTeamTheme?.crest ? (

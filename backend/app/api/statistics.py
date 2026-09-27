@@ -6,9 +6,15 @@ router = APIRouter(
     tags=["Statistics"]
 )
 
+
 statistics_service = StatisticsService()
 
 
 @router.get("/")
 def get_statistics():
     return statistics_service.get_overall_statistics()
+
+
+@router.get("/league")
+def get_league_analytics():
+    return statistics_service.get_league_analytics()

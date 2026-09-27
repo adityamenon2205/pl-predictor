@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from pathlib import Path
 
 import joblib
@@ -98,7 +99,11 @@ class PredictionService:
                     probability_dict.get(0, 0.0),
                     4
                 ),
-            }
+            },
+
+            # Store prediction creation time
+            # in UTC for prediction history.
+            "timestamp": datetime.now(timezone.utc)
         }
 
         # Save prediction to MongoDB
