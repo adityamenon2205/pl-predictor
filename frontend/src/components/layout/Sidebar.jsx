@@ -4,8 +4,10 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <h1>PL</h1>
-        <span>PREDICTOR</span>
+        <img
+          src="/pl_predictor_logo.svg"
+          alt="PL Predictor"
+        />
       </div>
 
       <nav className="sidebar-nav">

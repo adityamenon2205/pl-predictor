@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 
 import { getTeams, predictMatch } from "../services/api";
 import teamMetadata from "../data/teams";
+import PageTransition from "../components/common/PageTransition";
+import AnimatedNumber from "../components/common/AnimatedNumber";
 
 function TeamSearch({
   label,
@@ -245,251 +248,161 @@ function Predictor() {
 
   if (loadingTeams) {
     return (
-      <div className="predictor-page">
-        <div className="predictor-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading teams...</p>
+      <PageTransition>
+        <div className="predictor-page">
+          <div className="predictor-loading">
+            <div className="loading-spinner"></div>
+            <p>Loading teams...</p>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     );
   }
 
   return (
-    <div className="predictor-page">
-      {/* =========================================
-          HEADER
-          ========================================= */}
+    <PageTransition>
+      <div className="predictor-page">
+        {/* =========================================
+            HEADER
+            ========================================= */}
 
-      <div className="page-header predictor-header">
-        <div>
-          <p className="eyebrow">MACHINE LEARNING</p>
-
-          <h1>Match Predictor</h1>
-
-          <p className="page-description">
-            Predict the outcome of a Premier League fixture
-            using the trained Random Forest model.
-          </p>
-        </div>
-      </div>
-
-      {/* =========================================
-          FIXTURE SELECTOR
-          ========================================= */}
-
-      <section className="dashboard-card predictor-form-card">
-        <div className="card-header">
+        <div className="page-header predictor-header">
           <div>
-            <p className="eyebrow">FIXTURE</p>
-            <h2>Select Teams</h2>
+            <p className="eyebrow">MACHINE LEARNING</p>
+
+            <h1>Match Predictor</h1>
+
+            <p className="page-description">
+              Predict the outcome of a Premier League fixture
+              using the trained Random Forest model.
+            </p>
           </div>
         </div>
 
-        <form onSubmit={handlePrediction}>
-          <div className="predictor-matchup">
-            {/* Home Team */}
+        {/* =========================================
+            FIXTURE SELECTOR
+            ========================================= */}
 
-            <TeamSearch
-              label="Home Team"
-              value={homeTeam}
-              onChange={(team) => {
-                setHomeTeam(team);
-                setPrediction(null);
-                setError(null);
-              }}
-              teams={teams}
-              placeholder="Search home team..."
-              disabledTeam={awayTeam}
-            />
-
-            {/* VS */}
-
-            <div className="vs-divider">
-              <span>VS</span>
-            </div>
-
-            {/* Away Team */}
-
-            <TeamSearch
-              label="Away Team"
-              value={awayTeam}
-              onChange={(team) => {
-                setAwayTeam(team);
-                setPrediction(null);
-                setError(null);
-              }}
-              teams={teams}
-              placeholder="Search away team..."
-              disabledTeam={homeTeam}
-            />
-          </div>
-
-          {error && (
-            <div className="predictor-error">
-              <span>⚠</span>
-              <p>{error}</p>
-            </div>
-          )}
-
-          <button
-            type="submit"
-            className="predict-button"
-            disabled={predicting}
-          >
-            {predicting ? (
-              <>
-                <span className="button-spinner"></span>
-                Predicting...
-              </>
-            ) : (
-              <>
-                Predict Match
-                <span>→</span>
-              </>
-            )}
-          </button>
-        </form>
-      </section>
-
-      {/* =========================================
-          PREDICTION RESULT
-          ========================================= */}
-
-      {prediction && (
-        <section className="dashboard-card prediction-result-card">
+        <section className="dashboard-card predictor-form-card">
           <div className="card-header">
             <div>
-              <p className="eyebrow">MODEL PREDICTION</p>
-              <h2>Predicted Outcome</h2>
+              <p className="eyebrow">FIXTURE</p>
+              <h2>Select Teams</h2>
             </div>
           </div>
 
-          <div className="prediction-result">
-            {/* =====================================
-                MATCH DISPLAY
-                ===================================== */}
+          <form onSubmit={handlePrediction}>
+            <div className="predictor-matchup">
+              {/* Home Team */}
 
-            <div className="prediction-match">
-              <div
-                className="prediction-team"
-                style={{
-                  "--prediction-team-primary":
-                    homeTeamTheme?.primary || "#541E5D",
+              <TeamSearch
+                label="Home Team"
+                value={homeTeam}
+                onChange={(team) => {
+                  setHomeTeam(team);
+                  setPrediction(null);
+                  setError(null);
                 }}
-              >
-                <div className="prediction-team-crest">
-                  {homeTeamTheme?.crest ? (
-                    <img
-                      src={homeTeamTheme.crest}
-                      alt={`${prediction.home_team} crest`}
-                    />
-                  ) : (
-                    <span>
-                      {prediction.home_team.charAt(0)}
-                    </span>
-                  )}
-                </div>
+                teams={teams}
+                placeholder="Search home team..."
+                disabledTeam={awayTeam}
+              />
 
-                <span className="prediction-team-name">
-                  {prediction.home_team}
-                </span>
+              {/* VS */}
 
-                <small>HOME</small>
-              </div>
-
-              <div className="prediction-vs">
+              <div className="vs-divider">
                 <span>VS</span>
               </div>
 
-              <div
-                className="prediction-team"
-                style={{
-                  "--prediction-team-primary":
-                    awayTeamTheme?.primary || "#541E5D",
+              {/* Away Team */}
+
+              <TeamSearch
+                label="Away Team"
+                value={awayTeam}
+                onChange={(team) => {
+                  setAwayTeam(team);
+                  setPrediction(null);
+                  setError(null);
                 }}
-              >
-                <div className="prediction-team-crest">
-                  {awayTeamTheme?.crest ? (
-                    <img
-                      src={awayTeamTheme.crest}
-                      alt={`${prediction.away_team} crest`}
-                    />
-                  ) : (
-                    <span>
-                      {prediction.away_team.charAt(0)}
-                    </span>
-                  )}
-                </div>
-
-                <span className="prediction-team-name">
-                  {prediction.away_team}
-                </span>
-
-                <small>AWAY</small>
-              </div>
+                teams={teams}
+                placeholder="Search away team..."
+                disabledTeam={homeTeam}
+              />
             </div>
 
-            {/* =====================================
-                HOME / AWAY WIN
-                ===================================== */}
-
-            {winningTeamTheme && (
-              <div
-                className={`prediction-outcome ${getOutcomeClass(
-                  prediction.prediction
-                )}`}
-                style={{
-                  "--winning-primary":
-                    winningTeamTheme.primary,
-                  "--winning-secondary":
-                    winningTeamTheme.secondary,
-                  "--winning-accent":
-                    winningTeamTheme.accent,
-                }}
-              >
-                <div className="prediction-winning-crest">
-                  {winningTeamTheme.crest ? (
-                    <img
-                      src={winningTeamTheme.crest}
-                      alt={`${winningTeam} crest`}
-                    />
-                  ) : (
-                    <span>
-                      {winningTeam.charAt(0)}
-                    </span>
-                  )}
-                </div>
-
-                <span className="prediction-label">
-                  PREDICTED RESULT
-                </span>
-
-                <strong>{prediction.prediction}</strong>
-
-                <span className="prediction-winning-team">
-                  {winningTeam}
-                </span>
+            {error && (
+              <div className="predictor-error">
+                <span>⚠</span>
+                <p>{error}</p>
               </div>
             )}
 
-            {/* =====================================
-                DRAW
-                ===================================== */}
+            <button
+              type="submit"
+              className="predict-button"
+              disabled={predicting}
+            >
+              {predicting ? (
+                <>
+                  <span className="button-spinner"></span>
+                  Predicting...
+                </>
+              ) : (
+                <>
+                  Predict Match
+                  <span>→</span>
+                </>
+              )}
+            </button>
+          </form>
+        </section>
 
-            {prediction.prediction === "Draw" && (
-              <div
-                className="prediction-outcome prediction-draw prediction-draw-result"
-                style={{
-                  "--home-primary":
-                    homeTeamTheme?.primary ||
-                    "#541E5D",
-                  "--away-primary":
-                    awayTeamTheme?.primary ||
-                    "#541E5D",
+        {/* =========================================
+            PREDICTION RESULT
+            ========================================= */}
+
+        {prediction && (
+          <motion.section
+            className="dashboard-card prediction-result-card"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <div className="card-header">
+              <div>
+                <p className="eyebrow">MODEL PREDICTION</p>
+                <h2>Predicted Outcome</h2>
+              </div>
+            </div>
+
+            <div className="prediction-result">
+              {/* =====================================
+                  MATCH DISPLAY
+                  ===================================== */}
+
+              <motion.div
+                className="prediction-match"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.1,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <div className="draw-crests">
-                  <div className="draw-crest draw-crest-home">
+                {/* HOME TEAM */}
+
+                <div
+                  className="prediction-team"
+                  style={{
+                    "--prediction-team-primary":
+                      homeTeamTheme?.primary || "#541E5D",
+                  }}
+                >
+                  <div className="prediction-team-crest">
                     {homeTeamTheme?.crest ? (
                       <img
                         src={homeTeamTheme.crest}
@@ -502,9 +415,29 @@ function Predictor() {
                     )}
                   </div>
 
-                  <div className="draw-vs">+</div>
+                  <span className="prediction-team-name">
+                    {prediction.home_team}
+                  </span>
 
-                  <div className="draw-crest draw-crest-away">
+                  <small>HOME</small>
+                </div>
+
+                {/* VS */}
+
+                <div className="prediction-vs">
+                  <span>VS</span>
+                </div>
+
+                {/* AWAY TEAM */}
+
+                <div
+                  className="prediction-team"
+                  style={{
+                    "--prediction-team-primary":
+                      awayTeamTheme?.primary || "#541E5D",
+                  }}
+                >
+                  <div className="prediction-team-crest">
                     {awayTeamTheme?.crest ? (
                       <img
                         src={awayTeamTheme.crest}
@@ -516,143 +449,315 @@ function Predictor() {
                       </span>
                     )}
                   </div>
+
+                  <span className="prediction-team-name">
+                    {prediction.away_team}
+                  </span>
+
+                  <small>AWAY</small>
                 </div>
+              </motion.div>
 
-                <span className="prediction-label">
-                  PREDICTED RESULT
-                </span>
+              {/* =====================================
+                  HOME / AWAY WIN
+                  ===================================== */}
 
-                <strong>Draw</strong>
+              {winningTeamTheme && (
+                <motion.div
+                  className={`prediction-outcome ${getOutcomeClass(
+                    prediction.prediction
+                  )}`}
+                  style={{
+                    "--winning-primary":
+                      winningTeamTheme.primary,
+                    "--winning-secondary":
+                      winningTeamTheme.secondary,
+                    "--winning-accent":
+                      winningTeamTheme.accent,
+                  }}
+                  initial={{ opacity: 0, scale: 0.94, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{
+                    duration: 0.45,
+                    delay: 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div className="prediction-winning-crest">
+                    {winningTeamTheme.crest ? (
+                      <img
+                        src={winningTeamTheme.crest}
+                        alt={`${winningTeam} crest`}
+                      />
+                    ) : (
+                      <span>
+                        {winningTeam.charAt(0)}
+                      </span>
+                    )}
+                  </div>
 
-                <span className="prediction-winning-team">
-                  Both teams share the result
-                </span>
-              </div>
-            )}
-          </div>
+                  <span className="prediction-label">
+                    PREDICTED RESULT
+                  </span>
 
-          {/* =====================================
-              PROBABILITY BREAKDOWN
-              ===================================== */}
+                  <strong>{prediction.prediction}</strong>
 
-          <div className="probability-section">
-            <div className="probability-header">
-              <div>
-                <p className="eyebrow">
-                  PROBABILITY BREAKDOWN
-                </p>
+                  <span className="prediction-winning-team">
+                    {winningTeam}
+                  </span>
+                </motion.div>
+              )}
 
-                <h3>Model Confidence</h3>
-              </div>
+              {/* =====================================
+                  DRAW
+                  ===================================== */}
+
+              {prediction.prediction === "Draw" && (
+                <motion.div
+                  className="prediction-outcome prediction-draw prediction-draw-result"
+                  style={{
+                    "--home-primary":
+                      homeTeamTheme?.primary || "#541E5D",
+                    "--away-primary":
+                      awayTeamTheme?.primary || "#541E5D",
+                  }}
+                  initial={{ opacity: 0, scale: 0.94, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{
+                    duration: 0.45,
+                    delay: 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div className="draw-crests">
+                    <div className="draw-crest draw-crest-home">
+                      {homeTeamTheme?.crest ? (
+                        <img
+                          src={homeTeamTheme.crest}
+                          alt={`${prediction.home_team} crest`}
+                        />
+                      ) : (
+                        <span>
+                          {prediction.home_team.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="draw-vs">+</div>
+
+                    <div className="draw-crest draw-crest-away">
+                      {awayTeamTheme?.crest ? (
+                        <img
+                          src={awayTeamTheme.crest}
+                          alt={`${prediction.away_team} crest`}
+                        />
+                      ) : (
+                        <span>
+                          {prediction.away_team.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <span className="prediction-label">
+                    PREDICTED RESULT
+                  </span>
+
+                  <strong>Draw</strong>
+
+                  <span className="prediction-winning-team">
+                    Both teams share the result
+                  </span>
+                </motion.div>
+              )}
             </div>
 
-            <div className="probability-grid">
-              {/* Home */}
+            {/* =====================================
+                PROBABILITY BREAKDOWN
+                ===================================== */}
 
-              <div className="probability-card">
-                <div className="probability-card-header">
-                  <span
-                    className="probability-dot"
-                    style={{
-                      background:
-                        getProbabilityColor("home"),
-                    }}
-                  ></span>
+            <div className="probability-section">
+              <div className="probability-header">
+                <div>
+                  <p className="eyebrow">
+                    PROBABILITY BREAKDOWN
+                  </p>
 
-                  <span>Home Win</span>
+                  <h3>Model Confidence</h3>
                 </div>
+              </div>
 
-                <strong>
-                  {(
-                    prediction.probabilities.home * 100
-                  ).toFixed(2)}
-                  %
-                </strong>
+              <div className="probability-grid">
+                {/* =================================
+                    HOME
+                    ================================= */}
 
-                <div className="probability-bar">
-                  <div
-                    className="probability-fill home"
-                    style={{
-                      width: `${
+                <motion.div
+                  className="probability-card"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.35,
+                    delay: 0.25,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div className="probability-card-header">
+                    <span
+                      className="probability-dot"
+                      style={{
+                        background:
+                          getProbabilityColor("home"),
+                      }}
+                    ></span>
+
+                    <span>Home Win</span>
+                  </div>
+
+                  <strong>
+                    <AnimatedNumber
+                      value={
                         prediction.probabilities.home * 100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
+                      }
+                      decimals={2}
+                      suffix="%"
+                      duration={1.2}
+                    />
+                  </strong>
 
-              {/* Draw */}
+                  <div className="probability-bar">
+                    <motion.div
+                      className="probability-fill home"
+                      initial={{ width: 0 }}
+                      animate={{
+                        width: `${
+                          prediction.probabilities.home * 100
+                        }%`,
+                      }}
+                      transition={{
+                        duration: 1.1,
+                        delay: 0.3,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    ></motion.div>
+                  </div>
+                </motion.div>
 
-              <div className="probability-card">
-                <div className="probability-card-header">
-                  <span
-                    className="probability-dot"
-                    style={{
-                      background:
-                        getProbabilityColor("draw"),
-                    }}
-                  ></span>
+                {/* =================================
+                    DRAW
+                    ================================= */}
 
-                  <span>Draw</span>
-                </div>
+                <motion.div
+                  className="probability-card"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.35,
+                    delay: 0.35,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div className="probability-card-header">
+                    <span
+                      className="probability-dot"
+                      style={{
+                        background:
+                          getProbabilityColor("draw"),
+                      }}
+                    ></span>
 
-                <strong>
-                  {(
-                    prediction.probabilities.draw * 100
-                  ).toFixed(2)}
-                  %
-                </strong>
+                    <span>Draw</span>
+                  </div>
 
-                <div className="probability-bar">
-                  <div
-                    className="probability-fill draw"
-                    style={{
-                      width: `${
+                  <strong>
+                    <AnimatedNumber
+                      value={
                         prediction.probabilities.draw * 100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
+                      }
+                      decimals={2}
+                      suffix="%"
+                      duration={1.2}
+                    />
+                  </strong>
 
-              {/* Away */}
+                  <div className="probability-bar">
+                    <motion.div
+                      className="probability-fill draw"
+                      initial={{ width: 0 }}
+                      animate={{
+                        width: `${
+                          prediction.probabilities.draw * 100
+                        }%`,
+                      }}
+                      transition={{
+                        duration: 1.1,
+                        delay: 0.4,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    ></motion.div>
+                  </div>
+                </motion.div>
 
-              <div className="probability-card">
-                <div className="probability-card-header">
-                  <span
-                    className="probability-dot"
-                    style={{
-                      background:
-                        getProbabilityColor("away"),
-                    }}
-                  ></span>
+                {/* =================================
+                    AWAY
+                    ================================= */}
 
-                  <span>Away Win</span>
-                </div>
+                <motion.div
+                  className="probability-card"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.35,
+                    delay: 0.45,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div className="probability-card-header">
+                    <span
+                      className="probability-dot"
+                      style={{
+                        background:
+                          getProbabilityColor("away"),
+                      }}
+                    ></span>
 
-                <strong>
-                  {(
-                    prediction.probabilities.away * 100
-                  ).toFixed(2)}
-                  %
-                </strong>
+                    <span>Away Win</span>
+                  </div>
 
-                <div className="probability-bar">
-                  <div
-                    className="probability-fill away"
-                    style={{
-                      width: `${
+                  <strong>
+                    <AnimatedNumber
+                      value={
                         prediction.probabilities.away * 100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
+                      }
+                      decimals={2}
+                      suffix="%"
+                      duration={1.2}
+                    />
+                  </strong>
+
+                  <div className="probability-bar">
+                    <motion.div
+                      className="probability-fill away"
+                      initial={{ width: 0 }}
+                      animate={{
+                        width: `${
+                          prediction.probabilities.away * 100
+                        }%`,
+                      }}
+                      transition={{
+                        duration: 1.1,
+                        delay: 0.5,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    ></motion.div>
+                  </div>
+                </motion.div>
               </div>
             </div>
-          </div>
-        </section>
-      )}
-    </div>
+          </motion.section>
+        )}
+      </div>
+    </PageTransition>
   );
 }
 

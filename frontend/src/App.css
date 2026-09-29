@@ -12,18 +12,18 @@
 
 .sidebar-logo {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 50px;
+  padding: 0 4px;
 }
 
-.sidebar-logo h1 {
-  font-size: 28px;
-}
-
-.sidebar-logo span {
-  font-size: 12px;
-  opacity: 0.8;
+.sidebar-logo img {
+  display: block;
+  width: 190px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .sidebar-nav {
@@ -107,12 +107,18 @@
   font-size: 14px;
 }
 
-.stat-card strong {
+.overview-page .stats-grid .stat-card strong {
   display: block;
-  margin-bottom: 8px;
-  font-size: 32px;
-}
+  margin-top: 12px;
+  margin-bottom: 10px;
 
+  font-size: 3rem !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em;
+
+  color: #f7f3f8;
+}
 .stat-card small {
   color: #8f8491;
   font-size: 12px;
@@ -1087,7 +1093,6 @@
   max-width: 680px;
 }
 
-
 /* =========================================
    PREDICTOR FORM
    ========================================= */
@@ -1106,11 +1111,7 @@
   top: -260px;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(
-    circle,
-    rgba(84, 30, 93, 0.32),
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(84, 30, 93, 0.32), transparent 70%);
   pointer-events: none;
 }
 
@@ -1118,7 +1119,6 @@
   position: relative;
   z-index: 1;
 }
-
 
 /* Team matchup */
 
@@ -1155,12 +1155,11 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 12px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.018)
+  );
 
   color: #ffffff;
 
@@ -1213,7 +1212,6 @@
   color: #ffffff;
 }
 
-
 /* VS */
 
 .vs-divider {
@@ -1234,12 +1232,7 @@
 
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      #541e5d,
-      #321537
-    );
+  background: linear-gradient(145deg, #541e5d, #321537);
 
   border: 1px solid rgba(255, 255, 255, 0.1);
 
@@ -1252,7 +1245,6 @@
     0 8px 22px rgba(0, 0, 0, 0.25),
     0 0 24px rgba(84, 30, 93, 0.22);
 }
-
 
 /* =========================================
    PREDICT BUTTON
@@ -1272,13 +1264,7 @@
   border: none;
   border-radius: 12px;
 
-  background:
-    linear-gradient(
-      100deg,
-      #541e5d 0%,
-      #71377a 50%,
-      #541e5d 100%
-    );
+  background: linear-gradient(100deg, #541e5d 0%, #71377a 50%, #541e5d 100%);
 
   color: #ffffff;
 
@@ -1289,8 +1275,7 @@
 
   cursor: pointer;
 
-  box-shadow:
-    0 10px 28px rgba(84, 30, 93, 0.25);
+  box-shadow: 0 10px 28px rgba(84, 30, 93, 0.25);
 
   transition:
     transform 0.2s ease,
@@ -1306,8 +1291,7 @@
 .predict-button:hover:not(:disabled) {
   transform: translateY(-2px);
 
-  box-shadow:
-    0 14px 34px rgba(84, 30, 93, 0.38);
+  box-shadow: 0 14px 34px rgba(84, 30, 93, 0.38);
 
   filter: brightness(1.08);
 }
@@ -1324,7 +1308,6 @@
   cursor: not-allowed;
   opacity: 0.7;
 }
-
 
 /* =========================================
    ERROR
@@ -1356,7 +1339,6 @@
   font-size: 0.88rem;
 }
 
-
 /* =========================================
    PREDICTION RESULT
    ========================================= */
@@ -1382,12 +1364,7 @@
 
   transform: translateX(-50%);
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(84, 30, 93, 0.22),
-      transparent 68%
-    );
+  background: radial-gradient(circle, rgba(84, 30, 93, 0.22), transparent 68%);
 
   pointer-events: none;
 }
@@ -1396,7 +1373,6 @@
   position: relative;
   z-index: 1;
 }
-
 
 /* Match */
 
@@ -1437,7 +1413,6 @@
   letter-spacing: 0.06em;
 }
 
-
 /* Predicted outcome */
 
 .prediction-outcome {
@@ -1464,69 +1439,59 @@
   transform: translateY(-2px);
 }
 
-
 /* Home */
 
 .prediction-home {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(242, 107, 91, 0.15),
-      rgba(242, 107, 91, 0.05)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(242, 107, 91, 0.15),
+    rgba(242, 107, 91, 0.05)
+  );
 
   border: 1px solid rgba(242, 107, 91, 0.28);
 
-  box-shadow:
-    0 12px 35px rgba(242, 107, 91, 0.08);
+  box-shadow: 0 12px 35px rgba(242, 107, 91, 0.08);
 }
 
 .prediction-home strong {
   color: #f26b5b;
 }
 
-
 /* Draw */
 
 .prediction-draw {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 200, 87, 0.14),
-      rgba(255, 200, 87, 0.045)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 200, 87, 0.14),
+    rgba(255, 200, 87, 0.045)
+  );
 
   border: 1px solid rgba(255, 200, 87, 0.28);
 
-  box-shadow:
-    0 12px 35px rgba(255, 200, 87, 0.07);
+  box-shadow: 0 12px 35px rgba(255, 200, 87, 0.07);
 }
 
 .prediction-draw strong {
   color: #ffc857;
 }
 
-
 /* Away */
 
 .prediction-away {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(67, 179, 163, 0.14),
-      rgba(67, 179, 163, 0.045)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(67, 179, 163, 0.14),
+    rgba(67, 179, 163, 0.045)
+  );
 
   border: 1px solid rgba(67, 179, 163, 0.28);
 
-  box-shadow:
-    0 12px 35px rgba(67, 179, 163, 0.07);
+  box-shadow: 0 12px 35px rgba(67, 179, 163, 0.07);
 }
 
 .prediction-away strong {
   color: #43b3a3;
 }
-
 
 .prediction-label {
   margin-bottom: 7px;
@@ -1542,7 +1507,6 @@
   font-size: 1.7rem;
   font-weight: 800;
 }
-
 
 /* =========================================
    PROBABILITY BREAKDOWN
@@ -1577,12 +1541,11 @@
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 14px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.018)
+  );
 
   transition:
     transform 0.2s ease,
@@ -1627,7 +1590,6 @@
   font-weight: 800;
 }
 
-
 /* Probability bars */
 
 .probability-bar {
@@ -1650,38 +1612,22 @@
 }
 
 .probability-fill.home {
-  background: linear-gradient(
-    90deg,
-    #e95545,
-    #f26b5b
-  );
+  background: linear-gradient(90deg, #e95545, #f26b5b);
 
-  box-shadow:
-    0 0 12px rgba(242, 107, 91, 0.3);
+  box-shadow: 0 0 12px rgba(242, 107, 91, 0.3);
 }
 
 .probability-fill.draw {
-  background: linear-gradient(
-    90deg,
-    #f5b942,
-    #ffd166
-  );
+  background: linear-gradient(90deg, #f5b942, #ffd166);
 
-  box-shadow:
-    0 0 12px rgba(255, 200, 87, 0.28);
+  box-shadow: 0 0 12px rgba(255, 200, 87, 0.28);
 }
 
 .probability-fill.away {
-  background: linear-gradient(
-    90deg,
-    #35a895,
-    #4fc3b1
-  );
+  background: linear-gradient(90deg, #35a895, #4fc3b1);
 
-  box-shadow:
-    0 0 12px rgba(67, 179, 163, 0.28);
+  box-shadow: 0 0 12px rgba(67, 179, 163, 0.28);
 }
-
 
 /* =========================================
    EMPTY STATE
@@ -1702,8 +1648,7 @@
   border: 1px dashed rgba(255, 255, 255, 0.09);
   border-radius: 16px;
 
-  background:
-    rgba(255, 255, 255, 0.018);
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .empty-icon {
@@ -1718,19 +1663,17 @@
 
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(84, 30, 93, 0.7),
-      rgba(84, 30, 93, 0.25)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(84, 30, 93, 0.7),
+    rgba(84, 30, 93, 0.25)
+  );
 
   border: 1px solid rgba(155, 106, 163, 0.2);
 
   font-size: 1.5rem;
 
-  box-shadow:
-    0 10px 30px rgba(84, 30, 93, 0.18);
+  box-shadow: 0 10px 30px rgba(84, 30, 93, 0.18);
 }
 
 .predictor-empty-state h3 {
@@ -1751,7 +1694,6 @@
   font-size: 0.88rem;
   line-height: 1.6;
 }
-
 
 /* =========================================
    LOADING
@@ -1799,7 +1741,6 @@
     transform: rotate(360deg);
   }
 }
-
 
 /* =========================================
    RESPONSIVE
@@ -1875,12 +1816,11 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 12px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.018)
+  );
 
   color: #ffffff;
 
@@ -1932,7 +1872,6 @@
   z-index: 2;
 }
 
-
 /* Dropdown */
 
 .team-search-dropdown {
@@ -1951,12 +1890,7 @@
   border: 1px solid rgba(155, 106, 163, 0.22);
   border-radius: 12px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #29122c,
-      #1e0e20
-    );
+  background: linear-gradient(145deg, #29122c, #1e0e20);
 
   box-shadow:
     0 18px 40px rgba(0, 0, 0, 0.4),
@@ -1979,7 +1913,6 @@
   }
 }
 
-
 /* Dropdown scrollbar */
 
 .team-search-dropdown::-webkit-scrollbar {
@@ -1998,7 +1931,6 @@
 .team-search-dropdown::-webkit-scrollbar-thumb:hover {
   background: rgba(155, 106, 163, 0.55);
 }
-
 
 /* Individual team */
 
@@ -2034,12 +1966,11 @@
 }
 
 .team-search-option:hover:not(.disabled) {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(84, 30, 93, 0.55),
-      rgba(84, 30, 93, 0.25)
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(84, 30, 93, 0.55),
+    rgba(84, 30, 93, 0.25)
+  );
 
   color: #ffffff;
 
@@ -2062,7 +1993,6 @@
   font-weight: 800;
 }
 
-
 /* Empty search */
 
 .team-search-empty {
@@ -2075,7 +2005,6 @@
   text-align: center;
 }
 
-
 /* Keep dropdown above neighbouring content */
 
 .predictor-form-card {
@@ -2086,7 +2015,6 @@
   position: relative;
   z-index: 10;
 }
-
 
 /* Mobile */
 
@@ -2112,31 +2040,17 @@
 
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(
-        in srgb,
-        var(--winning-primary) 35%,
-        transparent
-      ),
-      rgba(255, 255, 255, 0.04)
-    );
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--winning-primary) 35%, transparent),
+    rgba(255, 255, 255, 0.04)
+  );
 
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--winning-primary) 55%,
-      rgba(255, 255, 255, 0.15)
-    );
+    color-mix(in srgb, var(--winning-primary) 55%, rgba(255, 255, 255, 0.15));
 
   box-shadow:
-    0 0 35px
-      color-mix(
-        in srgb,
-        var(--winning-primary) 28%,
-        transparent
-      ),
+    0 0 35px color-mix(in srgb, var(--winning-primary) 28%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -2163,18 +2077,13 @@
   font-weight: 600;
 }
 
-
 /* Team-specific result backgrounds */
 
 .prediction-home {
   background:
     radial-gradient(
       circle at 50% 15%,
-      color-mix(
-        in srgb,
-        var(--winning-primary) 22%,
-        transparent
-      ),
+      color-mix(in srgb, var(--winning-primary) 22%, transparent),
       transparent 58%
     ),
     linear-gradient(
@@ -2184,30 +2093,17 @@
     );
 
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--winning-primary) 50%,
-      rgba(255, 255, 255, 0.12)
-    );
+    color-mix(in srgb, var(--winning-primary) 50%, rgba(255, 255, 255, 0.12));
 
-  box-shadow:
-    0 16px 45px
-      color-mix(
-        in srgb,
-        var(--winning-primary) 12%,
-        transparent
-      );
+  box-shadow: 0 16px 45px
+    color-mix(in srgb, var(--winning-primary) 12%, transparent);
 }
 
 .prediction-away {
   background:
     radial-gradient(
       circle at 50% 15%,
-      color-mix(
-        in srgb,
-        var(--winning-primary) 22%,
-        transparent
-      ),
+      color-mix(in srgb, var(--winning-primary) 22%, transparent),
       transparent 58%
     ),
     linear-gradient(
@@ -2217,26 +2113,16 @@
     );
 
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--winning-primary) 50%,
-      rgba(255, 255, 255, 0.12)
-    );
+    color-mix(in srgb, var(--winning-primary) 50%, rgba(255, 255, 255, 0.12));
 
-  box-shadow:
-    0 16px 45px
-      color-mix(
-        in srgb,
-        var(--winning-primary) 12%,
-        transparent
-      );
+  box-shadow: 0 16px 45px
+    color-mix(in srgb, var(--winning-primary) 12%, transparent);
 }
 
 .prediction-home strong,
 .prediction-away strong {
   color: var(--winning-primary);
 }
-
 
 /* =========================================
    DRAW RESULT
@@ -2245,32 +2131,21 @@
 .prediction-draw-result {
   position: relative;
 
-  background:
-    linear-gradient(
-      115deg,
-      color-mix(
-        in srgb,
-        var(--home-primary) 13%,
-        transparent
-      ),
-      rgba(255, 200, 87, 0.07),
-      color-mix(
-        in srgb,
-        var(--away-primary) 13%,
-        transparent
-      )
-    );
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--home-primary) 13%, transparent),
+    rgba(255, 200, 87, 0.07),
+    color-mix(in srgb, var(--away-primary) 13%, transparent)
+  );
 
   border: 1px solid rgba(255, 200, 87, 0.25);
 
-  box-shadow:
-    0 16px 45px rgba(255, 200, 87, 0.06);
+  box-shadow: 0 16px 45px rgba(255, 200, 87, 0.06);
 }
 
 .prediction-draw-result strong {
   color: #ffc857;
 }
-
 
 /* Both crests */
 
@@ -2296,8 +2171,7 @@
 
   border: 1px solid rgba(255, 255, 255, 0.12);
 
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .draw-crest img {
@@ -2315,37 +2189,23 @@
 }
 
 .draw-crest-home {
-  border-color:
-    color-mix(
-      in srgb,
-      var(--home-primary) 55%,
-      rgba(255, 255, 255, 0.12)
-    );
+  border-color: color-mix(
+    in srgb,
+    var(--home-primary) 55%,
+    rgba(255, 255, 255, 0.12)
+  );
 
-  box-shadow:
-    0 0 24px
-      color-mix(
-        in srgb,
-        var(--home-primary) 18%,
-        transparent
-      );
+  box-shadow: 0 0 24px color-mix(in srgb, var(--home-primary) 18%, transparent);
 }
 
 .draw-crest-away {
-  border-color:
-    color-mix(
-      in srgb,
-      var(--away-primary) 55%,
-      rgba(255, 255, 255, 0.12)
-    );
+  border-color: color-mix(
+    in srgb,
+    var(--away-primary) 55%,
+    rgba(255, 255, 255, 0.12)
+  );
 
-  box-shadow:
-    0 0 24px
-      color-mix(
-        in srgb,
-        var(--away-primary) 18%,
-        transparent
-      );
+  box-shadow: 0 0 24px color-mix(in srgb, var(--away-primary) 18%, transparent);
 }
 
 .draw-vs {
@@ -2370,7 +2230,6 @@
   font-weight: 800;
 }
 
-
 /* =========================================
    PREDICTION MATCH
    ========================================= */
@@ -2383,7 +2242,6 @@
 .prediction-team-name span {
   font-weight: 700;
 }
-
 
 /* =========================================
    RESPONSIVE
@@ -2472,7 +2330,6 @@
   font-weight: 800;
 }
 
-
 /* =========================================
    HISTORY LIST
    ========================================= */
@@ -2482,7 +2339,6 @@
   flex-direction: column;
   gap: 16px;
 }
-
 
 /* =========================================
    HISTORY CARD
@@ -2506,15 +2362,13 @@
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 16px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.035),
-      rgba(255, 255, 255, 0.012)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.012)
+  );
 
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 
   transition:
     transform 0.2s ease,
@@ -2527,14 +2381,12 @@
 
   border-color: rgba(155, 106, 163, 0.2);
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.018)
+  );
 }
-
 
 /* =========================================
    HISTORY MATCH
@@ -2571,23 +2423,14 @@
 
   border-radius: 12px;
 
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(
-        in srgb,
-        var(--team-primary) 20%,
-        transparent
-      ),
-      rgba(255, 255, 255, 0.025)
-    );
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--team-primary) 20%, transparent),
+    rgba(255, 255, 255, 0.025)
+  );
 
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--team-primary) 40%,
-      rgba(255, 255, 255, 0.08)
-    );
+    color-mix(in srgb, var(--team-primary) 40%, rgba(255, 255, 255, 0.08));
 }
 
 .history-team-crest img {
@@ -2648,7 +2491,6 @@
   font-weight: 800;
 }
 
-
 /* =========================================
    OUTCOME
    ========================================= */
@@ -2686,7 +2528,6 @@
 .history-away {
   color: #43b3a3;
 }
-
 
 /* =========================================
    PROBABILITIES
@@ -2751,7 +2592,6 @@
   background: #43b3a3;
 }
 
-
 /* =========================================
    DATE
    ========================================= */
@@ -2766,7 +2606,6 @@
 
   text-align: right;
 }
-
 
 /* =========================================
    EMPTY STATE
@@ -2803,12 +2642,11 @@
 
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(84, 30, 93, 0.7),
-      rgba(84, 30, 93, 0.2)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(84, 30, 93, 0.7),
+    rgba(84, 30, 93, 0.2)
+  );
 
   border: 1px solid rgba(155, 106, 163, 0.2);
 
@@ -2836,7 +2674,6 @@
 
   line-height: 1.6;
 }
-
 
 /* =========================================
    ERROR
@@ -2879,7 +2716,6 @@
   font-size: 0.8rem;
 }
 
-
 /* =========================================
    LOADING
    ========================================= */
@@ -2898,7 +2734,6 @@
 .history-loading .loading-spinner {
   margin-bottom: 14px;
 }
-
 
 /* =========================================
    RESPONSIVE
@@ -3095,9 +2930,7 @@
 }
 
 @media (max-width: 800px) {
-  .league-analytics-page
-  .recharts-xAxis
-  .recharts-cartesian-axis-tick {
+  .league-analytics-page .recharts-xAxis .recharts-cartesian-axis-tick {
     font-size: 10px;
   }
 }
@@ -3177,7 +3010,6 @@
   margin-top: 22px;
 }
 
-
 /* ========================================
    LEADERBOARD ROW
    ======================================== */
@@ -3201,12 +3033,11 @@
 
   border-radius: 16px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.018)
+  );
 
   border: 1px solid rgba(255, 255, 255, 0.065);
 
@@ -3218,7 +3049,6 @@
 
   overflow: hidden;
 }
-
 
 /* Team colour accent */
 
@@ -3238,23 +3068,19 @@
   opacity: 0.9;
 }
 
-
 .leaderboard-row:hover {
   transform: translateY(-2px);
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.065),
-      rgba(255, 255, 255, 0.025)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.065),
+    rgba(255, 255, 255, 0.025)
+  );
 
   border-color: rgba(255, 255, 255, 0.12);
 
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
-
 
 /* ========================================
    RANK
@@ -3265,7 +3091,6 @@
   align-items: center;
   justify-content: center;
 }
-
 
 .leaderboard-rank span {
   display: flex;
@@ -3286,16 +3111,14 @@
   font-weight: 800;
 }
 
-
 /* Top three */
 
 .leaderboard-row:nth-child(1) .leaderboard-rank span,
 .leaderboard-row:nth-child(2) .leaderboard-rank span,
 .leaderboard-row:nth-child(3) .leaderboard-rank span {
   background: rgba(255, 200, 87, 0.12);
-  color: #FFC857;
+  color: #ffc857;
 }
-
 
 /* ========================================
    TEAM
@@ -3308,7 +3131,6 @@
 
   min-width: 0;
 }
-
 
 .leaderboard-crest {
   display: flex;
@@ -3328,7 +3150,6 @@
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-
 .leaderboard-crest img {
   width: 38px !important;
   height: 38px !important;
@@ -3341,17 +3162,14 @@
   display: block;
 }
 
-
 .leaderboard-crest span {
   font-size: 18px;
   font-weight: 800;
 }
 
-
 .leaderboard-team-info {
   min-width: 0;
 }
-
 
 .leaderboard-team-info h3 {
   margin: 0;
@@ -3365,7 +3183,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 .leaderboard-team-info span {
   display: block;
@@ -3381,7 +3198,6 @@
   letter-spacing: 0.05em;
 }
 
-
 /* ========================================
    RECORD
    ======================================== */
@@ -3391,7 +3207,6 @@
   flex-direction: column;
   gap: 7px;
 }
-
 
 .record-label,
 .leaderboard-gd > span,
@@ -3404,7 +3219,6 @@
   letter-spacing: 0.1em;
 }
 
-
 .record-values {
   display: flex;
   gap: 10px;
@@ -3415,16 +3229,13 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
-
 .record-win {
-  color: #48B5A5;
+  color: #48b5a5;
 }
-
 
 .record-loss {
-  color: #FF6B5F;
+  color: #ff6b5f;
 }
-
 
 /* ========================================
    WIN RATE
@@ -3438,7 +3249,6 @@
   padding-right: 20px;
 }
 
-
 .winrate-header {
   display: flex;
   align-items: center;
@@ -3446,7 +3256,6 @@
 
   gap: 10px;
 }
-
 
 .winrate-header span {
   color: rgba(255, 255, 255, 0.38);
@@ -3457,14 +3266,12 @@
   letter-spacing: 0.1em;
 }
 
-
 .winrate-header strong {
   color: #ffffff;
 
   font-size: 13px;
   font-weight: 700;
 }
-
 
 .winrate-track {
   width: 100%;
@@ -3477,22 +3284,19 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
-
 .winrate-fill {
   height: 100%;
 
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      90deg,
-      var(--team-primary),
-      rgba(255, 255, 255, 0.8)
-    );
+  background: linear-gradient(
+    90deg,
+    var(--team-primary),
+    rgba(255, 255, 255, 0.8)
+  );
 
   min-width: 4px;
 }
-
 
 /* ========================================
    GOAL DIFFERENCE
@@ -3504,12 +3308,10 @@
   gap: 7px;
 }
 
-
 .leaderboard-gd strong {
   font-size: 15px;
   font-weight: 750;
 }
-
 
 /* ========================================
    POINTS
@@ -3525,7 +3327,6 @@
   border-left: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-
 .leaderboard-points strong {
   color: #ffffff;
 
@@ -3533,13 +3334,11 @@
   font-weight: 800;
 }
 
-
 /* ========================================
    RESPONSIVE
    ======================================== */
 
 @media (max-width: 1100px) {
-
   .leaderboard-row {
     grid-template-columns:
       48px
@@ -3551,12 +3350,9 @@
 
     padding: 13px 14px;
   }
-
 }
 
-
 @media (max-width: 850px) {
-
   .leaderboard-row {
     grid-template-columns:
       45px
@@ -3579,12 +3375,9 @@
   .leaderboard-points {
     display: none;
   }
-
 }
 
-
 @media (max-width: 600px) {
-
   .leaderboard-row {
     grid-template-columns:
       40px
@@ -3616,9 +3409,7 @@
     width: 32px !important;
     height: 32px !important;
   }
-
 }
-
 
 /* ========================================
    LEAGUE ANALYTICS
@@ -3626,9 +3417,8 @@
    ======================================== */
 
 /* Axis tick labels */
-.league-analytics-page
-.recharts-cartesian-axis-tick-value {
-  fill: #A996B0 !important;
+.league-analytics-page .recharts-cartesian-axis-tick-value {
+  fill: #a996b0 !important;
   font-family: inherit !important;
   font-size: 12px !important;
   font-weight: 500 !important;
@@ -3636,41 +3426,33 @@
 }
 
 /* X-axis labels */
-.league-analytics-page
-.recharts-xAxis
-.recharts-cartesian-axis-tick-value {
-  fill: #B7A8BD !important;
+.league-analytics-page .recharts-xAxis .recharts-cartesian-axis-tick-value {
+  fill: #b7a8bd !important;
   font-size: 11px !important;
   font-weight: 600 !important;
 }
 
 /* Y-axis labels */
-.league-analytics-page
-.recharts-yAxis
-.recharts-cartesian-axis-tick-value {
-  fill: #A996B0 !important;
+.league-analytics-page .recharts-yAxis .recharts-cartesian-axis-tick-value {
+  fill: #a996b0 !important;
   font-size: 11px !important;
   font-weight: 500 !important;
 }
 
 /* Axis lines */
-.league-analytics-page
-.recharts-cartesian-axis-line {
+.league-analytics-page .recharts-cartesian-axis-line {
   stroke: rgba(255, 255, 255, 0.22) !important;
   stroke-width: 1 !important;
 }
 
 /* Tick marks */
-.league-analytics-page
-.recharts-cartesian-axis-tick-line {
+.league-analytics-page .recharts-cartesian-axis-tick-line {
   stroke: rgba(255, 255, 255, 0.16) !important;
 }
 
 /* Chart grid */
-.league-analytics-page
-.recharts-cartesian-grid-horizontal line,
-.league-analytics-page
-.recharts-cartesian-grid-vertical line {
+.league-analytics-page .recharts-cartesian-grid-horizontal line,
+.league-analytics-page .recharts-cartesian-grid-vertical line {
   stroke: rgba(255, 255, 255, 0.055) !important;
   stroke-dasharray: 3 5 !important;
 }
@@ -3679,65 +3461,53 @@
    CHART LEGEND
    ======================================== */
 
-.league-analytics-page
-.recharts-legend-item-text {
-  color: #B7A8BD !important;
+.league-analytics-page .recharts-legend-item-text {
+  color: #b7a8bd !important;
   font-family: inherit !important;
   font-size: 12px !important;
   font-weight: 600 !important;
 }
 
-
 /* ========================================
    CHART TOOLTIP
    ======================================== */
 
-.league-analytics-page
-.recharts-tooltip-wrapper {
+.league-analytics-page .recharts-tooltip-wrapper {
   outline: none;
 }
 
-.league-analytics-page
-.recharts-default-tooltip {
+.league-analytics-page .recharts-default-tooltip {
   background: rgba(28, 18, 31, 0.96) !important;
-  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 12px !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.30) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
   padding: 10px 12px !important;
 }
 
-.league-analytics-page
-.recharts-tooltip-label {
-  color: #FFFFFF !important;
+.league-analytics-page .recharts-tooltip-label {
+  color: #ffffff !important;
   font-size: 12px !important;
   font-weight: 700 !important;
   margin-bottom: 6px !important;
 }
 
-.league-analytics-page
-.recharts-tooltip-item {
+.league-analytics-page .recharts-tooltip-item {
   font-size: 12px !important;
   font-weight: 500 !important;
 }
-
 
 /* ========================================
    CHART RESPONSIVENESS
    ======================================== */
 
 @media (max-width: 800px) {
-
-  .league-analytics-page
-  .recharts-cartesian-axis-tick-value {
+  .league-analytics-page .recharts-cartesian-axis-tick-value {
     font-size: 10px !important;
   }
 
-  .league-analytics-page
-  .recharts-xAxis
-  .recharts-cartesian-axis-tick-value {
+  .league-analytics-page .recharts-xAxis .recharts-cartesian-axis-tick-value {
     font-size: 9px !important;
   }
-
 }
 /* ========================================
    PREDICTOR - TEAM SELECTOR POLISH
@@ -3783,7 +3553,6 @@
   display: block;
 }
 
-
 /* ========================================
    SEARCH DROPDOWN
    ======================================== */
@@ -3800,7 +3569,6 @@
 
   z-index: 100;
 }
-
 
 /* ========================================
    DROPDOWN TEAM OPTION
@@ -3825,7 +3593,6 @@
   border: 0;
 }
 
-
 /* Left side of dropdown option */
 .team-search-option-left {
   min-width: 0;
@@ -3837,7 +3604,6 @@
 
   flex: 1;
 }
-
 
 /* ========================================
    DROPDOWN CRESTS
@@ -3858,16 +3624,11 @@
 
   border-radius: 10px;
 
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(
-        in srgb,
-        var(--option-team-primary) 18%,
-        transparent
-      ),
-      rgba(255, 255, 255, 0.035)
-    );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--option-team-primary) 18%, transparent),
+    rgba(255, 255, 255, 0.035)
+  );
 
   border: 1px solid rgba(255, 255, 255, 0.08);
 
@@ -3894,7 +3655,6 @@
   font-weight: 700;
 }
 
-
 /* Team name inside dropdown */
 .team-search-option-left > span {
   min-width: 0;
@@ -3906,7 +3666,6 @@
   font-size: 14px;
   font-weight: 600;
 }
-
 
 /* Selected check */
 .team-search-option .team-selected-check {
@@ -3924,7 +3683,6 @@
 
   flex-shrink: 0;
 }
-
 
 /* ========================================
    DROPDOWN SCROLLBAR
@@ -3956,7 +3714,6 @@
   overflow: hidden;
 }
 
-
 /* ========================================
    MATCHUP
    ======================================== */
@@ -3968,7 +3725,6 @@
   align-items: stretch;
   gap: 24px;
 }
-
 
 /* The two teams + VS */
 
@@ -3988,17 +3744,15 @@
 
   border-radius: 20px;
 
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(84, 30, 93, 0.30),
-      rgba(255, 255, 255, 0.018) 55%,
-      rgba(255, 255, 255, 0.012)
-    );
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(84, 30, 93, 0.3),
+    rgba(255, 255, 255, 0.018) 55%,
+    rgba(255, 255, 255, 0.012)
+  );
 
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
-
 
 /* ========================================
    TEAM SIDE
@@ -4018,16 +3772,13 @@
   text-align: center;
 }
 
-
 .predictor-page .prediction-team:first-child {
   padding-right: 30px;
 }
 
-
 .predictor-page .prediction-team:last-child {
   padding-left: 30px;
 }
-
 
 /* Crest container */
 
@@ -4043,16 +3794,11 @@
 
   border-radius: 24px;
 
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(
-        in srgb,
-        var(--prediction-team-primary) 18%,
-        transparent
-      ),
-      rgba(255, 255, 255, 0.035)
-    );
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--prediction-team-primary) 18%, transparent),
+    rgba(255, 255, 255, 0.035)
+  );
 
   border: 1px solid
     color-mix(
@@ -4061,12 +3807,10 @@
       rgba(255, 255, 255, 0.08)
     );
 
-  box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.20);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 
   overflow: hidden;
 }
-
 
 .predictor-page .prediction-team-crest::before {
   content: "";
@@ -4078,20 +3822,14 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      color-mix(
-        in srgb,
-        var(--prediction-team-primary) 22%,
-        transparent
-      ),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--prediction-team-primary) 22%, transparent),
+    transparent 70%
+  );
 
   filter: blur(5px);
 }
-
 
 .predictor-page .prediction-team-crest img {
   position: relative;
@@ -4112,7 +3850,6 @@
   z-index: 1;
 }
 
-
 .predictor-page .prediction-team-crest span {
   position: relative;
 
@@ -4121,7 +3858,6 @@
 
   z-index: 1;
 }
-
 
 /* Team name */
 
@@ -4136,7 +3872,6 @@
   white-space: nowrap;
 }
 
-
 /* HOME / AWAY */
 
 .predictor-page .prediction-team small {
@@ -4148,7 +3883,6 @@
   letter-spacing: 0.16em;
 }
 
-
 /* ========================================
    VS
    ======================================== */
@@ -4158,7 +3892,6 @@
   align-items: center;
   justify-content: center;
 }
-
 
 .predictor-page .prediction-vs span {
   width: 54px;
@@ -4170,24 +3903,17 @@
 
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      #5f2868,
-      #32153b
-    );
+  background: linear-gradient(145deg, #5f2868, #32153b);
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   color: rgba(255, 255, 255, 0.85);
 
   font-size: 14px;
   font-weight: 800;
 
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
 }
-
 
 /* ========================================
    PREDICTED OUTCOME
@@ -4217,25 +3943,15 @@
 
   text-align: center;
 
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(
-        in srgb,
-        var(--winning-primary) 16%,
-        rgba(255, 255, 255, 0.025)
-      ),
-      rgba(255, 255, 255, 0.015)
-    );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--winning-primary) 16%, rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.015)
+  );
 
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--winning-primary) 35%,
-      rgba(255, 255, 255, 0.08)
-    );
+    color-mix(in srgb, var(--winning-primary) 35%, rgba(255, 255, 255, 0.08));
 }
-
 
 .predictor-page .prediction-outcome::before {
   content: "";
@@ -4248,15 +3964,13 @@
 
   height: 3px;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      var(--winning-primary),
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--winning-primary),
+    transparent
+  );
 }
-
 
 .predictor-page .prediction-outcome::after {
   content: "";
@@ -4273,20 +3987,14 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      color-mix(
-        in srgb,
-        var(--winning-primary) 16%,
-        transparent
-      ),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--winning-primary) 16%, transparent),
+    transparent 70%
+  );
 
   pointer-events: none;
 }
-
 
 /* ========================================
    WINNING CREST
@@ -4306,14 +4014,12 @@
 
   border-radius: 18px;
 
-  background:
-    rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.055);
 
   border: 1px solid rgba(255, 255, 255, 0.09);
 
   z-index: 1;
 }
-
 
 .predictor-page .prediction-winning-crest img {
   width: 52px !important;
@@ -4330,12 +4036,10 @@
   display: block !important;
 }
 
-
 .predictor-page .prediction-winning-crest span {
   font-size: 22px;
   font-weight: 800;
 }
-
 
 /* ========================================
    RESULT TEXT
@@ -4354,7 +4058,6 @@
   z-index: 1;
 }
 
-
 .predictor-page .prediction-outcome > strong {
   position: relative;
 
@@ -4368,7 +4071,6 @@
   z-index: 1;
 }
 
-
 .predictor-page .prediction-winning-team {
   position: relative;
 
@@ -4380,42 +4082,29 @@
   z-index: 1;
 }
 
-
 /* ========================================
    DRAW RESULT
    ======================================== */
 
 .predictor-page .prediction-draw-result {
-  --winning-primary: #FFC857;
+  --winning-primary: #ffc857;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 200, 87, 0.08),
-      rgba(255, 255, 255, 0.015)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 200, 87, 0.08),
+    rgba(255, 255, 255, 0.015)
+  );
 
-  border-color:
-    rgba(255, 200, 87, 0.22);
+  border-color: rgba(255, 200, 87, 0.22);
 }
-
 
 .predictor-page .prediction-draw-result::before {
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #FFC857,
-      transparent
-    );
+  background: linear-gradient(90deg, transparent, #ffc857, transparent);
 }
 
-
-.predictor-page .prediction-draw-result
-> strong {
-  color: #FFC857;
+.predictor-page .prediction-draw-result > strong {
+  color: #ffc857;
 }
-
 
 /* Draw crests */
 
@@ -4432,7 +4121,6 @@
   z-index: 1;
 }
 
-
 .predictor-page .draw-crest {
   width: 58px;
   height: 58px;
@@ -4448,7 +4136,6 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
-
 .predictor-page .draw-crest img {
   width: 43px !important;
   height: 43px !important;
@@ -4462,14 +4149,12 @@
   object-fit: contain !important;
 }
 
-
 .predictor-page .draw-vs {
-  color: #FFC857;
+  color: #ffc857;
 
   font-size: 18px;
   font-weight: 800;
 }
-
 
 /* ========================================
    PROBABILITY SECTION
@@ -4481,11 +4166,9 @@
   margin-top: 4px;
 }
 
-
 .predictor-page .probability-header {
   margin-bottom: 14px;
 }
-
 
 .predictor-page .probability-header h3 {
   margin: 3px 0 0;
@@ -4496,7 +4179,6 @@
   font-weight: 750;
 }
 
-
 /* Three probability cards */
 
 .predictor-page .probability-grid {
@@ -4504,12 +4186,10 @@
 
   display: grid;
 
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 12px;
 }
-
 
 .predictor-page .probability-card {
   min-width: 0;
@@ -4520,26 +4200,20 @@
 
   border-radius: 15px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.065);
 
   transition:
     background 0.2s ease,
     border-color 0.2s ease;
 }
 
-
 .predictor-page .probability-card:hover {
-  background:
-    rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.04);
 
-  border-color:
-    rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.11);
 }
-
 
 /* Probability label */
 
@@ -4552,14 +4226,12 @@
   margin-bottom: 9px;
 }
 
-
 .predictor-page .probability-card-header > span:last-child {
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255, 255, 255, 0.6);
 
   font-size: 11px;
   font-weight: 600;
 }
-
 
 .predictor-page .probability-dot {
   width: 7px !important;
@@ -4569,7 +4241,6 @@
 
   border-radius: 50%;
 }
-
 
 /* Percentage */
 
@@ -4586,7 +4257,6 @@
   margin-bottom: 13px;
 }
 
-
 /* Bar */
 
 .predictor-page .probability-bar {
@@ -4597,10 +4267,8 @@
 
   border-radius: 999px;
 
-  background:
-    rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.07);
 }
-
 
 .predictor-page .probability-fill {
   height: 100%;
@@ -4609,35 +4277,28 @@
 
   border-radius: inherit;
 
-  transition:
-    width 0.5s ease;
+  transition: width 0.5s ease;
 }
-
 
 .predictor-page .probability-fill.home {
-  background: #F26B5B;
+  background: #f26b5b;
 }
-
 
 .predictor-page .probability-fill.draw {
-  background: #FFC857;
+  background: #ffc857;
 }
-
 
 .predictor-page .probability-fill.away {
-  background: #43B3A3;
+  background: #43b3a3;
 }
-
 
 /* ========================================
    RESPONSIVE
    ======================================== */
 
 @media (max-width: 850px) {
-
   .predictor-page .prediction-match {
-    grid-template-columns:
-      1fr 60px 1fr;
+    grid-template-columns: 1fr 60px 1fr;
 
     padding: 25px 20px;
   }
@@ -4663,12 +4324,9 @@
   .predictor-page .prediction-team-name {
     font-size: 18px;
   }
-
 }
 
-
 @media (max-width: 650px) {
-
   .predictor-page .prediction-match {
     grid-template-columns: 1fr;
 
@@ -4724,12 +4382,9 @@
   .predictor-page .probability-grid {
     grid-template-columns: 1fr;
   }
-
 }
 
-
 @media (max-width: 450px) {
-
   .predictor-page .prediction-match {
     padding: 20px 12px;
   }
@@ -4743,7 +4398,6 @@
     width: 52px !important;
     height: 52px !important;
   }
-
 }
 
 /* ========================================
@@ -4774,12 +4428,11 @@
 
   border-radius: 20px;
 
-  background:
-    linear-gradient(
-      110deg,
-      rgba(255, 255, 255, 0.035),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.018)
+  );
 
   border: 1px solid rgba(255, 255, 255, 0.075);
 
@@ -4789,7 +4442,6 @@
     background 0.2s ease,
     box-shadow 0.2s ease;
 }
-
 
 /* ========================================
    OUTCOME ACCENT
@@ -4810,37 +4462,27 @@
 
   border-radius: 20px 0 0 20px;
 
-  box-shadow:
-    0 0 18px
-    color-mix(
-      in srgb,
-      var(--history-outcome-color) 35%,
-      transparent
-    );
+  box-shadow: 0 0 18px
+    color-mix(in srgb, var(--history-outcome-color) 35%, transparent);
 }
-
 
 .history-card:hover {
   transform: translateY(-2px);
 
-  background:
-    linear-gradient(
-      110deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.022)
-    );
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.022)
+  );
 
-  border-color:
-    color-mix(
-      in srgb,
-      var(--history-outcome-color) 28%,
-      rgba(255, 255, 255, 0.075)
-    );
+  border-color: color-mix(
+    in srgb,
+    var(--history-outcome-color) 28%,
+    rgba(255, 255, 255, 0.075)
+  );
 
-  box-shadow:
-    0 14px 35px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
 }
-
 
 /* ========================================
    MATCH AREA
@@ -4861,7 +4503,6 @@
   gap: 10px;
 }
 
-
 /* ========================================
    TEAM
    ======================================== */
@@ -4876,11 +4517,9 @@
   gap: 12px;
 }
 
-
 .history-card .history-team-away {
   justify-content: flex-start;
 }
-
 
 .history-card .history-team > div:last-child {
   min-width: 0;
@@ -4890,7 +4529,6 @@
 
   gap: 4px;
 }
-
 
 .history-card .history-team strong {
   display: block;
@@ -4909,7 +4547,6 @@
   line-height: 1.15;
 }
 
-
 /* ========================================
    TEAM LABEL
    ======================================== */
@@ -4926,7 +4563,6 @@
 
   line-height: 1;
 }
-
 
 /* ========================================
    CREST
@@ -4946,29 +4582,19 @@
 
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(
-        in srgb,
-        var(--team-primary) 16%,
-        transparent
-      ),
-      rgba(255, 255, 255, 0.035)
-    );
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--team-primary) 16%, transparent),
+    rgba(255, 255, 255, 0.035)
+  );
 
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--team-primary) 45%,
-      rgba(255, 255, 255, 0.08)
-    );
+    color-mix(in srgb, var(--team-primary) 45%, rgba(255, 255, 255, 0.08));
 
   overflow: hidden;
 
   box-sizing: border-box;
 }
-
 
 .history-card .history-team-crest::after {
   content: "";
@@ -4980,22 +4606,16 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      color-mix(
-        in srgb,
-        var(--team-primary) 20%,
-        transparent
-      ),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--team-primary) 20%, transparent),
+    transparent 70%
+  );
 
   filter: blur(4px);
 
   pointer-events: none;
 }
-
 
 .history-card .history-team-crest img {
   position: relative;
@@ -5016,7 +4636,6 @@
   display: block !important;
 }
 
-
 .history-card .history-team-crest span {
   position: relative;
 
@@ -5025,7 +4644,6 @@
   font-size: 18px;
   font-weight: 800;
 }
-
 
 /* ========================================
    VS
@@ -5043,11 +4661,9 @@
 
   border-radius: 50%;
 
-  background:
-    rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.045);
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
   color: rgba(255, 255, 255, 0.48);
 
@@ -5056,7 +4672,6 @@
 
   box-sizing: border-box;
 }
-
 
 /* ========================================
    PREDICTED RESULT
@@ -5073,7 +4688,6 @@
   padding-left: 6px;
 }
 
-
 .history-card .history-outcome-label {
   color: rgba(255, 255, 255, 0.38);
 
@@ -5082,7 +4696,6 @@
 
   letter-spacing: 0.15em;
 }
-
 
 .history-card .history-outcome strong {
   font-size: 19px;
@@ -5093,21 +4706,17 @@
   letter-spacing: -0.01em;
 }
 
-
 .history-card .history-outcome .history-home {
-  color: #F26B5B;
+  color: #f26b5b;
 }
-
 
 .history-card .history-outcome .history-away {
-  color: #43B3A3;
+  color: #43b3a3;
 }
-
 
 .history-card .history-outcome .history-draw {
-  color: #FFC857;
+  color: #ffc857;
 }
-
 
 /* ========================================
    PROBABILITY STRIP
@@ -5118,12 +4727,10 @@
 
   display: grid;
 
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 7px;
 }
-
 
 .history-card .history-probability {
   min-width: 0;
@@ -5139,15 +4746,12 @@
 
   border-radius: 11px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.035);
 
   box-sizing: border-box;
 }
-
 
 .history-card .history-probability span {
   display: flex;
@@ -5161,7 +4765,6 @@
   font-weight: 650;
 }
 
-
 .history-card .history-probability strong {
   color: #ffffff;
 
@@ -5170,7 +4773,6 @@
 
   line-height: 1;
 }
-
 
 /* ========================================
    PROBABILITY DOTS
@@ -5187,30 +4789,23 @@
   border-radius: 50%;
 }
 
-
 .history-card .history-dot.home {
-  background: #F26B5B;
+  background: #f26b5b;
 
-  box-shadow:
-    0 0 7px rgba(242, 107, 91, 0.35);
+  box-shadow: 0 0 7px rgba(242, 107, 91, 0.35);
 }
-
 
 .history-card .history-dot.draw {
-  background: #FFC857;
+  background: #ffc857;
 
-  box-shadow:
-    0 0 7px rgba(255, 200, 87, 0.35);
+  box-shadow: 0 0 7px rgba(255, 200, 87, 0.35);
 }
-
 
 .history-card .history-dot.away {
-  background: #43B3A3;
+  background: #43b3a3;
 
-  box-shadow:
-    0 0 7px rgba(67, 179, 163, 0.35);
+  box-shadow: 0 0 7px rgba(67, 179, 163, 0.35);
 }
-
 
 /* ========================================
    DATE
@@ -5231,7 +4826,6 @@
   white-space: nowrap;
 }
 
-
 /* ========================================
    HISTORY LIST SPACING
    ======================================== */
@@ -5243,13 +4837,11 @@
   gap: 14px;
 }
 
-
 /* ========================================
    RESPONSIVE
    ======================================== */
 
 @media (max-width: 1250px) {
-
   .history-card {
     grid-template-columns:
       minmax(300px, 1.2fr)
@@ -5278,15 +4870,11 @@
     max-width: 38px !important;
     max-height: 38px !important;
   }
-
 }
 
-
 @media (max-width: 1050px) {
-
   .history-card {
-    grid-template-columns:
-      1fr 150px;
+    grid-template-columns: 1fr 150px;
 
     gap: 18px;
 
@@ -5320,12 +4908,9 @@
 
     text-align: left;
   }
-
 }
 
-
 @media (max-width: 700px) {
-
   .history-card {
     grid-template-columns: 1fr;
 
@@ -5389,12 +4974,9 @@
   .history-card .history-outcome strong {
     font-size: 18px;
   }
-
 }
 
-
 @media (max-width: 500px) {
-
   .history-card .history-match {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -5421,7 +5003,6 @@
     align-items: center;
     justify-content: space-between;
   }
-
 }
 
 /* =========================================================
@@ -5545,17 +5126,14 @@ body,
   .sidebar-logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     margin-bottom: 12px;
+    padding: 0;
   }
 
-  .sidebar-logo h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-
-  .sidebar-logo span {
-    font-size: 11px;
+  .sidebar-logo img {
+    width: 180px;
+    max-width: 100%;
   }
 
   .sidebar-nav {
@@ -5665,9 +5243,7 @@ body,
     overflow: visible !important;
   }
 
-  .league-analytics-page
-  .analytics-chart
-  .recharts-responsive-container {
+  .league-analytics-page .analytics-chart .recharts-responsive-container {
     display: block !important;
     position: relative !important;
     width: 100% !important;
@@ -5677,9 +5253,7 @@ body,
     max-width: 100% !important;
   }
 
-  .league-analytics-page
-  .analytics-chart
-  .recharts-wrapper {
+  .league-analytics-page .analytics-chart .recharts-wrapper {
     width: 100% !important;
     height: 100% !important;
     max-width: 100% !important;
@@ -5689,9 +5263,7 @@ body,
     overflow: visible !important;
   }
 
-  .league-analytics-page
-  .recharts-xAxis
-  .recharts-cartesian-axis-tick-value {
+  .league-analytics-page .recharts-xAxis .recharts-cartesian-axis-tick-value {
     font-size: 10px !important;
   }
 }
@@ -5849,9 +5421,7 @@ body,
   We intentionally do not force their height here;
   ResponsiveContainer receives those fixed JSX heights.
 */
-.league-analytics-page
-.analytics-chart
-.recharts-responsive-container {
+.league-analytics-page .analytics-chart .recharts-responsive-container {
   max-width: 100% !important;
   min-width: 1px !important;
 }
@@ -5876,3 +5446,215 @@ body,
   -webkit-overflow-scrolling: touch;
 }
 
+/* =========================================================
+   MICRO-INTERACTIONS — PRODUCT POLISH
+   ========================================================= */
+
+/* Smooth global interaction */
+button,
+a,
+input,
+select,
+.team-card,
+.history-card,
+.analytics-card,
+.stat-card,
+.kpi-card {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sidebar navigation */
+.sidebar-nav a {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    padding-left 180ms ease;
+}
+
+.sidebar-nav a:hover {
+  transform: translateX(4px);
+}
+
+.sidebar-nav a.active {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/* Team cards */
+.team-card {
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+  will-change: transform;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+}
+
+.team-card:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+.team-card .team-crest img {
+  transition:
+    transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 300ms ease;
+}
+
+.team-card:hover .team-crest img {
+  transform: scale(1.07) rotate(-2deg);
+}
+
+.team-card .team-arrow {
+  display: inline-block;
+  transition: transform 220ms ease;
+}
+
+.team-card:hover .team-arrow {
+  transform: translateX(5px);
+}
+
+/* Generic dashboard cards */
+.stat-card,
+.kpi-card,
+.analytics-card,
+.history-card {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+
+.stat-card:hover,
+.kpi-card:hover,
+.analytics-card:hover {
+  transform: translateY(-2px);
+}
+
+/* History cards */
+.history-card:hover {
+  transform: translateX(3px);
+}
+
+/* Buttons */
+button {
+  transition:
+    transform 160ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Interactive inputs */
+input,
+select {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+}
+
+/* Links */
+a {
+  transition:
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
+/* Chart containers */
+.recharts-wrapper {
+  transition: opacity 250ms ease;
+}
+
+/* Prevent hover transforms from causing mobile layout issues */
+@media (hover: none) {
+  .team-card:hover,
+  .stat-card:hover,
+  .kpi-card:hover,
+  .analytics-card:hover,
+  .history-card:hover {
+    transform: none;
+  }
+
+  .team-card:hover .team-crest img {
+    transform: none;
+  }
+
+  .team-card:hover .team-arrow {
+    transform: none;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   OVERVIEW KPI NUMBER OVERRIDE
+   ========================================================= */
+
+.overview-page .stats-grid .stat-card strong {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 10px;
+  font-size: 3rem !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em;
+  color: #f7f3f8;
+}
+
+@media (max-width: 700px) {
+  .overview-page .stats-grid .stat-card strong {
+    font-size: 2.35rem !important;
+  }
+}
+
+/* =========================================================
+   OVERVIEW — KPI NUMBER SIZE
+   ========================================================= */
+
+.overview-page .stats-grid .stat-card > strong {
+  display: block !important;
+  margin-top: 12px !important;
+  margin-bottom: 10px !important;
+  font-size: 2.75rem !important;
+  line-height: 1.05 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.overview-page .stats-grid .stat-card > strong > span {
+  font-size: 2.75rem !important;
+  line-height: 1.05 !important;
+  font-weight: 700 !important;
+}
+
+@media (max-width: 700px) {
+  .overview-page .stats-grid .stat-card > strong,
+  .overview-page .stats-grid .stat-card > strong > span {
+    font-size: 2.25rem !important;
+  }
+}

@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "motion/react";
 
 import { getPredictionHistory } from "../services/api";
 import teamMetadata from "../data/teams";
+import PageTransition from "../components/common/PageTransition";
 
 function History() {
   const [predictions, setPredictions] = useState([]);
@@ -15,7 +17,9 @@ function History() {
 
         setPredictions(data.predictions || []);
       } catch (err) {
-        setError(err.message || "Failed to load prediction history.");
+        setError(
+          err.message || "Failed to load prediction history."
+        );
       } finally {
         setLoading(false);
       }
@@ -158,18 +162,48 @@ function History() {
   }, [predictions]);
 
   /* =========================================================
+     HISTORY CARD ANIMATION
+     ========================================================= */
+
+  const historyListVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.07,
+      },
+    },
+  };
+
+  const historyCardVariants = {
+    hidden: {
+      opacity: 0,
+      y: 14,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.35,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  /* =========================================================
      LOADING
      ========================================================= */
 
   if (loading) {
     return (
-      <div className="history-page">
-        <div className="history-loading">
-          <div className="loading-spinner"></div>
+      <PageTransition>
+        <div className="history-page">
+          <div className="history-loading">
+            <div className="loading-spinner"></div>
 
-          <p>Loading prediction history...</p>
+            <p>Loading prediction history...</p>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     );
   }
 
@@ -179,29 +213,34 @@ function History() {
 
   if (error) {
     return (
-      <div className="history-page">
-        <div className="page-header history-header">
-          <div>
-            <p className="eyebrow">PREDICTION LOG</p>
+      <PageTransition>
+        <div className="history-page">
+          <div className="page-header history-header">
+            <div>
+              <p className="eyebrow">PREDICTION LOG</p>
 
-            <h1>History</h1>
+              <h1>History</h1>
 
-            <p className="page-description">
-              Review previously generated Premier League match predictions.
-            </p>
+              <p className="page-description">
+                Review previously generated Premier League match
+                predictions.
+              </p>
+            </div>
+          </div>
+
+          <div className="history-error">
+            <span>⚠</span>
+
+            <div>
+              <strong>
+                Unable to load prediction history
+              </strong>
+
+              <p>{error}</p>
+            </div>
           </div>
         </div>
-
-        <div className="history-error">
-          <span>⚠</span>
-
-          <div>
-            <strong>Unable to load prediction history</strong>
-
-            <p>{error}</p>
-          </div>
-        </div>
-      </div>
+      </PageTransition>
     );
   }
 
@@ -210,214 +249,239 @@ function History() {
      ========================================================= */
 
   return (
-    <div className="history-page">
-      {/* =====================================================
-          HEADER
-          ===================================================== */}
+    <PageTransition>
+      <div className="history-page">
+        {/* =====================================================
+            HEADER
+            ===================================================== */}
 
-      <div className="page-header history-header">
-        <div>
-          <p className="eyebrow">PREDICTION LOG</p>
+        <div className="page-header history-header">
+          <div>
+            <p className="eyebrow">PREDICTION LOG</p>
 
-          <h1>History</h1>
+            <h1>History</h1>
 
-          <p className="page-description">
-            Review previously generated Premier League match predictions and
-            their probability breakdowns.
-          </p>
+            <p className="page-description">
+              Review previously generated Premier League match
+              predictions and their probability breakdowns.
+            </p>
+          </div>
+
+          <div className="history-count">
+            <span>Predictions</span>
+
+            <strong>{predictions.length}</strong>
+          </div>
         </div>
 
-        <div className="history-count">
-          <span>Predictions</span>
+        {/* =====================================================
+            EMPTY STATE
+            ===================================================== */}
 
-          <strong>{predictions.length}</strong>
-        </div>
-      </div>
+        {predictions.length === 0 ? (
+          <div className="history-empty">
+            <div className="history-empty-icon">◷</div>
 
-      {/* =====================================================
-          EMPTY STATE
-          ===================================================== */}
+            <h2>No predictions yet</h2>
 
-      {predictions.length === 0 ? (
-        <div className="history-empty">
-          <div className="history-empty-icon">◷</div>
+            <p>
+              Your predictions will appear here after you use
+              the Match Predictor.
+            </p>
+          </div>
+        ) : (
+          /* ===================================================
+             HISTORY LIST
+             =================================================== */
 
-          <h2>No predictions yet</h2>
+          <motion.div
+            className="history-list"
+            variants={historyListVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {sortedPredictions.map((prediction, index) => {
+              const homeTeam = prediction.home_team;
+              const awayTeam = prediction.away_team;
 
-          <p>
-            Your predictions will appear here after you use the Match
-            Predictor.
-          </p>
-        </div>
-      ) : (
-        /* ===================================================
-           HISTORY LIST
-           =================================================== */
+              const homeTheme = getTeamTheme(homeTeam);
+              const awayTheme = getTeamTheme(awayTeam);
 
-        <div className="history-list">
-          {sortedPredictions.map((prediction, index) => {
-            const homeTeam = prediction.home_team;
-            const awayTeam = prediction.away_team;
+              const outcome = prediction.prediction;
+              const outcomeColor = getOutcomeColor(outcome);
+              const outcomeClass = getOutcomeClass(outcome);
+              const outcomeLabel = getOutcomeLabel(outcome);
 
-            const homeTheme = getTeamTheme(homeTeam);
-            const awayTheme = getTeamTheme(awayTeam);
+              const predictionDate =
+                getPredictionDate(prediction);
 
-            const outcome = prediction.prediction;
-            const outcomeColor = getOutcomeColor(outcome);
-            const outcomeClass = getOutcomeClass(outcome);
-            const outcomeLabel = getOutcomeLabel(outcome);
-
-            const predictionDate = getPredictionDate(prediction);
-
-            return (
-              <article
-                className="history-card"
-                key={
-                  prediction._id ||
-                  prediction.id ||
-                  `${homeTeam}-${awayTeam}-${index}`
-                }
-                style={{
-                  "--history-outcome-color": outcomeColor,
-                }}
-              >
-                {/* =================================================
-                    MATCH
-                    ================================================= */}
-
-                <div className="history-match">
-                  {/* HOME TEAM */}
-
-                  <div className="history-team">
-                    <div
-                      className="history-team-crest"
-                      style={{
-                        "--team-primary": homeTheme.primary,
-                      }}
-                    >
-                      {homeTheme.crest ? (
-                        <img
-                          src={homeTheme.crest}
-                          alt={`${homeTeam} crest`}
-                        />
-                      ) : (
-                        <span>{homeTeam?.charAt(0)}</span>
-                      )}
-                    </div>
-
-                    <div>
-                      <span className="history-team-label">HOME</span>
-
-                      <strong>{homeTeam}</strong>
-                    </div>
-                  </div>
-
-                  {/* VS */}
-
-                  <div className="history-vs">VS</div>
-
-                  {/* AWAY TEAM */}
-
-                  <div className="history-team history-team-away">
-                    <div
-                      className="history-team-crest"
-                      style={{
-                        "--team-primary": awayTheme.primary,
-                      }}
-                    >
-                      {awayTheme.crest ? (
-                        <img
-                          src={awayTheme.crest}
-                          alt={`${awayTeam} crest`}
-                        />
-                      ) : (
-                        <span>{awayTeam?.charAt(0)}</span>
-                      )}
-                    </div>
-
-                    <div>
-                      <span className="history-team-label">AWAY</span>
-
-                      <strong>{awayTeam}</strong>
-                    </div>
-                  </div>
-                </div>
-
-                {/* =================================================
-                    PREDICTED OUTCOME
-                    ================================================= */}
-
-                <div className="history-outcome">
-                  <span className="history-outcome-label">
-                    PREDICTED RESULT
-                  </span>
-
-                  <strong className={outcomeClass}>{outcomeLabel}</strong>
-                </div>
-
-                {/* =================================================
-                    PROBABILITY BREAKDOWN
-                    ================================================= */}
-
-                <div className="history-probabilities">
-                  {/* HOME */}
-
-                  <div className="history-probability">
-                    <span>
-                      <i className="history-dot home"></i>
-                      Home
-                    </span>
-
-                    <strong>
-                      {formatProbability(prediction.probabilities?.home)}
-                    </strong>
-                  </div>
-
-                  {/* DRAW */}
-
-                  <div className="history-probability">
-                    <span>
-                      <i className="history-dot draw"></i>
-                      Draw
-                    </span>
-
-                    <strong>
-                      {formatProbability(prediction.probabilities?.draw)}
-                    </strong>
-                  </div>
-
-                  {/* AWAY */}
-
-                  <div className="history-probability">
-                    <span>
-                      <i className="history-dot away"></i>
-                      Away
-                    </span>
-
-                    <strong>
-                      {formatProbability(prediction.probabilities?.away)}
-                    </strong>
-                  </div>
-                </div>
-
-                {/* =================================================
-                    DATE
-                    ================================================= */}
-
-                <div
-                  className="history-date"
+              return (
+                <motion.article
+                  className="history-card"
+                  key={
+                    prediction._id ||
+                    prediction.id ||
+                    `${homeTeam}-${awayTeam}-${index}`
+                  }
+                  variants={historyCardVariants}
                   style={{
-                    "--outcome-color": outcomeColor,
+                    "--history-outcome-color": outcomeColor,
                   }}
                 >
-                  {formatDate(predictionDate)}
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      )}
-    </div>
+                  {/* =================================================
+                      MATCH
+                      ================================================= */}
+
+                  <div className="history-match">
+                    {/* HOME TEAM */}
+
+                    <div className="history-team">
+                      <div
+                        className="history-team-crest"
+                        style={{
+                          "--team-primary": homeTheme.primary,
+                        }}
+                      >
+                        {homeTheme.crest ? (
+                          <img
+                            src={homeTheme.crest}
+                            alt={`${homeTeam} crest`}
+                          />
+                        ) : (
+                          <span>
+                            {homeTeam?.charAt(0)}
+                          </span>
+                        )}
+                      </div>
+
+                      <div>
+                        <span className="history-team-label">
+                          HOME
+                        </span>
+
+                        <strong>{homeTeam}</strong>
+                      </div>
+                    </div>
+
+                    {/* VS */}
+
+                    <div className="history-vs">VS</div>
+
+                    {/* AWAY TEAM */}
+
+                    <div className="history-team history-team-away">
+                      <div
+                        className="history-team-crest"
+                        style={{
+                          "--team-primary": awayTheme.primary,
+                        }}
+                      >
+                        {awayTheme.crest ? (
+                          <img
+                            src={awayTheme.crest}
+                            alt={`${awayTeam} crest`}
+                          />
+                        ) : (
+                          <span>
+                            {awayTeam?.charAt(0)}
+                          </span>
+                        )}
+                      </div>
+
+                      <div>
+                        <span className="history-team-label">
+                          AWAY
+                        </span>
+
+                        <strong>{awayTeam}</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* =================================================
+                      PREDICTED OUTCOME
+                      ================================================= */}
+
+                  <div className="history-outcome">
+                    <span className="history-outcome-label">
+                      PREDICTED RESULT
+                    </span>
+
+                    <strong className={outcomeClass}>
+                      {outcomeLabel}
+                    </strong>
+                  </div>
+
+                  {/* =================================================
+                      PROBABILITY BREAKDOWN
+                      ================================================= */}
+
+                  <div className="history-probabilities">
+                    {/* HOME */}
+
+                    <div className="history-probability">
+                      <span>
+                        <i className="history-dot home"></i>
+                        Home
+                      </span>
+
+                      <strong>
+                        {formatProbability(
+                          prediction.probabilities?.home
+                        )}
+                      </strong>
+                    </div>
+
+                    {/* DRAW */}
+
+                    <div className="history-probability">
+                      <span>
+                        <i className="history-dot draw"></i>
+                        Draw
+                      </span>
+
+                      <strong>
+                        {formatProbability(
+                          prediction.probabilities?.draw
+                        )}
+                      </strong>
+                    </div>
+
+                    {/* AWAY */}
+
+                    <div className="history-probability">
+                      <span>
+                        <i className="history-dot away"></i>
+                        Away
+                      </span>
+
+                      <strong>
+                        {formatProbability(
+                          prediction.probabilities?.away
+                        )}
+                      </strong>
+                    </div>
+                  </div>
+
+                  {/* =================================================
+                      DATE
+                      ================================================= */}
+
+                  <div
+                    className="history-date"
+                    style={{
+                      "--outcome-color": outcomeColor,
+                    }}
+                  >
+                    {formatDate(predictionDate)}
+                  </div>
+                </motion.article>
+              );
+            })}
+          </motion.div>
+        )}
+      </div>
+    </PageTransition>
   );
 }
 

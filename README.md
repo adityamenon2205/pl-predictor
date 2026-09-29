@@ -10,7 +10,7 @@ The system predicts Premier League match outcomes as:
 
 It combines historical Premier League match data with engineered team-performance features, Elo ratings, home/away statistics, form, rest days, and betting-market information to generate probability-based predictions.
 
-> **Current status:** The machine learning pipeline, FastAPI backend, MongoDB Atlas integration, Overview dashboard, Teams Explorer, team-specific Analytics, Predictor interface, and Prediction History interface are implemented. League Analytics is implemented with season trends, scoring trends, venue comparisons, and historical team rankings. Current work is focused on chart rendering/responsive refinement and final UI polish.
+> **Current status:** The machine learning pipeline, FastAPI backend, MongoDB Atlas integration, Overview dashboard, Teams Explorer, team-specific Analytics, Predictor interface, Prediction History, League Analytics, responsive layouts, branded UI, page transitions, animated KPI values, and micro-interactions are implemented. Current work is focused on final QA, remaining UI refinement, and project cleanup/documentation.
 
 ---
 
@@ -27,6 +27,8 @@ The application consists of:
 - 🍃 MongoDB Atlas database
 - ⚛️ React + Vite frontend
 - 📊 Recharts-based analytics dashboard
+- 🎞️ Motion-based UI animations and transitions
+- 🎨 Club-inspired visual themes and custom product branding
 
 ---
 
@@ -167,15 +169,15 @@ The application follows a modular architecture separating the machine learning p
                            Model Training
                                   │
                                   ▼
-                         Random Forest V4
+                          Random Forest V4
                                   │
                                   ▼
-                              FastAPI
+                               FastAPI
                                   │
                     ┌─────────────┼─────────────┐
                     │             │             │
                     ▼             ▼             ▼
-               Prediction       Teams       Statistics
+                Prediction      Teams       Statistics
                     │             │             │
                     └─────────────┼─────────────┘
                                   │
@@ -185,15 +187,15 @@ The application follows a modular architecture separating the machine learning p
                     ┌─────────────┴─────────────┐
                     │                           │
                     ▼                           ▼
-               Match Data               Prediction History
+                Match Data               Prediction History
                     │                           │
                     └─────────────┬─────────────┘
                                   │
                                   ▼
-                           React Frontend
+                            React Frontend
                                   │
                                   ▼
-                      Football Analytics Dashboard
+                       Football Analytics Dashboard
 ```
 
 ---
@@ -284,7 +286,7 @@ The prediction history endpoint retrieves these records for display in the front
 
 ---
 
-## ⚛️ Frontend
+# ⚛️ Frontend
 
 The frontend is implemented using:
 
@@ -293,6 +295,7 @@ The frontend is implemented using:
 - JavaScript
 - React Router
 - Recharts
+- Motion
 - CSS
 
 The frontend communicates with the FastAPI backend through REST API requests. API calls are centralized in `src/services/api.js`.
@@ -301,23 +304,35 @@ The frontend communicates with the FastAPI backend through REST API requests. AP
 
 ```text
 frontend/
+├── public/
+│   ├── pl_predictor_logo.svg
+│   ├── pl_predictor_logo.png
+│   └── pl_predictor_favicon.png
+│
 └── src/
     ├── assets/
+    │
     ├── components/
     │   ├── cards/
     │   ├── charts/
     │   ├── common/
+    │   │   ├── AnimatedNumber.jsx
+    │   │   └── PageTransition.jsx
     │   └── layout/
+    │
     ├── data/
     │   └── teams.js
+    │
     ├── pages/
     │   ├── Overview.jsx
     │   ├── Teams.jsx
     │   ├── Predictor.jsx
     │   ├── Analytics.jsx
     │   └── History.jsx
+    │
     ├── services/
     │   └── api.js
+    │
     ├── App.css
     ├── App.jsx
     ├── index.css
@@ -328,13 +343,13 @@ frontend/
 
 # 📊 Dashboard
 
-The frontend is being developed as a full football analytics dashboard rather than a simple prediction form.
+The frontend is developed as a full football analytics dashboard rather than a simple prediction form.
 
 ## 🏠 Overview
 
 Provides a high-level statistical snapshot of the Premier League dataset.
 
-Currently implemented:
+Implemented:
 
 - Total matches
 - Home win percentage
@@ -343,6 +358,9 @@ Currently implemented:
 - Number of teams
 - Match outcome distribution
 - League dataset snapshot
+- Animated KPI values
+- Recharts outcome visualization
+- Page entrance transition
 
 The Overview page retrieves real data from the backend and visualizes match outcomes using Recharts.
 
@@ -354,12 +372,14 @@ The Overview page retrieves real data from the backend and visualizes match outc
 
 The Teams Explorer retrieves available clubs from the backend and presents them as team-specific cards.
 
-Currently implemented:
+Implemented:
 
 - Team cards for the historical dataset's **41 teams**
 - Searchable Teams Explorer
 - Club-inspired primary, secondary, and accent color themes
 - Team crests
+- Hover interactions
+- Team-card motion effects
 - Navigation from a team card to its Analytics view
 - Real team statistics retrieved from `/teams/{team_name}/statistics`
 
@@ -378,6 +398,8 @@ Current team analytics include:
 - Goals scored vs conceded chart
 - Home vs away performance chart
 - Historical highlight
+- Animated KPI values
+- Team-specific visual styling
 
 Team-specific visual styling is used throughout the Teams Explorer, Analytics dashboard, and prediction results.
 
@@ -394,7 +416,7 @@ The application's main interface retains the project's purple visual identity wh
 
 ## 🔮 Predictor
 
-The Predictor is the main machine learning interface and is currently implemented.
+The Predictor is the main machine learning interface.
 
 Users can:
 
@@ -405,6 +427,7 @@ Users can:
 - Receive the predicted outcome
 - View home/draw/away probability percentages
 - View the prediction result using team-specific visual styling
+- See animated prediction/probability presentation
 
 Example:
 
@@ -412,7 +435,6 @@ Example:
 Arsenal  vs  Chelsea
 
         HOME WIN
-
           41.07%
 
 Home Win       Draw       Away Win
@@ -429,11 +451,11 @@ Predictions are also persisted to MongoDB Atlas for the History page.
 
 ---
 
-## 📈 Analytics
+# 📈 Analytics
 
-The Analytics section now contains both **team-specific analytics** and **league-wide historical analytics**.
+The Analytics section contains both **team-specific analytics** and **league-wide historical analytics**.
 
-### Team Analytics
+## Team Analytics
 
 When a team is selected from the Teams Explorer, the Analytics page provides:
 
@@ -446,12 +468,14 @@ When a team is selected from the Teams Explorer, the Analytics page provides:
 - Goal-difference summary
 - Home vs away performance chart
 - Real statistics retrieved through the FastAPI backend
+- Animated KPI values
+- Page transitions
 
-### League Analytics
+## League Analytics
 
 The default Analytics route provides league-wide historical analysis.
 
-Currently implemented:
+Implemented:
 
 - Total matches KPI
 - Total goals KPI
@@ -466,26 +490,27 @@ Currently implemented:
 - Historical team performance table
 - Team rankings
 - Matches, wins, draws, losses, goal difference, points, and win percentage
+- Animated KPI values
+- Responsive chart rendering
+- Mobile-friendly chart sizing
 
 The league analytics use real historical data rather than manually created readings.
 
-### Current Analytics Refinement
+### Responsive Analytics
 
-The league analytics functionality and UI are implemented, but **chart rendering and responsive/mobile behavior are currently being refined**, particularly for Recharts on narrow viewport sizes.
-
-The current refinement work focuses on:
+The Analytics dashboard includes responsive handling for narrow viewports, including:
 
 - Reliable chart sizing
 - Mobile chart rendering
 - Responsive dashboard layout
-- Avoiding horizontal overflow
-- Maintaining readable chart labels on small screens
+- Prevention of horizontal overflow
+- Readable chart labels on smaller screens
 
 Where numerical information can be understood more effectively through visualization, charts and graphs are preferred over raw numerical values.
 
 ---
 
-## 🕐 Prediction History
+# 🕐 Prediction History
 
 The Prediction History page is implemented.
 
@@ -497,7 +522,7 @@ GET /predictions/
 
 and displays them in a structured dashboard interface.
 
-Currently implemented:
+Implemented:
 
 - Prediction count
 - Historical prediction cards
@@ -510,12 +535,15 @@ Currently implemented:
 - Loading state
 - Error state
 - Empty state handling
+- Responsive layout
+- Hover/micro-interactions
+- Page transition
 
 Prediction history is backed by MongoDB Atlas rather than static frontend data.
 
 ---
 
-## 🎨 UI / UX Design
+# 🎨 UI / UX Design
 
 The application uses a dark visual design centered around the primary brand color:
 
@@ -535,36 +563,103 @@ The interface uses:
 - Responsive layouts
 - Club-inspired team colors
 - Football crests
+- Custom product branding
+- Motion-based transitions
+- Subtle hover and interaction feedback
 
-The Predictor uses searchable team selectors to reduce friction when choosing from the 41 available teams.
+### Product Branding
 
-Prediction results and team analytics adapt their visual identity to the relevant club, including team crests and club-inspired colors.
+The application now uses a custom **PL Predictor** visual identity.
 
-The design goal is to create a modern football analytics platform while maintaining clear visual hierarchy and readability.
+The branding includes:
+
+- Custom PL motion-style logo
+- Transparent logo artwork for the sidebar
+- Dedicated browser favicon
+- `PL Predictor` browser-tab title
+- Consistent purple/magenta visual language
+
+The sidebar uses the full branded logo, while the browser tab uses the compact favicon version.
+
+### Interaction Design
+
+The project includes lightweight micro-interactions such as:
+
+- Sidebar navigation hover movement
+- Team-card lift effects
+- Team crest hover motion
+- Team-card arrow movement
+- Card hover elevation
+- Button press feedback
+- Input focus transitions
+- Responsive hover handling
+- Reduced-motion support
+
+The design aims to improve feedback without overwhelming the analytical content.
 
 ---
 
-## ✨ Animation & Interaction
+# ✨ Animation & Interaction
 
-Animations are intentionally treated as a **final polish layer** rather than a core development dependency.
+Animation is treated as a **final polish layer** rather than the foundation of the application.
 
-After the major functionality and UI are stable, the project may incorporate:
+The current implementation uses **Motion for React**.
 
-- Motion animations
-- React Bits components
-- Page transitions
-- Animated statistics
-- Hover interactions
-- Scroll-based reveals
-- Prediction result animations
-- Micro-interactions
-- Interactive chart transitions
+Implemented:
+
+- Page entrance transitions
+- Animated KPI/statistic values
+- Team-card hover interactions
+- Sidebar navigation interactions
+- Button interactions
+- Card hover effects
+- Prediction result animation/presentation
+- Recharts animation where appropriate
+- Reduced-motion accessibility handling
+
+### Shared Animation Components
+
+```text
+src/components/common/
+├── AnimatedNumber.jsx
+└── PageTransition.jsx
+```
+
+`PageTransition` provides consistent page-level entrance animation across the major dashboard pages.
+
+`AnimatedNumber` provides spring-based animated numeric values for KPI/statistical displays.
+
+### React Bits
+
+React Bits was evaluated as a potential source of additional UI effects and components, but it is **not currently a core dependency of the implemented interface**. Additional components may be considered during later polish if they provide a clear UX benefit.
 
 The goal is to use animation to improve usability and visual feedback rather than adding effects purely for decoration.
 
 ---
 
-## 📁 Project Structure
+# 📱 Responsive Design
+
+The frontend has been refined for different viewport sizes.
+
+Responsive work includes:
+
+- Desktop dashboard layout
+- Tablet-friendly grids
+- Mobile navigation layout
+- Stacked dashboard cards
+- Responsive team cards
+- Responsive predictor layout
+- Responsive history cards
+- Responsive analytics charts
+- Prevention of horizontal overflow
+- Mobile chart sizing
+- Touch-friendly interaction behavior
+
+The responsive layout has been tested across the main dashboard pages and refined to maintain usability at narrower viewport sizes.
+
+---
+
+# 📁 Project Structure
 
 ```text
 pl-predictor/
@@ -604,12 +699,18 @@ pl-predictor/
 │
 ├── frontend/
 │   ├── public/
+│   │   ├── pl_predictor_logo.svg
+│   │   ├── pl_predictor_logo.png
+│   │   └── pl_predictor_favicon.png
+│   │
 │   ├── src/
 │   │   ├── assets/
 │   │   ├── components/
 │   │   │   ├── cards/
 │   │   │   ├── charts/
 │   │   │   ├── common/
+│   │   │   │   ├── AnimatedNumber.jsx
+│   │   │   │   └── PageTransition.jsx
 │   │   │   └── layout/
 │   │   ├── data/
 │   │   │   └── teams.js
@@ -625,6 +726,7 @@ pl-predictor/
 │   │   ├── App.jsx
 │   │   ├── index.css
 │   │   └── main.jsx
+│   │
 │   ├── package.json
 │   ├── package-lock.json
 │   └── vite.config.js
@@ -672,7 +774,7 @@ pl-predictor/
 
 ---
 
-## 🛠️ Technology Stack
+# 🛠️ Technology Stack
 
 ### Machine Learning
 
@@ -702,6 +804,7 @@ pl-predictor/
 - JavaScript
 - React Router
 - Recharts
+- Motion
 - CSS
 
 ### Development
@@ -713,9 +816,9 @@ pl-predictor/
 
 ---
 
-## 🚀 Running the Project
+# 🚀 Running the Project
 
-### 1. Start the Backend
+## 1. Start the Backend
 
 From the project root:
 
@@ -747,7 +850,7 @@ FastAPI Swagger documentation:
 http://127.0.0.1:8000/docs
 ```
 
-### 2. Start the Frontend
+## 2. Start the Frontend
 
 Open a second terminal:
 
@@ -775,7 +878,7 @@ http://localhost:5173
 
 ---
 
-## 🗄️ Database Setup
+# 🗄️ Database Setup
 
 The MongoDB connection is configured through environment variables.
 
@@ -801,7 +904,7 @@ Prediction records are subsequently written to the `predictions` collection when
 
 ---
 
-## 🔐 Environment Variables
+# 🔐 Environment Variables
 
 The backend requires:
 
@@ -814,9 +917,9 @@ MONGODB_DATABASE=pl_predictor
 
 ---
 
-## 🔄 Application Data Flow
+# 🔄 Application Data Flow
 
-### Prediction Workflow
+## Prediction Workflow
 
 ```text
 User selects teams
@@ -857,7 +960,7 @@ React Dashboard
 Prediction Result
 ```
 
-### Prediction History Flow
+## Prediction History Flow
 
 ```text
 Prediction
@@ -872,7 +975,7 @@ GET /predictions/
 React History Page
 ```
 
-### Analytics Flow
+## Analytics Flow
 
 ```text
 MongoDB match data
@@ -912,6 +1015,7 @@ React Analytics Dashboard
 - [x] Random Forest V4 production baseline
 - [x] 2025/26 held-out evaluation
 - [x] 2026/27 exclusion from training/evaluation
+- [ ] Future model optimization
 
 ## Backend
 
@@ -945,6 +1049,8 @@ React Analytics Dashboard
 - [x] React Router
 - [x] Application layout
 - [x] Sidebar navigation
+- [x] Custom PL Predictor branding
+- [x] Browser favicon and page title
 - [x] Page structure
 - [x] API service layer
 - [x] FastAPI integration
@@ -963,33 +1069,49 @@ React Analytics Dashboard
 - [x] Loading states
 - [x] Error states
 - [x] Empty states
+- [x] Responsive desktop/tablet/mobile layout
 
 ## League Analytics
 
 - [x] League analytics page
 - [x] League KPI cards
+- [x] Animated KPI values
 - [x] Season outcome trend visualization
 - [x] Goals-per-match visualization
 - [x] Home vs away goals visualization
 - [x] Historical team performance table
 - [x] Team ranking data
-- [ ] Recharts rendering refinement on narrow viewports
-- [ ] Final mobile layout refinement
+- [x] Responsive chart sizing
+- [x] Narrow viewport rendering
+- [x] Mobile layout refinement
+- [x] Horizontal overflow prevention
 
-## Final Polish
+## Animation & Interaction
 
-- [ ] Motion animations
-- [ ] React Bits components
-- [ ] Page transitions
-- [ ] Micro-interactions
-- [ ] Advanced hover interactions
+- [x] Motion integration
+- [x] Shared page transitions
+- [x] Animated numerical statistics
+- [x] Team-card hover interactions
+- [x] Sidebar navigation micro-interactions
+- [x] Button interaction feedback
+- [x] Card hover effects
+- [x] Reduced-motion handling
 - [ ] Advanced chart interactions
+- [ ] Additional animation refinement
+
+## Final Polish / QA
+
+- [ ] Full end-to-end QA
+- [ ] Cross-page interaction verification
+- [ ] Final responsive regression check
 - [ ] Performance optimization
 - [ ] Final UI/UX refinement
+- [ ] Final GitHub repository cleanup
+- [ ] Final README review
 
 ---
 
-## 🎯 Future Improvements
+# 🎯 Future Improvements
 
 Potential future improvements include:
 
@@ -1005,14 +1127,14 @@ Potential future improvements include:
 - Historical prediction accuracy
 - More advanced visual analytics
 - Interactive team profiles
-- Responsive mobile dashboard refinement
 - Animated UI interactions
+- Further performance optimization
 
-Model optimization will be revisited after the current application experience and analytics features are complete.
+Model optimization will be revisited after the current application experience and remaining product work are complete.
 
 ---
 
-## 📜 Project Philosophy
+# 📜 Project Philosophy
 
 The project is being developed with several principles in mind.
 
@@ -1035,3 +1157,15 @@ Models are evaluated chronologically to better represent future prediction scena
 ### UX Matters
 
 The final application is intended to be an interactive football analytics platform rather than simply an ML model exposed through an API.
+
+### Controlled Animation
+
+Animation should improve usability, feedback, and perceived responsiveness rather than exist purely as decoration.
+
+---
+
+## 🔒 Project Status
+
+The core machine learning, backend, database, dashboard, analytics, prediction, history, responsive design, branding, and animation systems are implemented.
+
+The project is now in the **final refinement and QA stage**, with remaining work focused on verification, cleanup, and a small amount of additional polish.
