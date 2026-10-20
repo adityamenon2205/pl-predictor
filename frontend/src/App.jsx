@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 
 import Overview from "./pages/Overview";
 import Teams from "./pages/Teams";
+import About from "./pages/About";
 import Predictor from "./pages/Predictor";
 import Analytics from "./pages/Analytics";
 import History from "./pages/History";
@@ -18,6 +19,7 @@ function App() {
           <Route path="/predict" element={<Predictor />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/history" element={<History />} />
+          <Route path="/about" element={<About />} />
         </Route>
       </Routes>
     </BrowserRouter>

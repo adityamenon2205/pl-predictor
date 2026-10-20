@@ -1,7 +1,14 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 
-import { getPredictionHistory } from "../services/api";
+import "./HistoryModal.css";
+
+import {
+  getPredictionHistory,
+  clearPredictionHistory,
+} from "../services/api";
+
 import teamMetadata from "../data/teams";
 import PageTransition from "../components/common/PageTransition";
 
@@ -9,12 +16,15 @@ function History() {
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [clearing, setClearing] = useState(false);
+  const [clearError, setClearError] = useState(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
+  // Load prediction history
   useEffect(() => {
     async function loadPredictionHistory() {
       try {
         const data = await getPredictionHistory();
-
         setPredictions(data.predictions || []);
       } catch (err) {
         setError(
@@ -28,10 +38,33 @@ function History() {
     loadPredictionHistory();
   }, []);
 
-  /* =========================================================
-     HELPERS
-     ========================================================= */
+  // Clear prediction history after confirmation
+  async function handleClearHistory() {
+    if (predictions.length === 0 || clearing) {
+      return;
+    }
 
+    setClearing(true);
+    setClearError(null);
+
+    try {
+      await clearPredictionHistory();
+
+      // Update the UI only after successful deletion.
+      setPredictions([]);
+      setError(null);
+      setShowClearConfirm(false);
+    } catch (err) {
+      setClearError(
+        err.message || "Failed to clear prediction history."
+      );
+      setShowClearConfirm(false);
+    } finally {
+      setClearing(false);
+    }
+  }
+
+  // Outcome styling
   function getOutcomeClass(outcome) {
     if (outcome === "Home Win") {
       return "history-home";
@@ -68,6 +101,7 @@ function History() {
     return "DRAW";
   }
 
+  // Format probabilities
   function formatProbability(value) {
     const numericValue = Number(value);
 
@@ -78,6 +112,7 @@ function History() {
     return `${(numericValue * 100).toFixed(2)}%`;
   }
 
+  // Format prediction date
   function formatDate(value) {
     if (!value) {
       return "Date unavailable";
@@ -108,6 +143,7 @@ function History() {
     );
   }
 
+  // Get team colours and crest
   function getTeamTheme(teamName) {
     return (
       teamMetadata[teamName] || {
@@ -119,28 +155,15 @@ function History() {
     );
   }
 
-  /* =========================================================
-     SORT PREDICTIONS
-     Newest predictions appear first.
-     Predictions without timestamps remain usable.
-     ========================================================= */
-
+  // Sort newest predictions first
   const sortedPredictions = useMemo(() => {
     return [...predictions].sort((a, b) => {
       const dateA = getPredictionDate(a);
       const dateB = getPredictionDate(b);
 
-      if (!dateA && !dateB) {
-        return 0;
-      }
-
-      if (!dateA) {
-        return 1;
-      }
-
-      if (!dateB) {
-        return -1;
-      }
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
 
       const timeA = new Date(dateA).getTime();
       const timeB = new Date(dateB).getTime();
@@ -149,22 +172,14 @@ function History() {
         return 0;
       }
 
-      if (Number.isNaN(timeA)) {
-        return 1;
-      }
-
-      if (Number.isNaN(timeB)) {
-        return -1;
-      }
+      if (Number.isNaN(timeA)) return 1;
+      if (Number.isNaN(timeB)) return -1;
 
       return timeB - timeA;
     });
   }, [predictions]);
 
-  /* =========================================================
-     HISTORY CARD ANIMATION
-     ========================================================= */
-
+  // History card animations
   const historyListVariants = {
     hidden: {},
     visible: {
@@ -189,17 +204,13 @@ function History() {
     },
   };
 
-  /* =========================================================
-     LOADING
-     ========================================================= */
-
+  // Loading state
   if (loading) {
     return (
       <PageTransition>
         <div className="history-page">
           <div className="history-loading">
-            <div className="loading-spinner"></div>
-
+            <div className="loading-spinner" />
             <p>Loading prediction history...</p>
           </div>
         </div>
@@ -207,10 +218,7 @@ function History() {
     );
   }
 
-  /* =========================================================
-     ERROR
-     ========================================================= */
-
+  // Error state
   if (error) {
     return (
       <PageTransition>
@@ -218,9 +226,7 @@ function History() {
           <div className="page-header history-header">
             <div>
               <p className="eyebrow">PREDICTION LOG</p>
-
               <h1>History</h1>
-
               <p className="page-description">
                 Review previously generated Premier League match
                 predictions.
@@ -230,12 +236,8 @@ function History() {
 
           <div className="history-error">
             <span>⚠</span>
-
             <div>
-              <strong>
-                Unable to load prediction history
-              </strong>
-
+              <strong>Unable to load prediction history</strong>
               <p>{error}</p>
             </div>
           </div>
@@ -244,56 +246,68 @@ function History() {
     );
   }
 
-  /* =========================================================
-     MAIN PAGE
-     ========================================================= */
-
+  // Main page
   return (
     <PageTransition>
       <div className="history-page">
-        {/* =====================================================
-            HEADER
-            ===================================================== */}
-
+        {/* HEADER */}
         <div className="page-header history-header">
           <div>
             <p className="eyebrow">PREDICTION LOG</p>
-
             <h1>History</h1>
-
             <p className="page-description">
               Review previously generated Premier League match
               predictions and their probability breakdowns.
             </p>
           </div>
 
-          <div className="history-count">
-            <span>Predictions</span>
+          <div className="history-header-actions">
+            <div className="history-count">
+              <span>Predictions</span>
+              <strong>{predictions.length}</strong>
+            </div>
 
-            <strong>{predictions.length}</strong>
+            {predictions.length > 0 && (
+              <button
+                type="button"
+                className="clear-history-button"
+                onClick={() => {
+                  setClearError(null);
+                  setShowClearConfirm(true);
+                }}
+                disabled={clearing}
+              >
+                <span aria-hidden="true">⌫</span>
+                Clear History
+              </button>
+            )}
           </div>
         </div>
 
-        {/* =====================================================
-            EMPTY STATE
-            ===================================================== */}
+        {/* CLEAR HISTORY ERROR */}
+        {clearError && (
+          <div className="history-error" role="alert">
+            <span aria-hidden="true">⚠</span>
+            <div>
+              <strong>
+                Unable to clear prediction history
+              </strong>
+              <p>{clearError}</p>
+            </div>
+          </div>
+        )}
 
+        {/* EMPTY STATE OR HISTORY LIST */}
         {predictions.length === 0 ? (
           <div className="history-empty">
             <div className="history-empty-icon">◷</div>
-
             <h2>No predictions yet</h2>
-
             <p>
               Your predictions will appear here after you use
               the Match Predictor.
             </p>
           </div>
         ) : (
-          /* ===================================================
-             HISTORY LIST
-             =================================================== */
-
           <motion.div
             className="history-list"
             variants={historyListVariants}
@@ -328,13 +342,9 @@ function History() {
                     "--history-outcome-color": outcomeColor,
                   }}
                 >
-                  {/* =================================================
-                      MATCH
-                      ================================================= */}
-
+                  {/* MATCH */}
                   <div className="history-match">
                     {/* HOME TEAM */}
-
                     <div className="history-team">
                       <div
                         className="history-team-crest"
@@ -348,9 +358,7 @@ function History() {
                             alt={`${homeTeam} crest`}
                           />
                         ) : (
-                          <span>
-                            {homeTeam?.charAt(0)}
-                          </span>
+                          <span>{homeTeam?.charAt(0)}</span>
                         )}
                       </div>
 
@@ -358,17 +366,14 @@ function History() {
                         <span className="history-team-label">
                           HOME
                         </span>
-
                         <strong>{homeTeam}</strong>
                       </div>
                     </div>
 
                     {/* VS */}
-
                     <div className="history-vs">VS</div>
 
                     {/* AWAY TEAM */}
-
                     <div className="history-team history-team-away">
                       <div
                         className="history-team-crest"
@@ -382,9 +387,7 @@ function History() {
                             alt={`${awayTeam} crest`}
                           />
                         ) : (
-                          <span>
-                            {awayTeam?.charAt(0)}
-                          </span>
+                          <span>{awayTeam?.charAt(0)}</span>
                         )}
                       </div>
 
@@ -392,39 +395,28 @@ function History() {
                         <span className="history-team-label">
                           AWAY
                         </span>
-
                         <strong>{awayTeam}</strong>
                       </div>
                     </div>
                   </div>
 
-                  {/* =================================================
-                      PREDICTED OUTCOME
-                      ================================================= */}
-
+                  {/* PREDICTED OUTCOME */}
                   <div className="history-outcome">
                     <span className="history-outcome-label">
                       PREDICTED RESULT
                     </span>
-
                     <strong className={outcomeClass}>
                       {outcomeLabel}
                     </strong>
                   </div>
 
-                  {/* =================================================
-                      PROBABILITY BREAKDOWN
-                      ================================================= */}
-
+                  {/* PROBABILITY BREAKDOWN */}
                   <div className="history-probabilities">
-                    {/* HOME */}
-
                     <div className="history-probability">
                       <span>
-                        <i className="history-dot home"></i>
+                        <i className="history-dot home" />
                         Home
                       </span>
-
                       <strong>
                         {formatProbability(
                           prediction.probabilities?.home
@@ -432,14 +424,11 @@ function History() {
                       </strong>
                     </div>
 
-                    {/* DRAW */}
-
                     <div className="history-probability">
                       <span>
-                        <i className="history-dot draw"></i>
+                        <i className="history-dot draw" />
                         Draw
                       </span>
-
                       <strong>
                         {formatProbability(
                           prediction.probabilities?.draw
@@ -447,14 +436,11 @@ function History() {
                       </strong>
                     </div>
 
-                    {/* AWAY */}
-
                     <div className="history-probability">
                       <span>
-                        <i className="history-dot away"></i>
+                        <i className="history-dot away" />
                         Away
                       </span>
-
                       <strong>
                         {formatProbability(
                           prediction.probabilities?.away
@@ -463,10 +449,7 @@ function History() {
                     </div>
                   </div>
 
-                  {/* =================================================
-                      DATE
-                      ================================================= */}
-
+                  {/* DATE */}
                   <div
                     className="history-date"
                     style={{
@@ -479,6 +462,91 @@ function History() {
               );
             })}
           </motion.div>
+        )}
+
+        {/* CUSTOM CLEAR HISTORY CONFIRMATION MODAL */}
+        {showClearConfirm && (
+          <div
+            className="history-modal-backdrop"
+            onClick={() => {
+              if (!clearing) {
+                setShowClearConfirm(false);
+              }
+            }}
+          >
+            <motion.div
+              className="history-confirm-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="clear-history-title"
+              aria-describedby="clear-history-description"
+              initial={{
+                opacity: 0,
+                scale: 0.94,
+                y: 12,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+              }}
+              transition={{ duration: 0.2 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="history-modal-icon">
+                <span aria-hidden="true">!</span>
+              </div>
+
+              <p className="history-modal-eyebrow">
+                PERMANENT ACTION
+              </p>
+
+              <h2 id="clear-history-title">
+                Clear prediction history?
+              </h2>
+
+              <p
+                id="clear-history-description"
+                className="history-modal-description"
+              >
+                You're about to delete all{" "}
+                <strong>{predictions.length}</strong>{" "}
+                saved predictions. This action cannot be undone.
+              </p>
+
+              <div className="history-modal-summary">
+                <span>Predictions to delete</span>
+                <strong>{predictions.length}</strong>
+              </div>
+
+              <div className="history-modal-actions">
+                <button
+                  type="button"
+                  className="history-modal-cancel"
+                  onClick={() => setShowClearConfirm(false)}
+                  disabled={clearing}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  className="history-modal-delete"
+                  onClick={handleClearHistory}
+                  disabled={clearing}
+                >
+                  {clearing ? (
+                    <>
+                      <span className="clear-history-spinner" />
+                      Clearing...
+                    </>
+                  ) : (
+                    "Yes, clear history"
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </div>
     </PageTransition>

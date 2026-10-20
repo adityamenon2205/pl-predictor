@@ -1,3 +1,4 @@
+
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 export async function getStatistics() {
@@ -60,6 +61,22 @@ export async function getPredictionHistory() {
 
   if (!response.ok) {
     throw new Error("Failed to fetch prediction history");
+  }
+
+  return response.json();
+}
+
+export async function clearPredictionHistory() {
+  const response = await fetch(`${API_BASE_URL}/predictions/`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.detail || "Failed to clear prediction history"
+    );
   }
 
   return response.json();

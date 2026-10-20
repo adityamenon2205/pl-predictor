@@ -1,3 +1,4 @@
+
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
@@ -31,6 +32,19 @@ function Sidebar() {
           History
         </NavLink>
       </nav>
+
+      <div className="sidebar-footer">
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            `sidebar-about-link${isActive ? " active" : ""}`
+          }
+        >
+          <span className="about-icon">ⓘ</span>
+          <span>About Us</span>
+          <span className="about-arrow">→</span>
+        </NavLink>
+      </div>
     </aside>
   );
 }

@@ -4,10 +4,27 @@
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column;
+
   width: 240px;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+
   padding: 30px 20px;
+  box-sizing: border-box;
+
   background: linear-gradient(180deg, #541e5d 0%, #2a0f2f 100%);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  z-index: 1000;
 }
 
 .sidebar-logo {
@@ -47,6 +64,9 @@
 
 .main-content {
   flex: 1;
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  min-width: 0;
   min-width: 0;
   padding: 40px;
 }
@@ -5656,5 +5676,482 @@ a {
   .overview-page .stats-grid .stat-card > strong,
   .overview-page .stats-grid .stat-card > strong > span {
     font-size: 2.25rem !important;
+  }
+}
+
+/* =========================================================
+   ABOUT US — SIDEBAR FOOTER
+   ========================================================= */
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px 16px 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-about-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  color: #b5a9bb;
+  background: rgba(255, 255, 255, 0.045);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.sidebar-about-link:hover {
+  color: #f0e9f3;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+.sidebar-about-link.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.about-icon {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.about-arrow {
+  margin-left: 4px;
+  opacity: 0.65;
+  transition: transform 180ms ease;
+}
+
+.sidebar-about-link:hover .about-arrow {
+  transform: translateX(3px);
+}
+
+/* About Us placeholder page */
+
+/* =========================================================
+   ABOUT US — PROJECT SHOWCASE
+   ========================================================= */
+
+.about-page {
+  width: 100%;
+  min-width: 0;
+  padding: 24px 12px;
+}
+
+.about-card {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 25px;
+  overflow: hidden;
+  border: 1px solid rgba(183, 112, 194, 0.22);
+  border-radius: 20px;
+  background: #170b19;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+.about-section {
+  min-width: 0;
+}
+
+.about-section + .about-section {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(183, 112, 194, 0.28);
+}
+
+.about-card .eyebrow {
+  margin: 0 0 10px;
+}
+
+.about-section h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.65rem, 3vw, 1.9rem);
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.about-description {
+  margin: 22px 0 0;
+  color: #c9bdce;
+  font-size: 1.08rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.about-technologies .eyebrow {
+  margin-bottom: 20px;
+}
+
+.technology-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.technology-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: #2b1730;
+  color: #e4d9e9;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.technology-badge:hover {
+  background: #38203e;
+  border-color: rgba(183, 112, 194, 0.2);
+  transform: translateY(-2px);
+}
+
+.about-contact h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.about-contact-description {
+  margin: 22px 0 18px;
+  color: #bfb2c5;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contact-card {
+  display: flex;
+  min-width: 0;
+  min-height: 96px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(183, 112, 194, 0.24);
+  border-radius: 15px;
+  background: #29162e;
+  color: #f2eaf5;
+  text-decoration: none;
+  transition:
+    transform 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-3px);
+  background: #35203b;
+  border-color: rgba(204, 145, 216, 0.5);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+.contact-card:focus-visible {
+  outline: 2px solid #d7a4e5;
+  outline-offset: 3px;
+}
+
+.contact-icon {
+  display: flex;
+  width: 27px;
+  height: 27px;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-icon svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.contact-name {
+  font-size: 0.95rem;
+  font-weight: 650;
+  text-align: center;
+}
+
+/* Tablet and mobile */
+
+@media (max-width: 650px) {
+  .about-page {
+    padding: 16px 8px;
+  }
+
+  .about-card {
+    padding: 22px 18px;
+    border-radius: 16px;
+  }
+
+  .about-section + .about-section {
+    margin-top: 23px;
+    padding-top: 23px;
+  }
+
+  .about-description {
+    margin-top: 16px;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .technology-list {
+    gap: 8px;
+  }
+
+  .technology-badge {
+    padding: 8px 11px;
+    font-size: 0.88rem;
+  }
+
+  .about-contact-description {
+    margin-top: 14px;
+  }
+
+  .contact-grid {
+    gap: 8px;
+  }
+
+  .contact-card {
+    min-height: 86px;
+    padding: 10px 6px;
+    gap: 8px;
+  }
+
+  .contact-name {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    min-height: 68px;
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .technology-badge,
+  .contact-card {
+    transition: none;
+  }
+
+  .technology-badge:hover,
+  .contact-card:hover {
+    transform: none;
+  }
+}
+
+/* Keep the footer usable in the compact mobile sidebar */
+@media (max-width: 800px) {
+  .sidebar-footer {
+    padding: 8px 12px 12px;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto;
+    position: relative;
+  }
+
+  .sidebar-about-link {
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+}
+
+/* Clear prediction history controls */
+.history-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.clear-history-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 15px;
+  border: 1px solid rgba(242, 107, 91, 0.3);
+  border-radius: 10px;
+  background: rgba(242, 107, 91, 0.09);
+  color: #f26b5b;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.clear-history-button:hover:not(:disabled) {
+  background: rgba(242, 107, 91, 0.17);
+  border-color: rgba(242, 107, 91, 0.6);
+  transform: translateY(-1px);
+}
+
+.clear-history-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.clear-history-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.clear-history-button:focus-visible {
+  outline: 2px solid #f26b5b;
+  outline-offset: 3px;
+}
+
+.clear-history-spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(242, 107, 91, 0.3);
+  border-top-color: #f26b5b;
+  border-radius: 50%;
+  animation: clear-history-spin 0.7s linear infinite;
+}
+
+@keyframes clear-history-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .history-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* =========================================
+   MOBILE LAYOUT FIX
+   ========================================= */
+
+@media (max-width: 768px) {
+  /* Let the page use the full mobile viewport */
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 0;
+    min-height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  /* Turn the fixed desktop sidebar into a top navigation */
+  .sidebar {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    padding: 16px !important;
+    box-sizing: border-box !important;
+
+    overflow: visible !important;
+    z-index: 1000;
+  }
+
+  /* Keep the logo centered */
+  .sidebar img {
+    max-width: min(220px, 75vw);
+    height: auto;
+  }
+
+  /* Allow navigation links to fit on mobile */
+  .sidebar nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  /* Reset the desktop sidebar offset on the main content */
+  .main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    padding: 20px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Prevent dashboard sections from forcing horizontal overflow */
+  .main-content > *,
+  .main-content .page-header,
+  .main-content .teams-grid,
+  .main-content .team-grid,
+  .main-content .team-card {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Make team cards and grids responsive */
+  .teams-grid,
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 12px !important;
+  }
+
+  .main-content {
+    padding: 18px 12px !important;
+  }
+
+  .sidebar nav a,
+  .sidebar nav button {
+    padding: 9px 10px;
+    font-size: 12px;
   }
 }
